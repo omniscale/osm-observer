@@ -54,9 +54,4 @@ class TestConfig(object):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
     SQLALCHEMY_ECHO = False
     SAVEPATH = '/tmp/'
-
-    POSTERPLOT_URL = 'http://localhost:7171/render/poster'
-
-    SQLALCHEMY_BINDS = {
-        'cities': 'sqlite:////' + p.abspath('../../../dev/cities.sqlite'),
-    }
+    SQLALCHEMY_BINDS = {}
