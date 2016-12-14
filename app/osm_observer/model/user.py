@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask import current_app
 from osm_observer.extensions import db
+from osm_observer.helpers import _
 
 __all__ = ['User', 'DummyUser', 'AnonymousUser']
 
@@ -36,6 +37,7 @@ class User(db.Model, UserMixin):
 
     username = db.Column(db.String(256), unique=True, nullable=False)
     password = db.Column(db.String(256))
+    last_login = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __init__(self, username, password=None):
         self.username = username
@@ -68,7 +70,7 @@ class User(db.Model, UserMixin):
 
     def update_password(self, password):
         if not password:
-            raise ValueError('Password must be non empty.')
+            raise ValueError(_('Password must be non empty.'))
         self.password = generate_password_hash(password.encode('utf-8'))
 
     def check_password(self, password):
