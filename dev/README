@@ -19,7 +19,7 @@ Installation
     pip install -e ../app/
 
 ::
-    python manage.py createdb
+    python manage.py create_db
 
 ..note::
     Default username: admin
