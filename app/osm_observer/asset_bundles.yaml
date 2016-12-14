@@ -1,0 +1,4 @@
+libs-css:
+    output: libs.css
+    contents:
+      - libs/bootstrap4/css/bootstrap.css

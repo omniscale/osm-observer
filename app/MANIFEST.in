@@ -1,0 +1,7 @@
+include setup.py
+
+recursive-include osm_observer *
+recursive-exclude osm_observer *.pyc *.pyd .DS_Store *.rej *.orig *.lck .empty
+
+prune osm_observer/static/libs
+prune osm_observer/static/.webassets-cache

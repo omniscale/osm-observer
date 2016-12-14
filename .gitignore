@@ -1,0 +1,15 @@
+*.egg-info
+*.pyc
+*.db
+build/
+dist/
+doc/_build
+server/pkgs
+app/osm_observer/static/cache
+.DS_Store
+.coverage
+.project
+.settings
+.pydevproject
+.webassets-cache
+__pycache__

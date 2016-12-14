@@ -1,0 +1,24 @@
+{% extends "osm_observer/pages/_base.html.j2" %}
+
+{% from "osm_observer/macros/forms.html.j2" import input %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <form id="login" method="POST">
+                        {$ form.csrf_token $}
+                        {$ input(form.username) $}
+                        {$ input(form.password) $}
+                        <button type="submit">{$ _('Login') $}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

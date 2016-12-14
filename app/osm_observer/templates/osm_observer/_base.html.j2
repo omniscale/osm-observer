@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    {% block meta %}
+      {% include 'osm_observer/_meta.html.j2' %}
+    {% endblock %}
+    {% block meta_extension %}
+    {% endblock %}
+    <title>
+      OSM Observer
+    </title>
+
+    {% block header %}
+      {% assets "libs-css" %}
+        <link href="{$ ASSET_URL $}" rel="stylesheet" type="text/css">
+      {% endassets %}
+
+      {% assets "app-css" %}
+        <link href="{$ ASSET_URL $}" rel="stylesheet" type="text/css">
+      {% endassets %}
+    {% endblock %}
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+    {% block css %}
+    {% endblock %}
+  </head>
+    <body>
+      {% block body %}
+      {% endblock %}
+
+      {% block javascript %}
+      {% endblock %}
+
+      {% block flash %}
+      {% endblock %}
+    </body>
+</html>

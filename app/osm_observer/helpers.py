@@ -1,0 +1,33 @@
+import logging
+import pprint
+
+from flask import request
+from flask_babel import gettext as _, lazy_gettext as _l
+
+__all__ = ['_', '_l']
+
+
+def request_for_static():
+    if request.endpoint == 'static' or request.endpoint == 'favicon':
+        return True
+    else:
+        return False
+
+
+class LazyPrettyDict(object):
+    def __init__(self, dictionary):
+        self.dictionary = dictionary
+
+    def __str__(self):
+        return pprint.pformat(self.dictionary)
+
+
+class FlaskLogContext(logging.Filter):
+    def filter(self, record):
+        if hasattr(record, "environ"):
+            # record was already filtered
+            return True
+
+        record.environ = LazyPrettyDict(getattr(request, 'environ', {}))
+
+        return True

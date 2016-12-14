@@ -1,0 +1,15 @@
+{% extends "pages/_base.html.j2" %}
+
+{% block content %}
+<section id="startpage-header">
+    <div>
+        {% if current_user.is_authenticated %}
+            <a href="{$ url_for('user.logout') $}">Logout</a>
+        {% else %}
+            <a href="{$ url_for('user.login') $}">Zum login</a>
+
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
