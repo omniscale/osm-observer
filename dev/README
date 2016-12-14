@@ -5,6 +5,8 @@ Database
     createuser -P os
     createdb -O os osm_observer
     echo 'create extension postgis' | psql -d osm_observer
+    echo 'create extension hstore' | psql -d osm_observer
+
     psql -d osm_observer -c "ALTER TABLE geometry_columns OWNER TO os; ALTER TABLE spatial_ref_sys OWNER TO os;"
 
 
