@@ -8,7 +8,7 @@ from logging.handlers import SMTPHandler
 from flask import (
     Flask, request, jsonify, render_template, make_response
 )
-from flask.ext.babel import Babel, gettext as _
+from flask_babel import Babel, gettext as _
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session

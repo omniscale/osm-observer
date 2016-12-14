@@ -1,7 +1,7 @@
 from flask import (
     Blueprint, flash, redirect, url_for, request, render_template, current_app
 )
-from flask.ext.babel import gettext as _
+from flask_babel import gettext as _
 from flask_login import login_user, logout_user, current_user
 
 from osm_observer.model import User
