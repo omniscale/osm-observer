@@ -35,7 +35,7 @@ def create_app(config=None):
     configure_login(app)
     configure_errorhandlers(app)
     configure_blueprints(app)
-
+    configure_changes_db(app)
     return app
 
 
@@ -72,7 +72,8 @@ def configure_app(app, config):
 def configure_blueprints(app):
     blueprints = [
         views.frontend,
-        views.user
+        views.user,
+        views.changesets,
     ]
     for blueprint in blueprints:
         app.register_blueprint(blueprint)
@@ -235,3 +236,7 @@ def configure_errorhandlers(app):
         return make_response(
             render_template('osm_observer/errors/500.html.j2', error=error),
             500)
+
+
+def configure_changes_db(app):
+    app.changes_engine = db.get_engine(app, bind='changes')

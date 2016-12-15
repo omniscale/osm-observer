@@ -18,7 +18,9 @@ class DefaultConfig(object):
     # keys for localhost. Change as appropriate.
 
     SQLALCHEMY_DATABASE_URI = 'postgres://os:os@localhost:5432/osm_observer'
-    SQLALCHEMY_BINDS = {}
+    SQLALCHEMY_BINDS = {
+        'changes': 'postgres://os:os@localhost:5432/imposm_changes'
+    }
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
 
@@ -40,6 +42,9 @@ class DefaultConfig(object):
 
     LDAP_ENABLED = False
     LDAP_PROVIDER_URL = ''
+
+    CHANGES_DB_SCHEMA = 'changes'
+    OPENSTREETMAP_CHANGESET_URL = 'http://www.openstreetmap.org/changeset/'
 
     ADMINS = ['admin@example.org']
     TEMPLATES_AUTO_RELOAD = True

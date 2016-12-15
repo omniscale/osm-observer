@@ -11,5 +11,4 @@ frontend = Blueprint(
 
 @frontend.route('/')
 def index():
-
     return render_template('pages/index.html.j2')
