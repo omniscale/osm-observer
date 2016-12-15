@@ -21,7 +21,7 @@ def create_db(alembic_ini='alembic.ini'):
     command.stamp(alembic_cfg, "head")
 
     from osm_observer.model import fixtures
-    db.session.add(fixtures.create_user())
+    db.session.add_all(fixtures.create_users_coverages())
     db.session.commit()
     print("--- database with admin user was created ---")
 
