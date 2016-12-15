@@ -35,7 +35,7 @@ def create_app(config=None):
     configure_login(app)
     configure_errorhandlers(app)
     configure_blueprints(app)
-    configure_changes_db(app)
+    # configure_changes_db(app)
     return app
 
 
@@ -137,11 +137,13 @@ Message:
 def configure_extensions(app):
     mail.init_app(app)
 
-    if not app.testing:
-        engine = create_engine(
-            app.config['SQLALCHEMY_DATABASE_URI'],
-            echo=app.config['SQLALCHEMY_ECHO'])
-        db.session = scoped_session(sessionmaker(bind=engine, autoflush=True))
+    # TODO why is this needed? when disabled, multiple databases can used easy with __bind_key__
+    #      like in model.changesets
+    # if not app.testing:
+    #     engine = create_engine(
+    #         app.config['SQLALCHEMY_DATABASE_URI'],
+    #         echo=app.config['SQLALCHEMY_ECHO'])
+    #     db.session = scoped_session(sessionmaker(bind=engine, autoflush=True))
     db.init_app(app)
 
     configure_assets(app)
@@ -238,5 +240,5 @@ def configure_errorhandlers(app):
             500)
 
 
-def configure_changes_db(app):
-    app.changes_engine = db.get_engine(app, bind='changes')
+# def configure_changes_db(app):
+#     app.changes_engine = db.get_engine(app, bind='changes')
