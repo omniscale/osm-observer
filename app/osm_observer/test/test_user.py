@@ -1,7 +1,7 @@
 from osm_observer.test.base import BaseTestClass
-from osm_observer.helpers import _
 
 from flask import url_for
+from flask_login import current_user
 from urllib.parse import urlparse
 
 
@@ -18,11 +18,15 @@ class TestUserLogin(BaseTestClass):
             parsed_location = urlparse(r.location)
             self.assertEqual(parsed_location.path, url_for('frontend.index'))
 
+            assert current_user.is_authenticated
+
             r = c.get(url_for('user.logout'), follow_redirects=False)
 
             self.assertEqual(r.status_code, 302)
             parsed_location = urlparse(r.location)
             self.assertEqual(parsed_location.path, url_for('frontend.index'))
+
+            assert not current_user.is_authenticated
 
     def test_invalid_login(self):
         with self.app.test_client() as c:
@@ -32,7 +36,7 @@ class TestUserLogin(BaseTestClass):
             ))
 
             self.assertEqual(r.status_code, 200)
-            assert _('username or password not correct') in str(r.data)
+            assert not current_user.is_authenticated
 
             r = c.post(url_for('user.login'), data=dict(
                 username='admin',
@@ -40,4 +44,4 @@ class TestUserLogin(BaseTestClass):
             ), follow_redirects=False)
 
             self.assertEqual(r.status_code, 200)
-            assert _('username or password not correct') in str(r.data)
+            assert not current_user.is_authenticated
