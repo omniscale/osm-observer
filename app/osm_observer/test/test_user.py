@@ -1,4 +1,5 @@
 from osm_observer.test.base import BaseTestClass
+from osm_observer import model
 
 from flask import url_for
 from flask_login import current_user
@@ -45,3 +46,21 @@ class TestUserLogin(BaseTestClass):
 
             self.assertEqual(r.status_code, 200)
             assert not current_user.is_authenticated
+
+
+class TestUserCoverages(BaseTestClass):
+
+    def test_user_coverage(self):
+        admin_user = model.User.by_username('admin')
+
+        assert len(admin_user.coverages) == 2
+
+        user_user = model.User.by_username('user')
+
+        assert len(user_user.coverages) == 2
+
+        self.assertNotEqual(admin_user.coverages[0], user_user.coverages[0])
+        self.assertNotEqual(admin_user.coverages[0], user_user.coverages[1])
+        self.assertNotEqual(admin_user.coverages[1], user_user.coverages[1])
+
+        self.assertEqual(admin_user.coverages[1], user_user.coverages[0])

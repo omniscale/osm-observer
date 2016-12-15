@@ -5,22 +5,17 @@ from geoalchemy2.shape import from_shape
 from geoalchemy2.functions import ST_AsGeoJSON
 from shapely.geometry import asShape
 
-__all__ = ['Coverage']#, 'user_coverage']
+__all__ = ['Coverage']
 
 user_coverage = db.Table(
     'users_coverages', db.metadata,
     db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('coverage_id', db.Integer, db.ForeignKey('coverages.id'))
-    # ,
-    # schema='test'
+    db.Column('coverage_id', db.Integer, db.ForeignKey('coverages.id')),
 )
 
 
 class Coverage(db.Model):
     __tablename__ = 'coverages'
-    # __table_args__ = {
-    #     'schema': 'test'
-    # }
 
     id = db.Column(db.Integer, primary_key=True)
     geometry = db.Column(Geometry(geometry_type='Polygon', srid=4326))

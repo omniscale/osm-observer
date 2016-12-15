@@ -56,7 +56,9 @@ class TestConfig(object):
     TESTING = True
     ASSETS_DEBUG = True
     WTF_CSRF_ENABLED = False
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    SQLALCHEMY_DATABASE_URI = 'postgres://os:os@localhost:5432/osm_observer_testing'
     SQLALCHEMY_ECHO = False
     SAVEPATH = '/tmp/'
-    SQLALCHEMY_BINDS = {}
+    SQLALCHEMY_BINDS = {
+        'changes': 'postgres://os:os@localhost:5432/imposm_changes'
+    }

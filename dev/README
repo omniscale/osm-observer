@@ -10,6 +10,16 @@ Database
     psql -d osm_observer -c "ALTER TABLE geometry_columns OWNER TO os; ALTER TABLE spatial_ref_sys OWNER TO os;"
 
 
+Testing Database
+----------------
+::
+    createdb -O os osm_observer_testing
+    echo 'create extension postgis' | psql -d osm_observer_testing
+    echo 'create extension hstore' | psql -d osm_observer_testing
+
+    psql -d osm_observer_testing -c "ALTER TABLE geometry_columns OWNER TO os; ALTER TABLE spatial_ref_sys OWNER TO os;"
+
+
 Installation
 ------------
 
