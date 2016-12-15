@@ -1,12 +1,6 @@
 from flask import current_app
 
 
-def row2dict(row):
-    d = {}
-    for column in row.__table__.columns:
-        d[column.name] = str(getattr(row, column.name))
-
-    return d
 
 
 def query_changesets(filters=[]):
