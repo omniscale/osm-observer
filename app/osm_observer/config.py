@@ -18,9 +18,7 @@ class DefaultConfig(object):
     # keys for localhost. Change as appropriate.
 
     SQLALCHEMY_DATABASE_URI = 'postgres://os:os@localhost:5432/osm_observer'
-    SQLALCHEMY_BINDS = {
-        'changes': 'postgres://os:os@localhost:5432/imposm_changes'
-    }
+    SQLALCHEMY_BINDS = {}
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
 
