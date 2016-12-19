@@ -39,3 +39,8 @@ class Coverage(db.Model):
     @geojson.setter
     def geojson(self, geojson):
         self.geometry = from_shape(asShape(geojson['geometry']), srid=4326)
+
+    @classmethod
+    def by_id(cls, id):
+        q = cls.query.filter(cls.id == id)
+        return q.first()
