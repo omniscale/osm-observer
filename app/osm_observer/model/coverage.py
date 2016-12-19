@@ -18,6 +18,7 @@ class Coverage(db.Model):
     __tablename__ = 'coverages'
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
     geometry = db.Column(Geometry(geometry_type='Polygon', srid=4326))
 
     users = db.relationship(
@@ -26,8 +27,9 @@ class Coverage(db.Model):
         backref='coverages'
     )
 
-    def __init__(self, users, geojson=None):
+    def __init__(self, users, name, geojson=None):
         self.users = users
+        self.name = name
         self.geojson = geojson
 
     @property

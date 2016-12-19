@@ -12,6 +12,7 @@ def create_users_coverages():
     coverages = [
         model.Coverage(
             users=[users[0]],
+            name='Köln',
             geojson={
                 "type": "Feature",
                 "properties": {},
@@ -44,6 +45,7 @@ def create_users_coverages():
         ),
         model.Coverage(
             users=users,
+            name='Düsseldorf',
             geojson={
                 "type": "Feature",
                 "properties": {},
@@ -76,6 +78,7 @@ def create_users_coverages():
         ),
         model.Coverage(
             users=[users[1]],
+            name='Essen und Bochum',
             geojson={
                 "type": "Feature",
                 "properties": {},
