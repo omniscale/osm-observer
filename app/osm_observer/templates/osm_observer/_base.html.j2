@@ -26,18 +26,20 @@
     {% endblock %}
   </head>
   <body>
-    {% include 'osm_observer/pages/widgets/navbar.html.j2' %}
+    {% include 'widgets/navbar.html.j2' %}
     <div class="row">
       {% if current_user.is_authenticated %}
       <div class="col-sm-3 col-md-2 sidebar">
-        {% include 'osm_observer/pages/widgets/sidebar.html.j2' %}
+        {% include 'widgets/sidebar.html.j2' %}
       </div>
       <div class="col-sm-9 col-md-10">
       {% else %}
       <div class="col-sm-12 col-md-12">
       {% endif %}
-        {% block body %}
-        {% endblock %}
+        <div class="container">
+          {% block content %}
+          {% endblock %}
+        </div>
       </div>
     </div>
 

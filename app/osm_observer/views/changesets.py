@@ -17,7 +17,7 @@ changesets = Blueprint(
 @login_required
 def index():
     return render_template(
-        'pages/changesets.html.j2',
+        'changesets/changesets.html.j2',
         changesets=list(query_changesets(current_user.coverages)))
 
 
@@ -25,7 +25,7 @@ def index():
 def by_coverage(coverage_id):
     coverage = Coverage.by_user_and_id(coverage_id)
     return render_template(
-        'pages/changesets.html.j2',
+        'changesets/changesets.html.j2',
         changesets=list(query_changesets(coverages=coverage)),
         page='coverages')
 
@@ -34,14 +34,14 @@ def by_coverage(coverage_id):
 def changeset_details(changeset_id):
     details = query_changeset_details(changeset_id)
     return render_template(
-        'pages/changeset_details.html.j2',
+        'changesets/changeset_details.html.j2',
         details=details)
 
 
 @changesets.route('/last_login')
 def last_login():
     return render_template(
-        'pages/changesets.html.j2',
+        'changesets/changesets.html.j2',
         changesets=list(query_changesets(
             coverages=current_user.coverages,
             from_time=current_user.last_login

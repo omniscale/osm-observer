@@ -11,9 +11,9 @@ frontend = Blueprint(
 
 @frontend.route('/')
 def index():
-    return render_template('pages/index.html.j2', page='dashboard')
+    return render_template('frontend/index.html.j2', page='dashboard')
 
 
 @frontend.route('/coverages')
 def coverages():
-    return render_template('pages/coverages.html.j2', page='coverages')
+    return render_template('frontend/coverages.html.j2', page='coverages')
