@@ -14,6 +14,9 @@ def query_changesets(coverages=None):
         for coverage in coverages:
             s = s.where(changesets.c.bbox.ST_Intersects(coverage.geometry))
 
+
+    s = s.order_by(changesets.c.closed_at.desc())
+
     conn = db.session.connection()
     return conn.execute(s).fetchall()
 
