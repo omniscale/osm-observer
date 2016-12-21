@@ -26,7 +26,8 @@ def by_coverage(coverage_id):
     coverage = Coverage.by_user_and_id(coverage_id)
     return render_template(
         'pages/changesets.html.j2',
-        changesets=list(query_changesets(coverages=coverage)))
+        changesets=list(query_changesets(coverages=coverage)),
+        page='coverages')
 
 
 @changesets.route('/details/<changeset_id>')
@@ -44,7 +45,8 @@ def last_login():
         changesets=list(query_changesets(
             coverages=current_user.coverages,
             from_time=current_user.last_login
-        ))
+        )),
+        page='last_login',
     )
 
 # @changesets.route('/unchecked')

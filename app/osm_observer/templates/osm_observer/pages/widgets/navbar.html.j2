@@ -1,0 +1,14 @@
+<nav class="navbar navbar-light">
+    <h1 class="navbar-brand mb-0" href="#">Project name</h1>
+    {% if current_user.is_authenticated %}
+    <ul class="nav navbar-nav float-sm-right float-md-right">
+      <li class="nav-item">
+        <span class="navbar-text">{$ current_user.username $}</span>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{$ url_for('user.logout') $}">{$ _('Logout') $}</a>
+      </li>
+    </ul>
+    {% endif %}
+  </div>
+</nav>

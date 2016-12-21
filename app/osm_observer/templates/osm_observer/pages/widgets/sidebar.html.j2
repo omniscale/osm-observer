@@ -1,0 +1,13 @@
+<nav class="navbar navbar-dark">
+  <ul class ="nav nav-pills nav-stacked">
+    <li class="nav-item">
+      <a class="nav-link {% if page=='dashboard' %}active{% endif %}" href="{$ url_for('frontend.index') $}">{$ _('Dashboard') $}</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if page=='coverages' %}active{% endif %}" href="{$ url_for('frontend.coverages') $}">{$ _('Coverages') $}</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if page=='last_login' %}active{% endif %}" href="{$ url_for('changesets.last_login') $}">{$ _('Changesets since last login') $}</a>
+    </li>
+  </ul>
+</nav>

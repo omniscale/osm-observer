@@ -26,22 +26,20 @@
     {% endblock %}
   </head>
   <body>
-    <nav class="navbar navbar-dark bg-inverse">
-      <a class="navbar-brand" href="#">Project name</a>
-      <ul class="nav navbar-nav">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Contact</a>
-        </li>
-      </ul>
-    </nav>
-    {% block body %}
-    {% endblock %}
+    {% include 'osm_observer/pages/widgets/navbar.html.j2' %}
+    <div class="row">
+      {% if current_user.is_authenticated %}
+      <div class="col-sm-3 col-md-2 sidebar">
+        {% include 'osm_observer/pages/widgets/sidebar.html.j2' %}
+      </div>
+      <div class="col-sm-9 col-md-10">
+      {% else %}
+      <div class="col-sm-12 col-md-12">
+      {% endif %}
+        {% block body %}
+        {% endblock %}
+      </div>
+    </div>
 
     {% block javascript %}
     {% endblock %}
