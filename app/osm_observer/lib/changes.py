@@ -5,7 +5,7 @@ from osm_observer.model import changesets, nodes, ways, relations
 from osm_observer.extensions import db
 
 
-def query_changesets(coverages=None):
+def query_changesets(coverages=None, from_time=None):
 
     s = select([changesets])
     if coverages is not None:
@@ -14,6 +14,8 @@ def query_changesets(coverages=None):
         for coverage in coverages:
             s = s.where(changesets.c.bbox.ST_Intersects(coverage.geometry))
 
+    if from_time is not None:
+        s = s.where(changesets.c.closed_at>=from_time)
 
     s = s.order_by(changesets.c.closed_at.desc())
 

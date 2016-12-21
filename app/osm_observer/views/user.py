@@ -1,3 +1,5 @@
+import datetime
+
 from flask import (
     Blueprint, flash, redirect, url_for, request, render_template, current_app
 )
@@ -44,6 +46,8 @@ def login():
             login_user(user)
             flash(_('Logged in successfully'), 'success')
             next = request.args.get("next")
+            user.last_login = datetime.datetime.utcnow()
+            db.session.commit()
             return redirect(next or url_for("frontend.index"))
 
         flash(_('Invalid username or password. Please try again.'),
