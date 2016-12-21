@@ -15,7 +15,7 @@ changesets = db.Table(
     db.Column('user_name', db.String),
     db.Column('user_id', db.Integer),
     db.Column('tags', HSTORE),
-    schema='changes'
+    schema='changes',
 )
 
 
