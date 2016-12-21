@@ -2,7 +2,7 @@ from flask import Blueprint, render_template
 
 from flask_login import login_required, current_user
 
-from osm_observer.lib.changes import query_changesets
+from osm_observer.lib.changes import query_changesets, query_changeset_details
 from osm_observer.model import Coverage
 
 changesets = Blueprint(
@@ -28,6 +28,13 @@ def by_coverage(id):
         'pages/changesets.html.j2',
         changesets=list(query_changesets(coverage)))
 
+
+@changesets.route('/details/<changeset_id>')
+def changeset_details(changeset_id):
+    details = query_changeset_details(changeset_id)
+    return render_template(
+        'pages/changeset_details.html.j2',
+        details=details)
 
 
 # @changesets.route('/last_login')

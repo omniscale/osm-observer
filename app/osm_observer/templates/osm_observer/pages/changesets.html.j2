@@ -27,7 +27,7 @@
                         </ul>
                     </td>
                     <td>
-                        <a href="{$ config['OPENSTREETMAP_CHANGESET_URL'] $}{$ changeset.id $}">{$ _('View on openstreetmap') $}</a>
+                        <a target="_blank" href="{$ config['OPENSTREETMAP_CHANGESET_URL'] $}{$ changeset.id $}">{$ _('View on openstreetmap') $}</a>
                         <br>
                         <a href="{$ url_for('changesets.changeset_details', changeset_id=changeset['id']) $}">{$ _('Details') $}</a>
                     </td>
