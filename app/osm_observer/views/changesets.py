@@ -21,9 +21,9 @@ def index():
         changesets=list(query_changesets(current_user.coverages)))
 
 
-@changesets.route('/coverage/<id>')
-def by_coverage(id):
-    coverage = Coverage.by_id(id)
+@changesets.route('/coverage/<coverage_id>')
+def by_coverage(coverage_id):
+    coverage = Coverage.by_user_and_id(coverage_id)
     return render_template(
         'pages/changesets.html.j2',
         changesets=list(query_changesets(coverage)))

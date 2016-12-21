@@ -10,7 +10,7 @@ def query_changesets(coverages=None):
     s = select([changesets])
     if coverages is not None:
         if not isinstance(coverages, list):
-            coverages = list(coverages)
+            coverages = [coverages]
         for coverage in coverages:
             s = s.where(changesets.c.bbox.ST_Intersects(coverage.geometry))
 
