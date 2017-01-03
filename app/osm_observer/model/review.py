@@ -22,7 +22,7 @@ class Review(db.Model):
 
     changeset_id = db.Column(
         db.Integer,
-        db.ForeignKey('app.changesets.id'),
+        db.ForeignKey('app.changesets.osm_id'),
         nullable=True
     )
 
