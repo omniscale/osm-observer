@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, abort
 
 from flask_login import login_required, current_user
 
@@ -21,16 +21,20 @@ def index():
         changesets=list(query_changesets(current_user.coverages)))
 
 
-@changesets.route('/coverage/<coverage_id>')
+@changesets.route('/coverage/<int:coverage_id>')
 def by_coverage(coverage_id):
-    coverage = Coverage.by_user_and_id(coverage_id)
+    coverage = Coverage.by_id(coverage_id)
+
+    if coverage not in current_user.coverages:
+        raise abort(403)
+
     return render_template(
         'changesets/changesets.html.j2',
         changesets=list(query_changesets(coverages=coverage)),
         page='coverages')
 
 
-@changesets.route('/details/<changeset_id>')
+@changesets.route('/details/<int:changeset_id>')
 def changeset_details(changeset_id):
     details = query_changeset_details(changeset_id)
     return render_template(

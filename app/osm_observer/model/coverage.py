@@ -5,9 +5,6 @@ from geoalchemy2.shape import from_shape
 from geoalchemy2.functions import ST_AsGeoJSON
 from shapely.geometry import asShape
 
-from flask_login import current_user
-from flask import abort
-
 __all__ = ['Coverage']
 
 user_coverage = db.Table(
@@ -50,12 +47,4 @@ class Coverage(db.Model):
     @classmethod
     def by_id(cls, id):
         q = cls.query.filter(cls.id == id)
-        return q.first()
-
-    @classmethod
-    def by_user_and_id(cls, id):
-        q = cls.query.filter(cls.id == id)
-        coverage = q.first_or_404()
-        if coverage not in current_user.coverages:
-            raise abort(403)
-        return coverage
+        return q.first_or_404()
