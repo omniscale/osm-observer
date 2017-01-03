@@ -33,7 +33,19 @@ Installation
 
 ::
     python manage.py create_db
+    python manage.py insert_changesets
+
+
+Using Angular-CLI for the app
+------------
+::
+    npm install -g angular-cli
+
+
 
 ..note::
     Default username: admin
     Default password: secure
+
+
+
