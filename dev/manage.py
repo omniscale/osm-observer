@@ -35,9 +35,38 @@ def drop_db(force=False):
 
 @manager.command
 def recreate_db():
-    "Recreates database tables (same as issuing 'drop' and then 'create')"
+    "Recreates database tables (same as issuing 'drop' and then 'create'"
     drop_db(force=True)
     create_db()
+
+
+@manager.command
+def insert_changesets(created_at=None):
+    "Add Changeset IDs from imposm-changes to the app"
+    from osm_observer.model import changesets, Changeset
+    from sqlalchemy.sql import select
+
+    s = select([changesets])
+    if created_at is not None:
+        s = s.where(changesets.c.created_at >= created_at)
+
+    conn = db.session.connection()
+    queried_changesets = conn.execute(s).fetchall()
+
+    # todo refactor to speed up
+    for changeset in queried_changesets:
+        cs = Changeset.by_id(changeset.id)
+        if not cs:
+            cs = Changeset(
+                osm_id=changeset.id,
+                created_at=changeset.created_at,
+                closed_at=changeset.closed_at,
+            )
+            db.session.add(cs)
+        elif not cs.closed_at:
+            cs.closed_at = changeset.closed_at
+
+    db.session.commit()
 
 
 #############################
