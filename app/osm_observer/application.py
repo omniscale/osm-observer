@@ -74,6 +74,7 @@ def configure_blueprints(app):
         views.frontend,
         views.user,
         views.changesets,
+        views.coverages,
     ]
     for blueprint in blueprints:
         app.register_blueprint(blueprint)

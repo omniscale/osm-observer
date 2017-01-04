@@ -4,6 +4,7 @@ from geoalchemy2.types import Geometry
 from geoalchemy2.shape import from_shape
 from geoalchemy2.functions import ST_AsGeoJSON
 from shapely.geometry import asShape
+from sqlalchemy.orm import column_property
 
 __all__ = ['Coverage']
 
@@ -25,6 +26,10 @@ class Coverage(db.Model):
     name = db.Column(db.String, nullable=False)
     geometry = db.Column(Geometry(geometry_type='Polygon', srid=4326), nullable=False)
 
+    _geojson = column_property(
+        ST_AsGeoJSON(geometry)
+    )
+
     users = db.relationship(
         'User',
         secondary=user_coverage,
@@ -38,11 +43,19 @@ class Coverage(db.Model):
 
     @property
     def geojson(self):
-        return ST_AsGeoJSON(self.geometry)
+        return self._geojson
 
     @geojson.setter
     def geojson(self, geojson):
         self.geometry = from_shape(asShape(geojson['geometry']), srid=4326)
+
+    @property
+    def json(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'geometry': self.geojson
+        }
 
     @classmethod
     def by_id(cls, id):
