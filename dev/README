@@ -37,15 +37,22 @@ Installation
 
 
 Using Angular-CLI for the app
-------------
+-----------------------------
 ::
-    npm install -g angular-cli
+    cd ../app/osm_observer/webapp
+    npm install
 
+
+Development
+-----------
+
+::
+    python manage.py runserver
+
+::
+    python manage.py watch_webapp
 
 
 ..note::
     Default username: admin
     Default password: secure
-
-
-
