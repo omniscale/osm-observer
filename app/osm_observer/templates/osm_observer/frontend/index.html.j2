@@ -1,9 +1,5 @@
 {% extends "_base.html.j2" %}
 
 {% block content %}
-    <div>
-        {% if not current_user.is_authenticated %}
-            <a href="{$ url_for('user.login') $}">Zum login</a>
-        {% endif %}
-    </div>
+    <app-root>Loading...</app-root>
 {% endblock %}

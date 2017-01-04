@@ -2,3 +2,15 @@ libs-css:
     output: libs.css
     contents:
       - libs/bootstrap4/css/bootstrap.css
+
+app-css:
+    output: app.css
+    contents:
+      - webapp/styles.bundle.css
+
+app-js:
+    output: app.js
+    contents:
+      - webapp/inline.bundle.js
+      - webapp/vendor.bundle.js
+      - webapp/main.bundle.js

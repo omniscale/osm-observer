@@ -124,7 +124,7 @@ def watch_webapp():
     "Watches changes in angular webapp and rebuild it"
     os.chdir('../app/osm_observer/webapp')
     call([
-        'ng', 'build', '--watch'
+        'ng', 'build', '--watch', '--output-path', '../static/webapp'
     ])
 
 

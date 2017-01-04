@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, send_from_directory
+    Blueprint, render_template
 )
 
 from flask_login import login_required
@@ -18,16 +18,6 @@ frontend = Blueprint(
 @frontend.route('/')
 @login_required
 def index():
-    """
-    Serve angular app index page
-    """
-    return send_from_directory(CLIENT_APP_FOLDER, 'index.html')
+    return render_template('frontend/index.html.j2')
 
 
-@frontend.route("/<path:filename>")
-@login_required
-def webapp(filename):
-    """
-    Serve the Angular2 app created by the angular-cli system.
-    """
-    return send_from_directory(CLIENT_APP_FOLDER, filename)
