@@ -1,3 +1,5 @@
+import os
+
 from osm_observer import create_app
 from osm_observer.extensions import db
 
@@ -114,6 +116,15 @@ def babel_compile():
     call([
         'pybabel', 'compile',
         '-d', '../app/osm_observer/translations'
+    ])
+
+
+@manager.command
+def watch_webapp():
+    "Watches changes in angular webapp and rebuild it"
+    os.chdir('../app/osm_observer/webapp')
+    call([
+        'ng', 'build', '--watch'
     ])
 
 
