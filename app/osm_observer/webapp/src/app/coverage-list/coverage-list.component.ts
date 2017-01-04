@@ -6,7 +6,7 @@ import { CoverageService } from '../coverage.service'
 @Component({
   selector: 'coverage-list',
   templateUrl: './coverage-list.component.html',
-  styleUrls: ['./coverage-list.component.css']
+  styleUrls: ['./coverage-list.component.sass']
 })
 export class CoverageListComponent implements OnInit {
 
