@@ -1,8 +1,6 @@
-from flask import Blueprint, render_template, abort, jsonify
+from flask import Blueprint, jsonify
 
 from flask_login import login_required, current_user
-
-from osm_observer.model import Coverage
 
 coverages = Blueprint(
     'coverages',
@@ -19,5 +17,3 @@ def all():
     for coverage in current_user.coverages:
         coverages.append(coverage.json)
     return jsonify(coverages)
-
-

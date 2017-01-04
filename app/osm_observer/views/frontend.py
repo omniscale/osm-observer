@@ -1,9 +1,10 @@
+import os
+
 from flask import (
     Blueprint, render_template
 )
 
 from flask_login import login_required
-import os
 
 BASE_URL = os.path.abspath(os.path.dirname(__file__))
 CLIENT_APP_FOLDER = os.path.join(BASE_URL, "../webapp/dist")
@@ -19,5 +20,3 @@ frontend = Blueprint(
 @login_required
 def index():
     return render_template('frontend/index.html.j2')
-
-
