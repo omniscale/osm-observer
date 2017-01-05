@@ -8,7 +8,7 @@ from osm_observer.model import Coverage
 
 
 
-@api.route('/changesets/all')
+@api.route('/changesets')
 @login_required
 def changesets_list():
     # TODO add more filter options
