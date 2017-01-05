@@ -3,7 +3,7 @@ from sqlalchemy.sql import select, func
 
 from sqlalchemy.sql.expression import join
 
-from osm_observer.model import Changeset
+from osm_observer.model import Changeset, Review
 from osm_observer.model import changesets, nodes, ways, relations
 from osm_observer.extensions import db
 
@@ -12,7 +12,25 @@ def query_changesets(coverages=None, from_time=None):
     changeset_join = join(Changeset, changesets,
          Changeset.osm_id == changesets.c.id
     )
-    s = select([changesets]).select_from(changeset_join)
+
+    # subquery to get informations from reviews
+    # add more options e.g. sum score from reviews
+    review_select = select([
+        Review.changeset_id.label('changeset_id'),
+        func.count('*').label('num_reviews')]
+    ).group_by(
+        Review.changeset_id).alias('reviews'
+    )
+
+    review_join = join(changeset_join, review_select,
+         Changeset.id == review_select.c.changeset_id, isouter=True,
+    )
+
+    s = select([
+        Changeset.id.label('app_id'),
+        changesets,
+        review_select.c.num_reviews
+    ]).select_from(review_join)
 
     if coverages is not None:
         if not isinstance(coverages, list):
