@@ -24,6 +24,4 @@ def add_review(changeset_id):
     db.session.add(review)
     db.session.commit()
 
-    return jsonify({
-        'id': review.id,
-    })
+    return jsonify(review.serialize)
