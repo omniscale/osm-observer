@@ -1,4 +1,5 @@
 from osm_observer.extensions import db
+from osm_observer.helpers import serialize_datetime
 
 __all__ = ['Changeset']
 
@@ -25,6 +26,15 @@ class Changeset(db.Model):
         self.created_at = created_at
         if closed_at:
             self.closed_at = closed_at
+
+    @property
+    def serialize(self):
+       return {
+           'id': self.id,
+           'osmId': self.osm_id,
+           'createdAt': serialize_datetime(self.created_at),
+           'closedAt': serialize_datetime(self.closed_at)
+       }
 
     @classmethod
     def by_id(cls, id):
