@@ -19,11 +19,11 @@ export class ChangesetListComponent implements OnInit {
   }
 
   getChangesets(): void {
-    this.changesetService.getChangesets().then(changesets => this.assignChangesets(changesets));
+    this.changesetService.getChangesets()
+                         .then(changesets => this.assignChangesets(changesets));
   }
 
   ngOnInit() {
     this.getChangesets();
   }
-
 }

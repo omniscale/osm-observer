@@ -13,6 +13,7 @@ import { CoverageService } from './coverage.service';
 
 import { ChangesetListComponent } from './changeset-list/changeset-list.component';
 import { ChangesetService } from './changeset.service';
+import { ChangesetDetailsComponent } from './changeset-details/changeset-details.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ChangesetService } from './changeset.service';
     CoverageListComponent,
     CoveragesComponent,
     DashboardComponent,
-    ChangesetListComponent
+    ChangesetListComponent,
+    ChangesetDetailsComponent
   ],
   imports: [
     BrowserModule,

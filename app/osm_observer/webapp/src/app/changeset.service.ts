@@ -4,12 +4,14 @@ import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { Changeset } from './changeset';
+import { ChangesetDetails } from './changeset-details';
 
 @Injectable()
 export class ChangesetService {
 
   private headers = new Headers({'Content-Type': 'application/json'});
-  private changesetsUrl = '/changesets/all';
+  private changesetsUrl = '/api/changesets/all';
+  private changesetDetailsUrl = '/api/changesets/details/'
 
   constructor(private http: Http) { }
 
@@ -20,7 +22,15 @@ export class ChangesetService {
                .catch(this.handleError);
   }
 
-   private handleError(error: any): Promise<any> {
+  getChangesetDetails(id: number): Promise<ChangesetDetails> {
+    // check with template-string
+    return this.http.get(this.changesetDetailsUrl + id)
+               .toPromise()
+               .then(response => response.json() as ChangesetDetails)
+               .catch(this.handleError);
+  }
+
+  private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);
   }
