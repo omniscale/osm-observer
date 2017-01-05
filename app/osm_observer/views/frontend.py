@@ -17,6 +17,7 @@ frontend = Blueprint(
 
 
 @frontend.route('/')
+@frontend.route('/<path:path>')
 @login_required
-def index():
+def index(path=None):
     return render_template('frontend/index.html.j2')
