@@ -1,19 +1,14 @@
-from flask import Blueprint, render_template, abort, jsonify, request
+from flask import abort, jsonify, request
 
 from flask_login import login_required, current_user
 
+from osm_observer.views import api
 from osm_observer.lib.changes import query_changesets, query_changeset_details
 from osm_observer.model import Coverage
 
-changesets = Blueprint(
-    'changesets',
-    __name__,
-    template_folder='../templates/poster',
-    url_prefix='/changesets'
-)
 
 
-@changesets.route('/all')
+@api.route('/changesets/all')
 @login_required
 def changesets_list():
     # TODO add more filter options
@@ -30,7 +25,7 @@ def changesets_list():
     return jsonify()
 
 
-@changesets.route('/details/<int:changeset_id>/details')
+@api.route('/changesets/details/<int:changeset_id>/details')
 def changeset_details(changeset_id):
     details = query_changeset_details(changeset_id)
     # TODO return changeset details as json

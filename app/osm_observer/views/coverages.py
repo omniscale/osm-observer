@@ -1,16 +1,9 @@
-from flask import Blueprint, jsonify
+from flask import jsonify
 
 from flask_login import login_required, current_user
+from osm_observer.views import api
 
-coverages = Blueprint(
-    'coverages',
-    __name__,
-    template_folder='../templates/poster',
-    url_prefix='/coverages'
-)
-
-
-@coverages.route('/all')
+@api.route('/coverages/all')
 @login_required
 def all():
     coverages = []
