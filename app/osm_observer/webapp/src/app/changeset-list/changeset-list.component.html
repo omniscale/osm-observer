@@ -1,0 +1,19 @@
+<p>
+  changeset-list works!
+</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th>OSM ID</th>
+      <th>Created at</th>
+      <th>Closed at</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let changeset of changesets">
+      <td>{{ changeset.osmId }}</td>
+      <td>{{ changeset.createdAt }}</td>
+      <td>{{ changeset.closedAt }}</td>
+    </tr>
+  </tbody>
+</table>

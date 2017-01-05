@@ -5,17 +5,22 @@ import { HttpModule } from '@angular/http';
 import { RouterModule }   from '@angular/router';
 
 import { AppComponent } from './app.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+
 import { CoverageListComponent } from './coverage-list/coverage-list.component';
 import { CoveragesComponent } from './coverages/coverages.component';
 import { CoverageService } from './coverage.service';
-import { DashboardComponent } from './dashboard/dashboard.component';
+
+import { ChangesetListComponent } from './changeset-list/changeset-list.component';
+import { ChangesetService } from './changeset.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     CoverageListComponent,
     CoveragesComponent,
-    DashboardComponent
+    DashboardComponent,
+    ChangesetListComponent
   ],
   imports: [
     BrowserModule,
@@ -29,10 +34,17 @@ import { DashboardComponent } from './dashboard/dashboard.component';
       {
         path: 'coverages',
         component: CoveragesComponent
+      },
+      {
+        path: 'changesets',
+        component: ChangesetListComponent
       }
     ])
   ],
-  providers: [CoverageService],
+  providers: [
+    CoverageService,
+    ChangesetService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

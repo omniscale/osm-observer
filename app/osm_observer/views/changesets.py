@@ -26,8 +26,15 @@ def changesets_list():
     else:
         changesets=list(query_changesets(current_user.coverages))
 
+    data = []
+    for changeset in changesets:
+        data.append({
+            'osmId': changeset.id,
+            'createdAt': changeset.created_at,
+            'closedAt': changeset.closed_at
+        })
     # TODO return changesets as json
-    return jsonify()
+    return jsonify(data)
 
 
 @changesets.route('/details/<int:changeset_id>/details')
