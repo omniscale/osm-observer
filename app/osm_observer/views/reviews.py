@@ -1,4 +1,5 @@
 from flask import jsonify, request
+import json
 
 from osm_observer.views import api
 from osm_observer.extensions import db
@@ -14,10 +15,11 @@ def reviews(changeset_id):
 
 @api.route('/reviews/<int:changeset_id>/add', methods=["POST"])
 def add_review(changeset_id):
+    data = json.loads(request.data)
     review = Review(
         changeset_id=changeset_id,
-        score=request.form['score'],
-        status=request.form['status']
+        score=int(data['score']),
+        status=int(data['status'])
     )
     db.session.add(review)
     db.session.commit()
