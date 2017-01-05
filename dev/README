@@ -18,6 +18,7 @@ Testing Database
     echo 'create extension postgis' | psql -d osm_observer_testing
     echo 'create extension hstore' | psql -d osm_observer_testing
 
+    psql -d osm_observer_testing -c "CREATE SCHEMA app; ALTER SCHEMA app OWNER TO os;"
     psql -d osm_observer_testing -c "ALTER TABLE geometry_columns OWNER TO os; ALTER TABLE spatial_ref_sys OWNER TO os;"
 
 
