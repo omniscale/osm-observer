@@ -20,16 +20,16 @@ def changesets_list():
     else:
         changesets = list(query_changesets(current_user.coverages))
 
-    return jsonify(serialize_changests(changesets))
+    return jsonify(serialize_changesets(changesets))
 
 
 @api.route('/changesets/details/<int:changeset_id>')
 def changeset_details(changeset_id):
     details = query_changeset_details(changeset_id)
-    return jsonify(serialize_changest_details(details))
+    return jsonify(serialize_changeset_details(details))
 
 
-def serialize_changest_details(changeset):
+def serialize_changeset_details(changeset):
     return {
         'id': changeset['id'],
         'osmId': changeset['osm_id'],
@@ -47,7 +47,7 @@ def serialize_changest_details(changeset):
     }
 
 
-def serialize_changests(changesets):
+def serialize_changesets(changesets):
     data = []
     for changeset in changesets:
         data.append({
