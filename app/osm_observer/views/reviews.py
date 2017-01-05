@@ -18,8 +18,8 @@ def add_review(changeset_id):
     data = json.loads(request.data)
     review = Review(
         changeset_id=changeset_id,
-        score=int(data['score']),
-        status=int(data['status'])
+        score=data['score'],
+        status=data['status']
     )
     db.session.add(review)
     db.session.commit()

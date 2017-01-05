@@ -13,7 +13,7 @@ export class ChangesetService {
   private changesetsUrl = '/api/changesets';
 
   private changesetDetailsUrl(id: number): string {
-    return `/api/changesets/details/${id}`
+    return `/api/changesets/details/${id}`;
   }
 
   constructor(private http: Http) { }

@@ -15,6 +15,10 @@ import { ChangesetListComponent } from './changeset-list/changeset-list.componen
 import { ChangesetService } from './changeset.service';
 import { ChangesetDetailsComponent } from './changeset-details/changeset-details.component';
 
+import { ReviewListComponent } from './review-list/review-list.component';
+import { ReviewService } from './review.service';
+import { ReviewFormComponent } from './review-form/review-form.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +26,9 @@ import { ChangesetDetailsComponent } from './changeset-details/changeset-details
     CoveragesComponent,
     DashboardComponent,
     ChangesetListComponent,
-    ChangesetDetailsComponent
+    ChangesetDetailsComponent,
+    ReviewListComponent,
+    ReviewFormComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +51,8 @@ import { ChangesetDetailsComponent } from './changeset-details/changeset-details
   ],
   providers: [
     CoverageService,
-    ChangesetService
+    ChangesetService,
+    ReviewService
   ],
   bootstrap: [AppComponent]
 })

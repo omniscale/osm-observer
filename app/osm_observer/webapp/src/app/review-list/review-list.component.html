@@ -1,0 +1,15 @@
+<p>
+  review-list works!
+</p>
+<ul *ngIf="reviews">
+  <li *ngFor="let review of reviews">
+    <span class="tag"
+          [class.tag-warning]="review.score === 0"
+          [class.tag-danger]="review.score < 0"
+          [class.tag-primary]="review.score > 0">
+      {{ review.score }}
+    </span>
+    {{ review.status }}
+    {{ review.timeCreated }}
+  </li>
+</ul>

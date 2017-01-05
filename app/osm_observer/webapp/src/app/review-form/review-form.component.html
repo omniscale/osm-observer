@@ -1,0 +1,23 @@
+<p>
+  review-form works!
+</p>
+<form (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="score">Score</label>
+    <input type="number"
+           class="form-control"
+           id="score"
+           [(ngModel)]="model.score"
+           name="score"
+           min="-100"
+           max="100" />
+  </div>
+  {{ ReviewStatus }}
+  <div class="form-group">
+    <label for="status">Status</label>
+    <select class="form-control" id="status" [(ngModel)]="model.status" name="status">
+      <option *ngFor="let reviewStatusName of reviewStatus.names()" [value]="reviewStatus[reviewStatusName]">{{ reviewStatusName }}</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Add</button>
+</form>
