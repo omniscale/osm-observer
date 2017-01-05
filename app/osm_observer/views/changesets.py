@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, render_template, abort, jsonify, request
 
 from flask_login import login_required, current_user
 
@@ -15,42 +15,25 @@ changesets = Blueprint(
 
 @changesets.route('/all')
 @login_required
-def index():
-    return render_template(
-        'changesets/changesets.html.j2',
-        changesets=list(query_changesets(current_user.coverages)))
+def changesets_list():
+    # TODO add more filter options
+    coverage_id = request.args.get('coverage', False)
+    if coverage_id:
+        coverage = Coverage.by_id(coverage_id)
+        if coverage not in current_user.coverages:
+            raise abort(403)
+        changesets=list(query_changesets(coverages=coverage))
+    else:
+        changesets=list(query_changesets(current_user.coverages))
+
+    # TODO return changesets as json
+    return jsonify()
 
 
-@changesets.route('/coverage/<int:coverage_id>')
-def by_coverage(coverage_id):
-    coverage = Coverage.by_id(coverage_id)
-
-    if coverage not in current_user.coverages:
-        raise abort(403)
-
-    return render_template(
-        'changesets/changesets.html.j2',
-        changesets=list(query_changesets(coverages=coverage)),
-        page='coverages')
-
-
-@changesets.route('/details/<int:changeset_id>')
+@changesets.route('/details/<int:changeset_id>/details')
 def changeset_details(changeset_id):
     details = query_changeset_details(changeset_id)
-    return render_template(
-        'changesets/changeset_details.html.j2',
-        details=details)
+    # TODO return changeset details as json
+    return jsonify()
 
 
-@changesets.route('/last_login')
-def last_login():
-    return render_template(
-        'changesets/changesets.html.j2',
-        changesets=list(query_changesets(
-            coverages=current_user.coverages,
-            from_time=current_user.last_login
-        )),
-        page='last_login',
-    )
-
-# @changesets.route('/unchecked')
