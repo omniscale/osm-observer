@@ -47,12 +47,14 @@ def serialize_changests(changesets):
     data = []
     for changeset in changesets:
         data.append({
+            'id': changeset.app_id,
             'osmId': changeset.id,
             'createdAt': changeset.created_at,
             'closedAt': changeset.closed_at,
             'username': changeset.user_name,
             'numChanges': changeset.num_changes,
             'userId': changeset.user_id,
-            'tags': changeset.tags
+            'tags': changeset.tags,
+            'numReviews': changeset.num_reviews,
         })
     return data
