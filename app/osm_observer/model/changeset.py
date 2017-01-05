@@ -27,15 +27,6 @@ class Changeset(db.Model):
         if closed_at:
             self.closed_at = closed_at
 
-    @property
-    def serialize(self):
-       return {
-           'id': self.id,
-           'osmId': self.osm_id,
-           'createdAt': serialize_datetime(self.created_at),
-           'closedAt': serialize_datetime(self.closed_at)
-       }
-
     @classmethod
     def by_id(cls, id):
         q = cls.query.filter(cls.id == id)
