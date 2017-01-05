@@ -6,6 +6,7 @@ from osm_observer.views import api
 from osm_observer.lib.changes import query_changesets, query_changeset_details
 from osm_observer.model import Coverage
 
+
 @api.route('/changesets')
 @login_required
 def changesets_list():
@@ -15,21 +16,23 @@ def changesets_list():
         coverage = Coverage.by_id(coverage_id)
         if coverage not in current_user.coverages:
             raise abort(403)
-        changesets=list(query_changesets(coverages=coverage))
+        changesets = list(query_changesets(coverages=coverage))
     else:
-        changesets=list(query_changesets(current_user.coverages))
+        changesets = list(query_changesets(current_user.coverages))
 
     return jsonify(serialize_changests(changesets))
 
 
-@api.route('/changesets/details/<int:changeset_id>/details')
+@api.route('/changesets/details/<int:changeset_id>')
 def changeset_details(changeset_id):
     details = query_changeset_details(changeset_id)
     return jsonify(serialize_changest_details(details))
 
+
 def serialize_changest_details(changeset):
     return {
-        'osmId': changeset['id'],
+        'id': changeset['id'],
+        'osmId': changeset['osm_id'],
         'createdAt': changeset['created_at'],
         'closedAt': changeset['closed_at'],
         'nodesAdd': changeset['nodes_add'],
@@ -42,6 +45,7 @@ def serialize_changest_details(changeset):
         'relationsModify': changeset['relations_modify'],
         'relationsDelete': changeset['relations_delete'],
     }
+
 
 def serialize_changests(changesets):
     data = []
