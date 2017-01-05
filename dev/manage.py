@@ -52,6 +52,9 @@ def insert_changesets(created_at=None):
     if created_at is not None:
         s = s.where(changesets.c.created_at >= created_at)
 
+    # import only closed changesets
+    s = s.where(changesets.c.closed_at != None)
+
     conn = db.session.connection()
     queried_changesets = conn.execute(s).fetchall()
 
@@ -65,8 +68,6 @@ def insert_changesets(created_at=None):
                 closed_at=changeset.closed_at,
             )
             db.session.add(cs)
-        elif not cs.closed_at:
-            cs.closed_at = changeset.closed_at
 
     db.session.commit()
 

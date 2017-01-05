@@ -13,16 +13,12 @@ class Review(db.Model):
     }
 
     id = db.Column(db.Integer, primary_key=True)
-
     score = db.Column(db.Integer, default=0)
-
     _status = db.Column(db.String, default=False)
-
     time_created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-
     changeset_id = db.Column(
         db.Integer,
-        db.ForeignKey('app.changesets.osm_id'),
+        db.ForeignKey('app.changesets.id'),
         nullable=True
     )
 

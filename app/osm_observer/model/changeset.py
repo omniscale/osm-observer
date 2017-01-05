@@ -9,7 +9,8 @@ class Changeset(db.Model):
         'schema': 'app'
     }
 
-    osm_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    osm_id = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
     closed_at = db.Column(db.DateTime, nullable=True)
 
@@ -27,10 +28,15 @@ class Changeset(db.Model):
 
     @classmethod
     def by_id(cls, id):
+        q = cls.query.filter(cls.id == id)
+        return q.first()
+
+    @classmethod
+    def by_osm_id(cls, id):
         q = cls.query.filter(cls.osm_id == id)
         return q.first()
 
     def __repr__(self):
-        return '<Changeset osm_id=%s>' % (
-            self.osm_id,
+        return '<Changeset id="%s", osm_id=%s>' % (
+            self.id, self.osm_id,
         )
