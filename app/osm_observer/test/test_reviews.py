@@ -1,6 +1,5 @@
 from osm_observer.test.base import BaseTestClass
 from osm_observer.model import Changeset, Review
-from osm_observer.extensions import db
 
 from flask import url_for
 
