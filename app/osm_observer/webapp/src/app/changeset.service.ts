@@ -11,7 +11,10 @@ export class ChangesetService {
 
   private headers = new Headers({'Content-Type': 'application/json'});
   private changesetsUrl = '/api/changesets/all';
-  private changesetDetailsUrl = '/api/changesets/details/'
+
+  private changesetDetailsUrl(id: number): string {
+    return `/api/changesets/details/${id}`
+  }
 
   constructor(private http: Http) { }
 
@@ -23,8 +26,7 @@ export class ChangesetService {
   }
 
   getChangesetDetails(id: number): Promise<ChangesetDetails> {
-    // check with template-string
-    return this.http.get(this.changesetDetailsUrl + id)
+    return this.http.get(this.changesetDetailsUrl(id))
                .toPromise()
                .then(response => response.json() as ChangesetDetails)
                .catch(this.handleError);

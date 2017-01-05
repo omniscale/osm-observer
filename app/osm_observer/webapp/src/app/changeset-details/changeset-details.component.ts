@@ -17,7 +17,6 @@ export class ChangesetDetailsComponent implements OnInit {
   constructor(private changesetService: ChangesetService) { }
 
   assignChangesetDetails(changesetDetails: ChangesetDetails) {
-    console.log(changesetDetails);
     this.changesetDetails = changesetDetails;
   }
 
