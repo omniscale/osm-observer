@@ -57,6 +57,3 @@ class TestConfig(object):
     SQLALCHEMY_DATABASE_URI = 'postgres://os:os@localhost:5432/osm_observer_testing'
     SQLALCHEMY_ECHO = False
     SAVEPATH = '/tmp/'
-    SQLALCHEMY_BINDS = {
-        'changes': 'postgres://os:os@localhost:5432/imposm_changes'
-    }
