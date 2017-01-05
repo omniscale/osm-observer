@@ -1,4 +1,5 @@
 from osm_observer.extensions import db
+from osm_observer.helpers import serialize_datetime
 
 __all__ = ['Changeset']
 

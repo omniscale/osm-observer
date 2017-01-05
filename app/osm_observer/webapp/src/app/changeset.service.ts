@@ -10,7 +10,7 @@ import { ChangesetDetails } from './changeset-details';
 export class ChangesetService {
 
   private headers = new Headers({'Content-Type': 'application/json'});
-  private changesetsUrl = '/api/changesets/all';
+  private changesetsUrl = '/api/changesets';
 
   private changesetDetailsUrl(id: number): string {
     return `/api/changesets/details/${id}`

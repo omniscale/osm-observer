@@ -45,7 +45,7 @@ class Review(db.Model):
            'id': self.id,
            'score': self.score,
            'status': self.status,
-           'time_created': serialize_datetime(self.time_created)
+           'timeCreated': serialize_datetime(self.time_created)
        }
 
     @property

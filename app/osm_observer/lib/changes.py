@@ -1,13 +1,19 @@
 from sqlalchemy import case, true
 from sqlalchemy.sql import select, func
 
+from sqlalchemy.sql.expression import join
+
+from osm_observer.model import Changeset
 from osm_observer.model import changesets, nodes, ways, relations
 from osm_observer.extensions import db
 
-
 def query_changesets(coverages=None, from_time=None):
 
-    s = select([changesets])
+    changeset_join = join(Changeset, changesets,
+         Changeset.osm_id == changesets.c.id
+    )
+    s = select([changesets]).select_from(changeset_join)
+
     if coverages is not None:
         if not isinstance(coverages, list):
             coverages = [coverages]
