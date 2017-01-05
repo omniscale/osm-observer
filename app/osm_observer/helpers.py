@@ -13,6 +13,11 @@ def request_for_static():
     else:
         return False
 
+def serialize_datetime(value):
+    if value is None:
+        return None
+    return [value.strftime("%Y-%m-%d"), value.strftime("%H:%M:%S")]
+
 
 class LazyPrettyDict(object):
     def __init__(self, dictionary):

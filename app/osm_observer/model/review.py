@@ -1,7 +1,7 @@
 import datetime
 
 from osm_observer.extensions import db
-from osm_observer.helpers import _
+from osm_observer.helpers import _, serialize_datetime
 
 __all__ = ['Review']
 
@@ -38,6 +38,15 @@ class Review(db.Model):
         self.changeset_id = changeset_id
         self.score = score
         self.status = status
+
+    @property
+    def serialize(self):
+       return {
+           'id': self.id,
+           'score': self.score,
+           'status': self.status,
+           'time_created': serialize_datetime(self.time_created)
+       }
 
     @property
     def status(self):
