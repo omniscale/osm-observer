@@ -14,8 +14,11 @@ class Review(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     score = db.Column(db.Integer, default=0)
-    _status = db.Column(db.String, default=False)
-    time_created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    _status = db.Column(db.Integer, default=False)
+    time_created = db.Column(
+        db.DateTime,
+        default=datetime.datetime.utcnow
+    )
     changeset_id = db.Column(
         db.Integer,
         db.ForeignKey('app.changesets.id'),
@@ -31,6 +34,11 @@ class Review(db.Model):
         99: _('Fixed')
     }
 
+    def __init__(self, changeset_id, score, status=STATUS.NOTHING):
+        self.changeset_id = changeset_id
+        self.score = score
+        self.status = status
+
     @property
     def status(self):
         return self._review_status[self._status]
@@ -38,3 +46,8 @@ class Review(db.Model):
     @status.setter
     def status(self, value):
         self._status = value
+
+    @classmethod
+    def by_id(cls, id):
+        q = cls.query.filter(cls.id == id)
+        return q.first()
