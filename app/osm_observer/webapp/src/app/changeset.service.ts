@@ -9,7 +9,7 @@ import { Changeset } from './changeset';
 export class ChangesetService {
 
   private headers = new Headers({'Content-Type': 'application/json'});
-  private changesetsUrl = '/changesets';
+  private changesetsUrl = '/api/changesets';
 
   constructor(private http: Http) { }
 
