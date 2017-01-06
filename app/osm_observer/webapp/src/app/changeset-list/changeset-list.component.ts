@@ -42,11 +42,6 @@ export class ChangesetListComponent implements OnInit {
   }
 
   updateRouteParams(): void {
-    if(this.timer !== undefined) {
-      clearTimeout(this.timer);
-    }
-    this.timer = undefined;
-
     let routeParams = {};
     if(this.username !== undefined && this.username !== null && this.username !== '') {
       routeParams['username'] = this.username;
@@ -86,7 +81,10 @@ export class ChangesetListComponent implements OnInit {
     if(this.timer !== undefined) {
       clearTimeout(this.timer);
     }
-    this.timer = setTimeout(() => this.updateRouteParams(), 200);
+    this.timer = setTimeout(() => {
+      this.timer = undefined;
+      this.updateRouteParams();
+    }, 200);
   }
 
   ngOnInit() {
