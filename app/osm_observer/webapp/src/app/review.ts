@@ -10,7 +10,7 @@ export enum ReviewStatus {
   Fixed = 99
 }
 
-// TODO
+
 export namespace ReviewStatus {
   export function names(): Array<string> {
     var keys = Object.keys(ReviewStatus);

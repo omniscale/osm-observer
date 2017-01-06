@@ -9,7 +9,7 @@ import { Coverage } from './coverage';
 export class CoverageService {
 
   private headers = new Headers({'Content-Type': 'application/json'});
-  private coveragesUrl = '/api/coverages/all';
+  private coveragesUrl = '/api/coverages';
 
   constructor(private http: Http) { }
 
