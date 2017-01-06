@@ -3,7 +3,8 @@ from flask import jsonify
 from flask_login import login_required, current_user
 from osm_observer.views import api
 
-@api.route('/coverages/all')
+
+@api.route('/coverages')
 @login_required
 def all():
     coverages = []
