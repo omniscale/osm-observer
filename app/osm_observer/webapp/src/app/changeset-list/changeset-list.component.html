@@ -3,20 +3,46 @@
 </p>
 <div>
   <div class="form-inline">
-    <button class="btn btn-default btn-sm" [class.btn-primary]="timeRange==='today'" (click)="setTimeRange('today')">Today</button>
-    <button class="btn btn-default btn-sm" [class.btn-primary]="timeRange==='yesterday'" (click)="setTimeRange('yesterday')">Yesterday</button>
-    <button class="btn btn-default btn-sm" [class.btn-primary]="timeRange==='lastWeek'" (click)="setTimeRange('lastWeek')">Last Week</button>
+    <button class="btn btn-default btn-sm"
+            [class.btn-primary]="timeRange==='today'"
+            (click)="setTimeRange('today')">
+      Today
+    </button>
+    <button class="btn btn-default btn-sm"
+            [class.btn-primary]="timeRange==='yesterday'"
+            (click)="setTimeRange('yesterday')">
+      Yesterday
+    </button>
+    <button class="btn btn-default btn-sm"
+            [class.btn-primary]="timeRange==='lastWeek'"
+            (click)="setTimeRange('lastWeek')">
+      Last Week
+    </button>
     <div class="form-group">
-      <input type="text" class="form-control form-control-sm" id="username" placeholder="Username" (keyup)="applyChange()" [(ngModel)]="username"/>
+      <input type="text"
+             class="form-control form-control-sm"
+             id="username"
+             placeholder="Username"
+             (keyup)="applyChange()"
+             [(ngModel)]="username" />
     </div>
     <div class="form-group">
-      <input type="number" class="form-control form-control-sm" id="average-score" placeholder="Average Score" (keyup)="applyChange()" [(ngModel)]="averageScore" />
+      <input type="number"
+             class="form-control form-control-sm"
+             id="average-score"
+             placeholder="Average Score"
+             (keyup)="applyChange()"
+             [(ngModel)]="averageScore" />
     </div>
     <div class="form-group">
-      <input type="number" class="form-control form-control-sm" id="num-reviews" placeholder="Reviews" (keyup)="applyChange()" [(ngModel)]="numReviews" />
+      <input type="number"
+             class="form-control form-control-sm"
+             id="num-reviews"
+             placeholder="Reviews"
+             (keyup)="applyChange()"
+             [(ngModel)]="numReviews" />
     </div>
   </div>
-
 </div>
 <table class="table table-striped">
   <thead>
@@ -39,7 +65,9 @@
         <td><a href="http://www.openstreetmap.org/user/{{ changeset.username }}" target="_blank">{{ changeset.username }}</a></td>
         <td>{{ changeset.numReviews }}</td>
         <td>{{ changeset.averageScore }}</td>
-        <td><button class="btn btn-default btn-sm" (click)="show= show === changeset.id ? undefined : changeset.id">Toggle</button></td>
+        <td>
+          <button class="btn btn-default btn-sm" (click)="show= show === changeset.id ? undefined : changeset.id">Toggle</button>
+        </td>
       </tr>
       <tr *ngIf="show === changeset.id">
         <td colspan="4">
