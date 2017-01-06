@@ -21,6 +21,8 @@ export class ChangesetListComponent implements OnInit {
   averageScore: number;
   numReviews: number;
 
+  private timer;
+
   private subscription: Subscription;
 
   constructor(
@@ -40,6 +42,11 @@ export class ChangesetListComponent implements OnInit {
   }
 
   updateRouteParams(): void {
+    if(this.timer !== undefined) {
+      clearTimeout(this.timer);
+    }
+    this.timer = undefined;
+
     let routeParams = {};
     if(this.username !== undefined) {
       routeParams['username'] = this.username;
@@ -64,7 +71,6 @@ export class ChangesetListComponent implements OnInit {
     this.timeRange = params['timeRange'] as string;
     this.averageScore = params['averageScore'] as number;
     this.numReviews = params['numReviews'] as number;
-    console.log(this.username, this.timeRange, this.averageScore, this.numReviews);
   }
 
   setTimeRange(timeRange: string): void {
@@ -74,6 +80,13 @@ export class ChangesetListComponent implements OnInit {
       this.timeRange = timeRange;
     }
     this.updateRouteParams();
+  }
+
+  applyChange(): void {
+    if(this.timer !== undefined) {
+      clearTimeout(this.timer);
+    }
+    this.timer = setTimeout(() => this.updateRouteParams(), 200);
   }
 
   ngOnInit() {
