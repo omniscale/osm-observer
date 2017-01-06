@@ -15,7 +15,7 @@ def reviews(changeset_id):
 
 @api.route('/reviews/<int:changeset_id>/add', methods=["POST"])
 def add_review(changeset_id):
-    data = json.loads(request.data)
+    data = request.json
     review = Review(
         changeset_id=changeset_id,
         score=data['score'],
