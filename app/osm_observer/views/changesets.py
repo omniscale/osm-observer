@@ -26,13 +26,14 @@ def changesets_list():
 @api.route('/changesets/details/<int:changeset_id>')
 def changeset_details(changeset_id):
     details = query_changeset_details(changeset_id)
+    print(details)
     return jsonify(serialize_changeset_details(details))
 
 
 def serialize_changeset_details(changeset):
     return {
-        'id': changeset['id'],
-        'osmId': changeset['osm_id'],
+        'id': changeset['app_id'],
+        'osmId': changeset['id'],
         'createdAt': changeset['created_at'],
         'closedAt': changeset['closed_at'],
         'nodesAdd': changeset['nodes_add'],

@@ -10,9 +10,6 @@ from flask import (
 )
 from flask_babel import Babel, gettext as _
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
-
 import webassets.loaders
 import webassets.env
 
