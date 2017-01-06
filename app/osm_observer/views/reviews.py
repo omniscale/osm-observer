@@ -1,5 +1,4 @@
 from flask import jsonify, request
-import json
 
 from osm_observer.views import api
 from osm_observer.extensions import db
