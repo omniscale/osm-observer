@@ -22,13 +22,11 @@
         <td>{{ changeset.numReviews }}</td>
         <td><button (click)="show= show === changeset.id ? undefined : changeset.id">Toggle</button></td>
       </tr>
-      <!-- TODO Readd when changeset details refectored in python code
       <tr *ngIf="show === changeset.id">
         <td colspan="4">
-          <changeset-details [id]="changeset.id"></changeset-details>
+          <changeset-details [id]="changeset.osmId"></changeset-details>
         </td>
       </tr>
-      -->
       <tr *ngIf="show === changeset.id">
         <td colspan="4">
           <review-form [id]="changeset.id"></review-form>

@@ -66,12 +66,17 @@ def query_changeset_details(changeset_id=None):
         func.coalesce(func.sum(case([(relations.c.delete==true(), 1)], else_=0)), 0).label('relations_delete'),
     ]).where(relations.c.changeset==changeset_id).cte('relations')
 
+    changeset_join = join(Changeset, changesets,
+         Changeset.osm_id == changeset_id
+    )
+
     stmt = select([
+        Changeset.id.label('app_id'),
         changesets,
         n,
         w,
         r,
-    ]).where(changesets.c.id==changeset_id)
+    ]).select_from(changeset_join).where(changesets.c.id==changeset_id)
 
     conn = db.session.connection()
     return conn.execute(stmt).fetchone()
