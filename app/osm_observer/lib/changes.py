@@ -7,7 +7,7 @@ from osm_observer.model import Changeset, Review
 from osm_observer.model import changesets, nodes, ways, relations
 from osm_observer.extensions import db
 
-def query_changesets(coverages=None, from_time=None):
+def query_changesets(coverages=None, from_time=None, to_time=None, username=None, num_reviews=None, average_score=None):
 
     changeset_join = join(Changeset, changesets,
          Changeset.osm_id == changesets.c.id
@@ -17,8 +17,11 @@ def query_changesets(coverages=None, from_time=None):
     # add more options e.g. sum score from reviews
     review_select = select([
         Review.changeset_id.label('changeset_id'),
-        func.count('*').label('num_reviews')]
-    ).group_by(
+        func.count('*').label('num_reviews'),
+        func.coalesce(
+            func.sum(Review.score) / func.count('*')
+        ).label('average_score')
+    ]).group_by(
         Review.changeset_id).alias('reviews'
     )
 
@@ -29,7 +32,8 @@ def query_changesets(coverages=None, from_time=None):
     s = select([
         Changeset.id.label('app_id'),
         changesets,
-        review_select.c.num_reviews
+        review_select.c.num_reviews,
+        review_select.c.average_score
     ]).select_from(review_join)
 
     if coverages is not None:
@@ -38,7 +42,23 @@ def query_changesets(coverages=None, from_time=None):
         for coverage in coverages:
             s = s.where(changesets.c.bbox.ST_Intersects(coverage.geometry))
 
-    if from_time is not None:
+    if username is not None:
+        s = s.where(changesets.c.user_name==username)
+
+    if num_reviews is not None:
+        if num_reviews == 0:
+            s = s.where(review_select.c.num_reviews==None)
+        else:
+            s = s.where(review_select.c.num_reviews>=num_reviews)
+
+    if average_score is not None:
+        s = s.where(review_select.c.average_score>=average_score)
+
+    if from_time is not None and to_time is not None:
+        s = s.where(changesets.c.closed_at>=from_time)
+        s = s.where(changesets.c.closed_at<to_time)
+
+    if from_time is not None and to_time is None:
         s = s.where(changesets.c.closed_at>=from_time)
 
     s = s.order_by(changesets.c.closed_at.desc())
