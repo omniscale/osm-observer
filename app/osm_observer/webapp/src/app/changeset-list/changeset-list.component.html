@@ -18,7 +18,7 @@
       <tr>
         <td>{{ changeset.id }}</td>
         <td><a href="http://www.openstreetmap.org/changeset/{{ changeset.osmId }}" target="_blank">{{ changeset.osmId }}</a></td>
-        <td>{{ changeset.closedAt }}</td>
+        <td>{{ changeset.closedAt | date:'d.M.y H:m:s' }}</td>
         <td><a href="http://www.openstreetmap.org/user/{{ changeset.username }}" target="_blank">{{ changeset.username }}</a></td>
         <td>{{ changeset.numReviews }}</td>
         <td>{{ changeset.averageScore }}</td>

@@ -54,8 +54,8 @@ def serialize_changesets(changesets):
         data.append({
             'id': changeset.app_id,
             'osmId': changeset.id,
-            'createdAt': changeset.created_at,
-            'closedAt': changeset.closed_at,
+            'createdAt': changeset.created_at.timestamp() * 1000,
+            'closedAt': changeset.closed_at.timestamp() * 1000,
             'username': changeset.user_name,
             'numChanges': changeset.num_changes,
             'userId': changeset.user_id,
