@@ -14,7 +14,9 @@ export class ReviewListComponent implements OnInit {
 
   reviews: Review[];
 
-  constructor(private reviewService: ReviewService) { }
+  constructor(private reviewService: ReviewService) {
+    reviewService.refreshReviews$.subscribe(e => this.getReviews());
+  }
 
   assignReviews(reviews: Review[]) {
     this.reviews = reviews;
