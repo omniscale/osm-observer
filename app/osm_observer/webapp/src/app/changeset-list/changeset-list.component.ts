@@ -48,16 +48,16 @@ export class ChangesetListComponent implements OnInit {
     this.timer = undefined;
 
     let routeParams = {};
-    if(this.username !== undefined) {
+    if(this.username !== undefined && this.username !== null && this.username !== '') {
       routeParams['username'] = this.username;
     }
-    if(this.timeRange !== undefined) {
+    if(this.timeRange !== undefined && this.timeRange !== null && this.timeRange !== '') {
       routeParams['timeRange'] = this.timeRange;
     }
-    if(this.averageScore !== undefined) {
+    if(this.averageScore !== undefined && this.averageScore !== null) {
       routeParams['averageScore'] = this.averageScore;
     }
-    if(this.numReviews !== undefined) {
+    if(this.numReviews !== undefined && this.numReviews !== null) {
       routeParams['numReviews'] = this.numReviews;
     }
 
