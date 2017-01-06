@@ -26,7 +26,6 @@ def changesets_list():
 @api.route('/changesets/details/<int:changeset_id>')
 def changeset_details(changeset_id):
     details = query_changeset_details(changeset_id)
-    print(details)
     return jsonify(serialize_changeset_details(details))
 
 
