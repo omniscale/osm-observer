@@ -1,6 +1,11 @@
 <p>
   changeset-list works!
 </p>
+<div>
+  <button class="btn btn-default btn-sm" [class.btn-primary]="timeRange==='today'" (click)="setTimeRange('today')">Today</button>
+  <button class="btn btn-default btn-sm" [class.btn-primary]="timeRange==='yesterday'" (click)="setTimeRange('yesterday')">Yesterday</button>
+  <button class="btn btn-default btn-sm" [class.btn-primary]="timeRange==='lastWeek'" (click)="setTimeRange('lastWeek')">Last Week</button>
+</div>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -18,11 +23,11 @@
       <tr>
         <td>{{ changeset.id }}</td>
         <td><a href="http://www.openstreetmap.org/changeset/{{ changeset.osmId }}" target="_blank">{{ changeset.osmId }}</a></td>
-        <td>{{ changeset.closedAt | date:'d.M.y H:m:s' }}</td>
+        <td>{{ changeset.closedAt | date:'d.M.y HH:mm:ss' }}</td>
         <td><a href="http://www.openstreetmap.org/user/{{ changeset.username }}" target="_blank">{{ changeset.username }}</a></td>
         <td>{{ changeset.numReviews }}</td>
         <td>{{ changeset.averageScore }}</td>
-        <td><button (click)="show= show === changeset.id ? undefined : changeset.id">Toggle</button></td>
+        <td><button class="btn btn-default btn-sm" (click)="show= show === changeset.id ? undefined : changeset.id">Toggle</button></td>
       </tr>
       <tr *ngIf="show === changeset.id">
         <td colspan="4">
