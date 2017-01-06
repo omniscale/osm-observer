@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 from flask import abort, jsonify, request
 
 from flask_login import login_required, current_user
@@ -10,15 +12,47 @@ from osm_observer.model import Coverage
 @api.route('/changesets')
 @login_required
 def changesets_list():
-    # TODO add more filter options
+    # filter with coverage
+    coverage = None
     coverage_id = request.args.get('coverage', False)
     if coverage_id:
         coverage = Coverage.by_id(coverage_id)
         if coverage not in current_user.coverages:
             raise abort(403)
-        changesets = list(query_changesets(coverages=coverage))
+
+    # filter with username
+    username = request.args.get('username', None)
+
+    # filter with num_reviews
+    num_reviews = request.args.get('numReviews', None)
+
+    # filter with average sorce
+    average_score = request.args.get('averageScore', None)
+
+    # filter with time_range
+    # actually we support today, yesterday and last_week
+    time_range = request.args.get('timeRange', None)
+    if time_range == 'today':
+        from_time = date.today()
+        to_time = date.today() + timedelta(1)
+    elif time_range == 'yesterday':
+        from_time = date.today() - timedelta(1)
+        to_time = date.today()
+    elif time_range == 'last_week':
+        from_time = date.today() - timedelta(7)
+        to_time = date.today()
     else:
-        changesets = list(query_changesets(current_user.coverages))
+        from_time = None
+        to_time = None
+
+    changesets = list(query_changesets(
+        coverages=coverage or current_user.coverages,
+        from_time=from_time,
+        to_time=to_time,
+        username=username,
+        num_reviews=num_reviews,
+        average_score=average_score,
+    ))
 
     return jsonify(serialize_changesets(changesets))
 
@@ -60,5 +94,6 @@ def serialize_changesets(changesets):
             'userId': changeset.user_id,
             'tags': changeset.tags,
             'numReviews': changeset.num_reviews,
+            'averageScore': changeset.average_score,
         })
     return data
