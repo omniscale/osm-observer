@@ -1,14 +1,15 @@
 <p>
   changeset-list works!
 </p>
-<table class="table">
+<table class="table table-striped">
   <thead>
     <tr>
       <th>ID</th>
       <th>OSM ID</th>
-      <th>Created at</th>
       <th>Closed at</th>
+      <th>Username</th>
       <th>Reviews</th>
+      <th>Average Score</th>
       <th></th>
     </tr>
   </thead>
@@ -16,10 +17,11 @@
     <ng-container *ngFor="let changeset of changesets">
       <tr>
         <td>{{ changeset.id }}</td>
-        <td>{{ changeset.osmId }}</td>
-        <td>{{ changeset.createdAt }}</td>
-        <td>{{ changeset.closedAt }}</td>
+        <td><a href="http://www.openstreetmap.org/changeset/{{ changeset.osmId }}" target="_blank">{{ changeset.osmId }}</a></td>
+        <td>{{ changeset.closedAt | date:'d.M.y H:m:s' }}</td>
+        <td><a href="http://www.openstreetmap.org/user/{{ changeset.username }}" target="_blank">{{ changeset.username }}</a></td>
         <td>{{ changeset.numReviews }}</td>
+        <td>{{ changeset.averageScore }}</td>
         <td><button (click)="show= show === changeset.id ? undefined : changeset.id">Toggle</button></td>
       </tr>
       <tr *ngIf="show === changeset.id">

@@ -10,6 +10,6 @@
       {{ review.score }}
     </span>
     {{ review.status }}
-    {{ review.timeCreated }}
+    {{ review.timeCreated | date:'d.M.y H:m:s' }}
   </li>
 </ul>

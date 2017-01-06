@@ -2,7 +2,14 @@ export class Review {
   id: number;
   score: number;
   status: number;
-  timeCreated: string;
+  timeCreated: Date;
+
+  constructor(id: number, score: number, status: number, timeCreated: string) {
+    this.id = id;
+    this.score = score;
+    this.status = status;
+    this.timeCreated = new Date(timeCreated);
+  }
 }
 
 export enum ReviewStatus {
