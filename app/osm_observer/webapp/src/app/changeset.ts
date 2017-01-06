@@ -4,4 +4,9 @@ export class Changeset {
     createdAt: string;
     closedAt: string;
     numReviews: number;
+    username: string;
+    numChanges: number;
+    userId: number;
+    averageScore: number;
+    // tags
 }

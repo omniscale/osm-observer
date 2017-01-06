@@ -61,5 +61,6 @@ def serialize_changesets(changesets):
             'userId': changeset.user_id,
             'tags': changeset.tags,
             'numReviews': changeset.num_reviews,
+            'averageScore': 0
         })
     return data
