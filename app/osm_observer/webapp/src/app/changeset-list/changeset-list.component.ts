@@ -37,7 +37,7 @@ export class ChangesetListComponent implements OnInit {
   }
 
   getChangesets(): void {
-    this.changesetService.getChangesets()
+    this.changesetService.getChangesets(this.username, this.timeRange, this.averageScore, this.numReviews)
                          .then(changesets => this.assignChangesets(changesets));
   }
 
@@ -75,6 +75,7 @@ export class ChangesetListComponent implements OnInit {
       this.timeRange = timeRange;
     }
     this.updateRouteParams();
+    this.getChangesets();
   }
 
   applyChange(): void {
@@ -84,6 +85,7 @@ export class ChangesetListComponent implements OnInit {
     this.timer = setTimeout(() => {
       this.timer = undefined;
       this.updateRouteParams();
+      this.getChangesets();
     }, 200);
   }
 

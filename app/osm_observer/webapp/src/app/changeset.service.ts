@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { Headers, Http, URLSearchParams } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -18,8 +18,22 @@ export class ChangesetService {
 
   constructor(private http: Http) { }
 
-  getChangesets(): Promise<Changeset[]> {
-    return this.http.get(this.changesetsUrl)
+  getChangesets(username: string, timeRange: string, averageScore: number, numReviews: number): Promise<Changeset[]> {
+    let params = new URLSearchParams();
+    if(username !== undefined && username !== null && username !== '') {
+      params.set('username', username);
+    }
+    if(timeRange !== undefined && timeRange !== null && timeRange !== '') {
+      params.set('timeRange', timeRange);
+    }
+    if(averageScore !== undefined && averageScore !== null) {
+      params.set('averageScore', averageScore.toString());
+    }
+    if(numReviews !== undefined && numReviews !== null) {
+      params.set('numReviews', numReviews.toString());
+    }
+
+    return this.http.get(this.changesetsUrl, {search: params})
                .toPromise()
                .then(response => response.json() as Changeset[])
                .catch(this.handleError);
