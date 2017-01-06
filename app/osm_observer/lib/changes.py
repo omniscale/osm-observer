@@ -18,7 +18,9 @@ def query_changesets(coverages=None, from_time=None, to_time=None, username=None
     review_select = select([
         Review.changeset_id.label('changeset_id'),
         func.count('*').label('num_reviews'),
-        func.sum(Review.score).label('average_score')
+        func.coalesce(
+            func.sum(Review.score) / func.count('*')
+        ).label('average_score')
     ]).group_by(
         Review.changeset_id).alias('reviews'
     )
