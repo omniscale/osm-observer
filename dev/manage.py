@@ -129,6 +129,20 @@ def watch_webapp():
     ])
 
 
+@manager.command
+def update_ng_translation(path='../static/i18n/de.json'):
+    "Updates ng2-translations. Path is relative to webapp folder."
+
+    langs = ['en', 'de']
+
+    os.chdir('../app/osm_observer/webapp')
+
+    for lang in langs:
+        call([
+            'npm', 'run', 'extract-%s' % lang
+        ])
+
+
 manager.add_command("runserver", Server(threaded=True))
 
 if __name__ == '__main__':

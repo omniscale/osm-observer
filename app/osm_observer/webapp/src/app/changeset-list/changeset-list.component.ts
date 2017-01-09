@@ -4,6 +4,8 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import {Subscription } from 'rxjs';
 
+import {TranslateService} from 'ng2-translate';
+
 import { Changeset } from '../changeset';
 import { ChangesetService } from '../changeset.service';
 
@@ -29,7 +31,8 @@ export class ChangesetListComponent implements OnInit {
     private changesetService: ChangesetService,
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location
+    private location: Location,
+    translate: TranslateService
   ) { }
 
   assignChangesets(changesets: Changeset[]) {

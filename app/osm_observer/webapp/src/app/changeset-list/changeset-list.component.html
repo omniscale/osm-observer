@@ -6,17 +6,17 @@
     <button class="btn btn-default btn-sm"
             [class.btn-primary]="timeRange==='today'"
             (click)="setTimeRange('today')">
-      Today
+      {{ 'TODAY' | translate }}
     </button>
     <button class="btn btn-default btn-sm"
             [class.btn-primary]="timeRange==='yesterday'"
             (click)="setTimeRange('yesterday')">
-      Yesterday
+      {{ 'YESTERDAY' | translate }}
     </button>
     <button class="btn btn-default btn-sm"
             [class.btn-primary]="timeRange==='lastWeek'"
             (click)="setTimeRange('lastWeek')">
-      Last Week
+      {{ 'LAST WEEK' | translate }}
     </button>
     <div class="form-group">
       <input type="text"
