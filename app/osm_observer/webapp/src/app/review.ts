@@ -4,7 +4,7 @@ export class Review {
   status: number;
   timeCreated: Date;
 
-  constructor(id: number, score: number, status: number, timeCreated: string) {
+  constructor(id?: number, score?: number, status?: number, timeCreated?: string) {
     this.id = id;
     this.score = score;
     this.status = status;
