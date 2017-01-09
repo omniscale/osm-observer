@@ -3,7 +3,7 @@ from itertools import chain
 from osm_observer import model
 
 
-def create_users_coverages():
+def all():
     users = [
         model.User('admin', 'secure'),
         model.User('user', 'secure'),

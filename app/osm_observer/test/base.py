@@ -65,7 +65,7 @@ class BaseTestClass(TestCase):
     def setUp(self):
         db.create_all()
         db.session.commit()
-        db.session.add_all(fixtures.create_users_coverages())
+        db.session.add_all(fixtures.all())
         db.session.commit()
 
     def tearDown(self):
