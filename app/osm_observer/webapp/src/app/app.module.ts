@@ -19,6 +19,10 @@ import { ReviewListComponent } from './review-list/review-list.component';
 import { ReviewService } from './review.service';
 import { ReviewFormComponent } from './review-form/review-form.component';
 
+import { ReviewBotConfigListComponent } from './review-bot-config-list/review-bot-config-list.component';
+import { ReviewBotConfigService } from './review-bot-config.service';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,7 +32,8 @@ import { ReviewFormComponent } from './review-form/review-form.component';
     ChangesetListComponent,
     ChangesetDetailsComponent,
     ReviewListComponent,
-    ReviewFormComponent
+    ReviewFormComponent,
+    ReviewBotConfigListComponent
   ],
   imports: [
     BrowserModule,
@@ -46,13 +51,18 @@ import { ReviewFormComponent } from './review-form/review-form.component';
       {
         path: 'changesets',
         component: ChangesetListComponent
+      },
+      {
+        path: 'reviewBotConfigs',
+        component: ReviewBotConfigListComponent
       }
     ])
   ],
   providers: [
     CoverageService,
     ChangesetService,
-    ReviewService
+    ReviewService,
+    ReviewBotConfigService
   ],
   bootstrap: [AppComponent]
 })

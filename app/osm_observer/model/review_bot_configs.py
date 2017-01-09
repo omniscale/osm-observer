@@ -28,3 +28,12 @@ class ReviewBotConfig(db.Model):
     def by_bot_name(cls, name):
         q = cls.query.filter(cls.bot_name == name)
         return q.all()
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'active': self.active,
+            'botName': self.bot_name,
+            'config': self.config
+        }

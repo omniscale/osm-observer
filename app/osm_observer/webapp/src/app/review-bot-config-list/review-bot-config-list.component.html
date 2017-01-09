@@ -1,0 +1,35 @@
+<p>
+  review-bot-config-list works!
+</p>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Bot name</th>
+      <th>Active</th>
+      <th>Config</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let reviewBotConfig of reviewBotConfigs">
+      <td>{{ reviewBotConfig['botName'] }}</td>
+      <td>{{ reviewBotConfig['active'] }}</td>
+      <td [ngSwitch]="reviewBotConfig['botName']">
+        <dl *ngSwitchCase="'UsernameReviewBot'">
+          <dt>Username</dt>
+          <dd>{{ reviewBotConfig['config']['username'] }}</dd>
+          <dt>Score</dt>
+          <dd>{{ reviewBotConfig['config']['score'] }}</dd>
+        </dl>
+        <dl *ngSwitchCase="'TagValueReviewBot'">
+          <dt>Tag</dt>
+          <dd>{{ reviewBotConfig['config']['tag'] }}</dd>
+          <dt>Value</dt>
+          <dd>{{ reviewBotConfig['config']['value'] }}</dd>
+          <dt>Score</dt>
+          <dd>{{ reviewBotConfig['config']['score'] }}</dd>
+        </dl>
+        <span *ngSwitchDefault>Failed</span>
+      </td>
+    </tr>
+  </tbody>
+</table>
