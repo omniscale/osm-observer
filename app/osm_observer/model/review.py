@@ -34,7 +34,7 @@ class Review(db.Model):
         99: _('Fixed')
     }
 
-    def __init__(self, changeset_id, score, status=STATUS.NOTHING):
+    def __init__(self, changeset_id=None, score=0, status=STATUS.NOTHING):
         self.changeset_id = changeset_id
         self.score = score
         self.status = status

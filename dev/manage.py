@@ -2,6 +2,7 @@ import os
 
 from osm_observer import create_app
 from osm_observer.extensions import db
+from osm_observer.lib.review_bots import UsernameReviewBot, TagValueReviewBot
 
 from flask_script import Manager, Server, prompt_bool
 from subprocess import call
@@ -58,6 +59,11 @@ def insert_changesets(created_at=None):
     conn = db.session.connection()
     queried_changesets = conn.execute(s).fetchall()
 
+    bots = [
+        UsernameReviewBot(conn),
+        TagValueReviewBot(conn),
+    ]
+
     # todo refactor to speed up
     for changeset in queried_changesets:
         cs = Changeset.by_id(changeset.id)
@@ -67,8 +73,14 @@ def insert_changesets(created_at=None):
                 created_at=changeset.created_at,
                 closed_at=changeset.closed_at,
             )
-            db.session.add(cs)
 
+            for bot in bots:
+                review = bot.review(changeset)
+                if review is not None:
+                    print (bot, 'reviewed', changeset.id, 'with score', review.score)
+                    cs.reviews.append(review)
+
+            db.session.add(cs)
     db.session.commit()
 
 
