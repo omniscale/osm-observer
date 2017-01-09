@@ -7,6 +7,8 @@ doc/_build
 server/pkgs
 app/osm_observer/static/webapp
 app/osm_observer/static/cache
+dev/changes
+dev/diffs
 .DS_Store
 .coverage
 .project

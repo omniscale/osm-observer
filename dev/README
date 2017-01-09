@@ -8,18 +8,29 @@ Database
     echo 'create extension hstore' | psql -d osm_observer
 
     psql -d osm_observer -c "CREATE SCHEMA app; ALTER SCHEMA app OWNER TO os;"
-    psql -d osm_observer -c "ALTER TABLE geometry_columns OWNER TO os; ALTER TABLE spatial_ref_sys OWNER TO os;"
+    psql -d osm_observer -c "CREATE SCHEMA changes; ALTER SCHEMA changes OWNER TO os;"
 
 
 Testing Database
 ----------------
+
 ::
     createdb -O os osm_observer_testing
     echo 'create extension postgis' | psql -d osm_observer_testing
     echo 'create extension hstore' | psql -d osm_observer_testing
 
     psql -d osm_observer_testing -c "CREATE SCHEMA app; ALTER SCHEMA app OWNER TO os;"
-    psql -d osm_observer_testing -c "ALTER TABLE geometry_columns OWNER TO os; ALTER TABLE spatial_ref_sys OWNER TO os;"
+    psql -d osm_observer -c "CREATE SCHEMA changes; ALTER SCHEMA changes OWNER TO os;"
+
+
+
+Imposm-Changes
+--------------
+
+See https://github.com/omniscale/imposm-changes for imposm-changes installation notes
+
+::
+    imposm-changes -config imposm-changes-config.json
 
 
 Installation
@@ -39,6 +50,10 @@ Installation
 
 Using Angular-CLI for the app
 -----------------------------
+
+::
+    npm install -g angular-cli
+
 ::
     cd ../app/osm_observer/webapp
     npm install
