@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+
+import 'rxjs/add/operator/switchMap';
 
 import { ReviewBotConfig, DefaultBotConfig, UsernameBotConfig, TagValueBotConfig } from '../review-bot-config';
 import { ReviewBotConfigService } from '../review-bot-config.service';
@@ -14,9 +17,19 @@ export class ReviewBotConfigFormComponent implements OnInit {
 
   model = new ReviewBotConfig();
 
-  constructor(private reviewBotConfigService: ReviewBotConfigService) { }
+  update = false;
+
+  constructor(private reviewBotConfigService: ReviewBotConfigService,
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.params
+        .switchMap((params: Params) => this.reviewBotConfigService.getReviewBotConfig(+params['id']))
+        .subscribe((reviewBotConfig: ReviewBotConfig) => {
+          this.model = reviewBotConfig;
+          this.update = true;
+        });
   }
 
   setBotConfig() {
@@ -33,7 +46,21 @@ export class ReviewBotConfigFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.reviewBotConfigService.addReviewBotConfig(this.model);
+    if(this.update) {
+      this.reviewBotConfigService.updateReviewBotConfig(this.model)
+          .then(v => {
+            this.router.navigate(['/reviewBotConfig']);
+          })
+    } else {
+      this.reviewBotConfigService.addReviewBotConfig(this.model)
+          .then(v => {
+            this.router.navigate(['/reviewBotConfig']);
+          });
+    }
+  }
+
+  onCancel() {
+    this.router.navigate(['/reviewBotConfig']);
   }
 
 }

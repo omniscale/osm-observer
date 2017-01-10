@@ -8,6 +8,7 @@
       <th>Bot name</th>
       <th>Active</th>
       <th>Config</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -30,6 +31,12 @@
           <dd>{{ reviewBotConfig['config']['score'] }}</dd>
         </dl>
         <span *ngSwitchDefault>Failed</span>
+      </td>
+      <td>
+        <a class="btn btn-default"
+           [routerLink]="['edit', reviewBotConfig.id]">
+          Edit
+        </a>
       </td>
     </tr>
   </tbody>

@@ -11,6 +11,12 @@ def bots():
     return jsonify([i.serialize for i in bots])
 
 
+@api.route('/bots/<int:bot_id>')
+def bot(bot_id):
+    bot = ReviewBotConfig.by_id(bot_id)
+    return jsonify(bot.serialize)
+
+
 @api.route('/bots/add', methods=['POST'])
 def add_bot():
     data = request.json
@@ -21,3 +27,16 @@ def add_bot():
     db.session.commit()
 
     return jsonify(review_bot_config.serialize)
+
+
+@api.route('/bots/<int:bot_id>/update', methods=['POST'])
+def update_bot(bot_id):
+    data = request.json
+    bot = ReviewBotConfig.by_id(bot_id)
+    bot.botName = data['botName']
+    bot.active = data['active']
+    bot.config = data['config']
+
+    db.session.commit()
+
+    return jsonify(bot.serialize)

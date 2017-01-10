@@ -64,6 +64,10 @@ import { ReviewBotConfigFormComponent } from './review-bot-config-form/review-bo
           {
             path: 'add',
             component: ReviewBotConfigFormComponent
+          },
+          {
+            path: 'edit/:id',
+            component: ReviewBotConfigFormComponent
           }
         ]
       }

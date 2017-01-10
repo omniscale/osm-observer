@@ -10,6 +10,12 @@ export class ReviewBotConfigService {
 
   private reviewBotConfigsUrl = '/api/bots';
   private addReviewBotConfigUrl = '/api/bots/add';
+  private reviewBotConfigUrl(id: number): string {
+    return `/api/bots/${id}`;
+  };
+  private updateReviewBotConfigUrl(id: number): string {
+    return `/api/bots/${id}/update`;
+  }
 
   constructor(private http: Http) { }
 
@@ -20,8 +26,22 @@ export class ReviewBotConfigService {
                     .catch(this.handleError);
   }
 
+  getReviewBotConfig(reviewBotId: number): Promise<ReviewBotConfig> {
+    return this.http.get(this.reviewBotConfigUrl(reviewBotId))
+                    .toPromise()
+                    .then(response => response.json() as ReviewBotConfig)
+                    .catch(this.handleError);
+  }
+
   addReviewBotConfig(reviewBotConfig: ReviewBotConfig): Promise<ReviewBotConfig> {
     return this.http.post(this.addReviewBotConfigUrl, reviewBotConfig)
+                    .toPromise()
+                    .then(response => response.json() as ReviewBotConfig)
+                    .catch(this.handleError);
+  }
+
+  updateReviewBotConfig(reviewBotConfig: ReviewBotConfig): Promise<ReviewBotConfig> {
+    return this.http.post(this.updateReviewBotConfigUrl(reviewBotConfig.id), reviewBotConfig)
                     .toPromise()
                     .then(response => response.json() as ReviewBotConfig)
                     .catch(this.handleError);

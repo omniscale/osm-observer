@@ -74,6 +74,12 @@
   <button type="submit"
           class="btn btn-primary"
           [disabled]="!botConfigForm.form.valid">
-    Add
+    <span *ngIf="update">Update</span>
+    <span *ngIf="!update">Add</span>
+  </button>
+  <button type="button"
+          class="btn btn-secondary"
+          (click)="onCancel()">
+    Cancel
   </button>
 </form>
