@@ -1,7 +1,5 @@
-Babel==2.3.4
 Flask==0.11.1
 Flask-Assets==0.12
-Flask-Babel==0.11.1
 Flask-Login==0.4.0
 Flask-Mail==0.9.1
 Flask-SQLAlchemy==2.1

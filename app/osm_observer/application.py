@@ -8,7 +8,6 @@ from logging.handlers import SMTPHandler
 from flask import (
     Flask, request, jsonify, render_template, make_response
 )
-from flask_babel import Babel, gettext as _
 
 import webassets.loaders
 import webassets.env
@@ -199,7 +198,7 @@ def configure_errorhandlers(app):
     @app.errorhandler(400)
     def bad_request(error):
         if request.is_xhr:
-            return jsonify(error=_('Sorry, bad request'))
+            return jsonify(error='Sorry, bad request')
         return make_response(
             render_template('osm_observer/errors/400.html.j2', error=error),
             400)
@@ -207,7 +206,7 @@ def configure_errorhandlers(app):
     @app.errorhandler(404)
     def page_not_found(error):
         if request.is_xhr:
-            return jsonify(error=_('Sorry, page not found'))
+            return jsonify(error='Sorry, page not found')
         return make_response(
             render_template('osm_observer/errors/404.html.j2', error=error),
             404)
@@ -215,7 +214,7 @@ def configure_errorhandlers(app):
     @app.errorhandler(403)
     def forbidden(error):
         if request.is_xhr:
-            return jsonify(error=_('Sorry, not allowed'))
+            return jsonify(error='Sorry, not allowed')
         return make_response(
             render_template('osm_observer/errors/403.html.j2', error=error),
             403)
@@ -223,7 +222,7 @@ def configure_errorhandlers(app):
     @app.errorhandler(500)
     def server_error(error):
         if request.is_xhr:
-            return jsonify(error=_('Sorry, an error has occurred'))
+            return jsonify(error='Sorry, an error has occurred')
         return make_response(
             render_template('osm_observer/errors/500.html.j2', error=error),
             500)

@@ -84,54 +84,6 @@ def insert_changesets(created_at=None):
     db.session.commit()
 
 
-#############################
-# Babel commands
-#############################
-@manager.command
-def babel_init_lang(lang='de'):
-    "Initialize new language."
-    call([
-        'pybabel', 'init',
-        '-i', '../app/osm_observer/translations/messages.pot',
-        '-d', '../app/osm_observer/translations',
-        '-l', lang
-    ])
-
-
-@manager.command
-def babel_refresh():
-    "Extract messages and update translation files."
-    call([
-        'pybabel', 'extract',
-        '-F', '../app/osm_observer/babel.cfg',
-        '-k', 'lazy_gettext', '-k', '_l',
-        '-o', '../app/osm_observer/translations/messages.pot',
-        '../app/osm_observer'
-    ])
-
-    call([
-        'pybabel', 'update',
-        '-i', '../app/osm_observer/translations/messages.pot',
-        '-d', '../app/osm_observer/translations'
-    ])
-
-    call([
-        'perl', '-p', '-i',
-        '-e', '''s|#: /.*?/lib/python3.4/site-packages/| #: venv/lib/python3.4/site-packages/|''',
-        '../app/osm_observer/translations/*/LC_MESSAGES/messages.po',
-        '../app/osm_observer/translations/messages.pot'
-    ])
-
-
-@manager.command
-def babel_compile():
-    "Compile translations."
-    call([
-        'pybabel', 'compile',
-        '-d', '../app/osm_observer/translations'
-    ])
-
-
 @manager.command
 def watch_webapp():
     "Watches changes in angular webapp and rebuild it"

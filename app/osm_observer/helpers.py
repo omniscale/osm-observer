@@ -2,9 +2,6 @@ import logging
 import pprint
 
 from flask import request
-from flask_babel import gettext as _, lazy_gettext as _l
-
-__all__ = ['_', '_l']
 
 
 def request_for_static():
@@ -12,6 +9,7 @@ def request_for_static():
         return True
     else:
         return False
+
 
 def serialize_datetime(value):
     if value is None:

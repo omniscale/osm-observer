@@ -1,7 +1,6 @@
 import datetime
 
 from osm_observer.extensions import db
-from osm_observer.helpers import _
 
 __all__ = ['Review']
 
@@ -30,8 +29,8 @@ class Review(db.Model):
         FIXED = 99
 
     _review_status = {
-        0: _('Nothing'),
-        99: _('Fixed')
+        0: 'Nothing',
+        99: 'Fixed'
     }
 
     def __init__(self, changeset_id=None, score=0, status=STATUS.NOTHING):

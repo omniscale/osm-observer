@@ -3,7 +3,6 @@ import datetime
 from flask import (
     Blueprint, flash, redirect, url_for, request, render_template, current_app
 )
-from flask_babel import gettext as _
 from flask_login import login_user, logout_user, current_user
 
 from osm_observer.model import User
@@ -21,7 +20,7 @@ user = Blueprint(
 @user.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        flash(_('You are already logged in'))
+        flash('You are already logged in')
         return redirect(url_for('frontend.index'))
 
     form = LoginForm(request.form)
@@ -44,13 +43,13 @@ def login():
 
         if user is not None:
             login_user(user)
-            flash(_('Logged in successfully'), 'success')
+            flash('Logged in successfully', 'success')
             next = request.args.get("next")
             user.last_login = datetime.datetime.utcnow()
             db.session.commit()
             return redirect(next or url_for("frontend.index"))
 
-        flash(_('Invalid username or password. Please try again.'),
+        flash('Invalid username or password. Please try again.',
               'danger')
 
     return render_template('user/login.html.j2', form=form)
