@@ -8,14 +8,22 @@ import { ReviewBotConfig } from './review-bot-config';
 @Injectable()
 export class ReviewBotConfigService {
 
-  private reviewBotsUrl = '/api/bots';
+  private reviewBotConfigsUrl = '/api/bots';
+  private addReviewBotConfigUrl = '/api/bots/add';
 
   constructor(private http: Http) { }
 
-  getReviewBots(): Promise<ReviewBotConfig[]> {
-    return this.http.get(this.reviewBotsUrl)
+  getReviewBotConfigs(): Promise<ReviewBotConfig[]> {
+    return this.http.get(this.reviewBotConfigsUrl)
                     .toPromise()
                     .then(response => response.json() as ReviewBotConfig[])
+                    .catch(this.handleError);
+  }
+
+  addReviewBotConfig(reviewBotConfig: ReviewBotConfig): Promise<ReviewBotConfig> {
+    return this.http.post(this.addReviewBotConfigUrl, reviewBotConfig)
+                    .toPromise()
+                    .then(response => response.json() as ReviewBotConfig)
                     .catch(this.handleError);
   }
 

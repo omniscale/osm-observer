@@ -21,6 +21,7 @@ import { ReviewFormComponent } from './review-form/review-form.component';
 
 import { ReviewBotConfigListComponent } from './review-bot-config-list/review-bot-config-list.component';
 import { ReviewBotConfigService } from './review-bot-config.service';
+import { ReviewBotConfigFormComponent } from './review-bot-config-form/review-bot-config-form.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { ReviewBotConfigService } from './review-bot-config.service';
     ChangesetDetailsComponent,
     ReviewListComponent,
     ReviewFormComponent,
-    ReviewBotConfigListComponent
+    ReviewBotConfigListComponent,
+    ReviewBotConfigFormComponent
   ],
   imports: [
     BrowserModule,
@@ -53,8 +55,17 @@ import { ReviewBotConfigService } from './review-bot-config.service';
         component: ChangesetListComponent
       },
       {
-        path: 'reviewBotConfigs',
-        component: ReviewBotConfigListComponent
+        path: 'reviewBotConfig',
+        children: [
+          {
+            path: '',
+            component: ReviewBotConfigListComponent
+          },
+          {
+            path: 'add',
+            component: ReviewBotConfigFormComponent
+          }
+        ]
       }
     ])
   ],

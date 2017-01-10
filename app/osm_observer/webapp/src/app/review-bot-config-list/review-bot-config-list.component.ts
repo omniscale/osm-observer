@@ -19,7 +19,7 @@ export class ReviewBotConfigListComponent implements OnInit {
   }
 
   getReviewBotConfigs(): void {
-    this.reviewBotConfigService.getReviewBots()
+    this.reviewBotConfigService.getReviewBotConfigs()
                          .then(reviewBotConfigs => this.assignReviewBotConfigs(reviewBotConfigs));
   }
 
