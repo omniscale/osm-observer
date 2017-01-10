@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule }   from '@angular/router';
 
+import { CustomFormsModule } from 'ng2-validation'
+
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
@@ -41,6 +43,7 @@ import { ReviewBotConfigFormComponent } from './review-bot-config-form/review-bo
     BrowserModule,
     FormsModule,
     HttpModule,
+    CustomFormsModule,
     RouterModule.forRoot([
       {
         path: 'dashboard',
