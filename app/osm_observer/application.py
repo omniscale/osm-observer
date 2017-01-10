@@ -135,7 +135,6 @@ def configure_extensions(app):
     db.init_app(app)
 
     configure_assets(app)
-    configure_i18n(app)
 
 
 def configure_assets(app):
@@ -155,18 +154,6 @@ def configure_assets(app):
         # ignore errors when registering bundles multiple times
         if not app.testing:
             raise
-
-
-def configure_i18n(app):
-
-    babel = Babel(app, default_timezone='Europe/Berlin')
-
-    @babel.localeselector
-    def get_locale():
-        accept_languages = app.config.get('ACCEPT_LANGUAGES', ['en_GB'])
-        return request.accept_languages.best_match(
-            accept_languages,
-            default=accept_languages[0])
 
 
 def configure_login(app):
