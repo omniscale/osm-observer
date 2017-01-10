@@ -24,12 +24,14 @@ export class ReviewBotConfigFormComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.route.params
-        .switchMap((params: Params) => this.reviewBotConfigService.getReviewBotConfig(+params['id']))
-        .subscribe((reviewBotConfig: ReviewBotConfig) => {
-          this.model = reviewBotConfig;
-          this.update = true;
-        });
+    let id = this.route.snapshot.params['id'];
+    if(id !== undefined) {
+      this.reviewBotConfigService.getReviewBotConfig(+id)
+                                 .then((reviewBotConfig: ReviewBotConfig) => {
+                                    this.model = reviewBotConfig;
+                                    this.update = true;
+                                  });
+    }
   }
 
   setBotConfig() {
