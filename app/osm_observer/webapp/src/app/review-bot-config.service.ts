@@ -16,6 +16,9 @@ export class ReviewBotConfigService {
   private updateReviewBotConfigUrl(id: number): string {
     return `/api/review-bot-configs/${id}/update`;
   }
+  private deleteReviewBotConfigUrl(id: number): string {
+    return `/api/review-bot-configs/${id}/delete`;
+  }
 
   constructor(private http: Http) { }
 
@@ -44,6 +47,12 @@ export class ReviewBotConfigService {
     return this.http.post(this.updateReviewBotConfigUrl(reviewBotConfig.id), reviewBotConfig)
                     .toPromise()
                     .then(response => response.json() as ReviewBotConfig)
+                    .catch(this.handleError);
+  }
+
+  deleteReviewBotConfig(id: number): Promise<any> {
+    return this.http.get(this.deleteReviewBotConfigUrl(id))
+                    .toPromise()
                     .catch(this.handleError);
   }
 

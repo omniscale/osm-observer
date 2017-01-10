@@ -23,6 +23,13 @@ export class ReviewBotConfigListComponent implements OnInit {
                          .then(reviewBotConfigs => this.assignReviewBotConfigs(reviewBotConfigs));
   }
 
+  deleteReviewBotConfig(id: number): void {
+    this.reviewBotConfigService.deleteReviewBotConfig(id)
+                               .then(v => {
+                                 this.getReviewBotConfigs();
+                               })
+  }
+
   ngOnInit() {
     this.getReviewBotConfigs();
   }

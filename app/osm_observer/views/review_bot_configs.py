@@ -41,3 +41,14 @@ def update_review_bot_config(review_bot_config_id):
     db.session.commit()
 
     return jsonify(review_bot_config.serialize)
+
+
+@api.route('/review-bot-configs/<int:review_bot_config_id>/delete',
+           methods=['GET'])
+def delete_review_bot_config(review_bot_config_id):
+    review_bot_config = ReviewBotConfig.by_id(review_bot_config_id)
+
+    db.session.delete(review_bot_config)
+    db.session.commit()
+
+    return jsonify({'success': True})
