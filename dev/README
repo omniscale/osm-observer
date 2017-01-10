@@ -72,3 +72,13 @@ Development
 ..note::
     Default username: admin
     Default password: secure
+
+
+Translation
+-----------
+
+::
+    python manage.py update_ng_translation
+
+..note::
+    Each language must be defined in webapp/package.json in script section
