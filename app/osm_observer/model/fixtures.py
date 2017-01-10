@@ -3,7 +3,7 @@ from itertools import chain
 from osm_observer import model
 
 
-def create_users_coverages():
+def all():
     users = [
         model.User('admin', 'secure'),
         model.User('user', 'secure'),
@@ -111,4 +111,25 @@ def create_users_coverages():
         )
     ]
 
-    return chain(users, coverages)
+    review_bot_configs = [
+        model.ReviewBotConfig('UsernameReviewBot', True, dict(
+            username='wheelmap_android',
+            score=20,
+        )),
+        model.ReviewBotConfig('UsernameReviewBot', True, dict(
+            username='Bman',
+            score=-20,
+        )),
+        model.ReviewBotConfig('TagValueReviewBot', True, dict(
+            tag='created_by',
+            value='JOSM/1.5',
+            score=10,
+        )),
+        model.ReviewBotConfig('TagValueReviewBot', True, dict(
+            tag='created_by',
+            value='MAPS.ME',
+            score=-10,
+        ))
+    ]
+
+    return chain(users, coverages, review_bot_configs)

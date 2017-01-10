@@ -1,0 +1,11 @@
+{
+    "connection": "postgres://os:os@localhost:5432/osm_observer?sslmode=disable",
+    "diffdir": "diffs",
+    "_replication_from_diffdir": true,
+    "changesdir": "changes",
+    "limitto": [5.7, 50.2, 9.6, 52.6],
+    "initial_history": "32h",
+    "schemas": {
+        "changes": "changes"
+    }
+}

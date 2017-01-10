@@ -5,6 +5,7 @@ import { HttpModule, Http } from '@angular/http';
 import { RouterModule }   from '@angular/router';
 
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
+import { CustomFormsModule } from 'ng2-validation'
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -21,8 +22,13 @@ import { ReviewListComponent } from './review-list/review-list.component';
 import { ReviewService } from './review.service';
 import { ReviewFormComponent } from './review-form/review-form.component';
 
+
+import { ReviewBotConfigListComponent } from './review-bot-config-list/review-bot-config-list.component';
+import { ReviewBotConfigService } from './review-bot-config.service';
+import { ReviewBotConfigFormComponent } from './review-bot-config-form/review-bot-config-form.component';
+
 export function createTranslateLoader(http: Http) {
-   return new TranslateStaticLoader(http, '/static/i18n', '.json');
+  return new TranslateStaticLoader(http, '/static/i18n', '.json');
 }
 
 @NgModule({
@@ -34,12 +40,15 @@ export function createTranslateLoader(http: Http) {
     ChangesetListComponent,
     ChangesetDetailsComponent,
     ReviewListComponent,
-    ReviewFormComponent
+    ReviewFormComponent,
+    ReviewBotConfigListComponent,
+    ReviewBotConfigFormComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    CustomFormsModule,
     TranslateModule.forRoot({
       provide: TranslateLoader,
       useFactory: (createTranslateLoader),
@@ -57,13 +66,31 @@ export function createTranslateLoader(http: Http) {
       {
         path: 'changesets',
         component: ChangesetListComponent
+      },
+      {
+        path: 'reviewBotConfigs',
+        children: [
+          {
+            path: '',
+            component: ReviewBotConfigListComponent
+          },
+          {
+            path: 'add',
+            component: ReviewBotConfigFormComponent
+          },
+          {
+            path: 'edit/:id',
+            component: ReviewBotConfigFormComponent
+          }
+        ]
       }
     ])
   ],
   providers: [
     CoverageService,
     ChangesetService,
-    ReviewService
+    ReviewService,
+    ReviewBotConfigService
   ],
   bootstrap: [AppComponent]
 })
