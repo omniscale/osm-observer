@@ -5,7 +5,7 @@
       (ngSubmit)="onSubmit()"
       #botConfigForm="ngForm">
   <div class="form-group">
-    <label for="bot-name">Bot Name</label>
+    <label for="bot-name">{{ 'BOT NAME' | translate }}</label>
     <select class="form-control"
             id="bot-name"
             name="bot-name"
@@ -25,13 +25,13 @@
              type="checkbox"
              name="active"
              [(ngModel)]="model.active" />
-      Active
+      {{ 'ACTIVE' | translate }}
     </label>
   </div>
   <ng-container [ngSwitch]="model.botName">
     <ng-container *ngSwitchCase="'UsernameReviewBot'">
       <div class="form-group">
-        <label for="username">Username</label>
+        <label for="username">{{ 'USERNAME' | translate }}</label>
         <input type="text"
                id="username"
                name="username"
@@ -42,7 +42,7 @@
     </ng-container>
     <ng-container *ngSwitchCase="'TagValueReviewBot'">
       <div class="form-group">
-        <label for="tag">Tag</label>
+        <label for="tag">{{ 'TAG' | translate }}</label>
         <input type="text"
                id="tag"
                name="tag"
@@ -51,7 +51,7 @@
                [(ngModel)]="model.config.tag" />
       </div>
       <div class="form-group">
-        <label for="value">Value</label>
+        <label for="value">{{ 'VALUE' | translate }}</label>
         <input type="text"
                id="value"
                name="value"
@@ -62,7 +62,7 @@
     </ng-container>
     <div class="form-group"
          *ngIf="model.botName">
-      <label for="score">Score</label>
+      <label for="score">{{ 'SCORE' | translate }}</label>
       <input type="number"
              id="score"
              name="score"
@@ -76,12 +76,12 @@
   <button type="submit"
           class="btn btn-primary"
           [disabled]="!botConfigForm.form.valid">
-    <span *ngIf="update">Update</span>
-    <span *ngIf="!update">Add</span>
+    <span *ngIf="update">{{ 'UPDATE' | translate }}</span>
+    <span *ngIf="!update">{{ 'ADD' | translate }}</span>
   </button>
   <button type="button"
           class="btn btn-secondary"
           (click)="onCancel()">
-    Cancel
+    {{ 'CANCEL' | translate }}
   </button>
 </form>

@@ -22,7 +22,7 @@
       <input type="text"
              class="form-control form-control-sm"
              id="username"
-             placeholder="Username"
+             placeholder="{{ 'USERNAME' | translate }}"
              (keyup)="applyChange()"
              [(ngModel)]="username" />
     </div>
@@ -30,7 +30,7 @@
       <input type="number"
              class="form-control form-control-sm"
              id="average-score"
-             placeholder="Average Score"
+             placeholder="{{ 'AVERAGE SCORE' | translate }}"
              (keyup)="applyChange()"
              [(ngModel)]="averageScore" />
     </div>
@@ -38,7 +38,7 @@
       <input type="number"
              class="form-control form-control-sm"
              id="num-reviews"
-             placeholder="Reviews"
+             placeholder="{{ 'REVIEWS' | translate }}"
              (keyup)="applyChange()"
              [(ngModel)]="numReviews" />
     </div>
@@ -47,12 +47,12 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>ID</th>
-      <th>OSM ID</th>
-      <th>Closed at</th>
-      <th>Username</th>
-      <th>Reviews</th>
-      <th>Average Score</th>
+      <th>{{ 'ID' | translate }}</th>
+      <th>{{ 'OSM ID' | translate }}</th>
+      <th>{{ 'CLOSED AT' | translate }}</th>
+      <th>{{ 'USERNAME' | translate }}</th>
+      <th>{{ 'REVIEWS' | translate }}</th>
+      <th>{{ 'AVERAGE SCORE' | translate }}</th>
       <th></th>
     </tr>
   </thead>
@@ -66,7 +66,7 @@
         <td>{{ changeset.numReviews }}</td>
         <td>{{ changeset.averageScore }}</td>
         <td>
-          <button class="btn btn-default btn-sm" (click)="show= show === changeset.id ? undefined : changeset.id">Toggle</button>
+          <button class="btn btn-default btn-sm" (click)="show= show === changeset.id ? undefined : changeset.id">{{ 'TOGGLE' | translate }}</button>
         </td>
       </tr>
       <tr *ngIf="show === changeset.id">

@@ -1,13 +1,13 @@
 <p>
   review-bot-config-list works!
 </p>
-<a routerLink="/reviewBotConfigs/add">Add review bot config</a>
+<a routerLink="/reviewBotConfigs/add">{{ 'ADD REVIEW BOT CONFIG' | translate }}</a>
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Bot name</th>
-      <th>Active</th>
-      <th>Config</th>
+      <th>{{ 'BOT NAME' | translate }}</th>
+      <th>{{ 'ACTIVE' | translate }}</th>
+      <th>{{ 'CONFIG' | translate }}</th>
       <th></th>
     </tr>
   </thead>
@@ -17,32 +17,31 @@
       <td>{{ reviewBotConfig['active'] }}</td>
       <td [ngSwitch]="reviewBotConfig['botName']">
         <dl *ngSwitchCase="'UsernameReviewBot'">
-          <dt>Username</dt>
+          <dt>{{ 'USERNAME' | translate }}</dt>
           <dd>{{ reviewBotConfig['config']['username'] }}</dd>
-          <dt>Score</dt>
+          <dt>{{ 'SCORE' | translate }}</dt>
           <dd>{{ reviewBotConfig['config']['score'] }}</dd>
         </dl>
         <dl *ngSwitchCase="'TagValueReviewBot'">
-          <dt>Tag</dt>
+          <dt>{{ 'TAG' | translate }}</dt>
           <dd>{{ reviewBotConfig['config']['tag'] }}</dd>
-          <dt>Value</dt>
+          <dt>{{ 'VALUE' | translate }}</dt>
           <dd>{{ reviewBotConfig['config']['value'] }}</dd>
-          <dt>Score</dt>
+          <dt>{{ 'SCORE' | translate }}</dt>
           <dd>{{ reviewBotConfig['config']['score'] }}</dd>
         </dl>
-        <span *ngSwitchDefault>Failed</span>
       </td>
       <td>
         <a class="btn btn-secondary btn-sm"
            role="button"
            [routerLink]="['edit', reviewBotConfig.id]">
-          Edit
+          {{ 'EDIT' | translate }}
         </a>
         <a class="btn btn-danger btn-sm"
            role="button"
            (click)="deleteReviewBotConfig(reviewBotConfig.id)"
            >
-          Delete
+          {{ 'DELETE' | translate }}
         </a>
       </td>
     </tr>
