@@ -55,7 +55,7 @@ import { ReviewBotConfigFormComponent } from './review-bot-config-form/review-bo
         component: ChangesetListComponent
       },
       {
-        path: 'reviewBotConfig',
+        path: 'reviewBotConfigs',
         children: [
           {
             path: '',

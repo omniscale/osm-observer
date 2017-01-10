@@ -51,18 +51,18 @@ export class ReviewBotConfigFormComponent implements OnInit {
     if(this.update) {
       this.reviewBotConfigService.updateReviewBotConfig(this.model)
           .then(v => {
-            this.router.navigate(['/reviewBotConfig']);
+            this.router.navigate(['/reviewBotConfigs']);
           })
     } else {
       this.reviewBotConfigService.addReviewBotConfig(this.model)
           .then(v => {
-            this.router.navigate(['/reviewBotConfig']);
+            this.router.navigate(['/reviewBotConfigs']);
           });
     }
   }
 
   onCancel() {
-    this.router.navigate(['/reviewBotConfig']);
+    this.router.navigate(['/reviewBotConfigs']);
   }
 
 }

@@ -5,20 +5,20 @@ from osm_observer.extensions import db
 from osm_observer.model import ReviewBotConfig
 
 
-@api.route('/bots')
-def bots():
-    bots = ReviewBotConfig.query.all()
-    return jsonify([i.serialize for i in bots])
+@api.route('/review-bot-configs')
+def review_bot_configs():
+    review_bot_configs = ReviewBotConfig.query.all()
+    return jsonify([i.serialize for i in review_bot_configs])
 
 
-@api.route('/bots/<int:bot_id>')
-def bot(bot_id):
-    bot = ReviewBotConfig.by_id(bot_id)
-    return jsonify(bot.serialize)
+@api.route('/review-bot-configs/<int:review_bot_config_id>')
+def review_bot_config(review_bot_config_id):
+    review_bot_config = ReviewBotConfig.by_id(review_bot_config_id)
+    return jsonify(review_bot_config.serialize)
 
 
-@api.route('/bots/add', methods=['POST'])
-def add_bot():
+@api.route('/review-bot-configs/add', methods=['POST'])
+def add_review_bot_config():
     data = request.json
     review_bot_config = ReviewBotConfig(
         data['botName'], data['active'], data['config'])
@@ -29,14 +29,15 @@ def add_bot():
     return jsonify(review_bot_config.serialize)
 
 
-@api.route('/bots/<int:bot_id>/update', methods=['POST'])
-def update_bot(bot_id):
+@api.route('/review-bot-configs/<int:review_bot_config_id>/update',
+           methods=['POST'])
+def update_review_bot_config(review_bot_config_id):
     data = request.json
-    bot = ReviewBotConfig.by_id(bot_id)
-    bot.botName = data['botName']
-    bot.active = data['active']
-    bot.config = data['config']
+    review_bot_config = ReviewBotConfig.by_id(review_bot_config_id)
+    review_bot_config.botName = data['botName']
+    review_bot_config.active = data['active']
+    review_bot_config.config = data['config']
 
     db.session.commit()
 
-    return jsonify(bot.serialize)
+    return jsonify(review_bot_config.serialize)

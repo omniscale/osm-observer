@@ -8,13 +8,13 @@ import { ReviewBotConfig } from './review-bot-config';
 @Injectable()
 export class ReviewBotConfigService {
 
-  private reviewBotConfigsUrl = '/api/bots';
-  private addReviewBotConfigUrl = '/api/bots/add';
+  private reviewBotConfigsUrl = '/api/review-bot-configs';
+  private addReviewBotConfigUrl = '/api/review-bot-configs/add';
   private reviewBotConfigUrl(id: number): string {
-    return `/api/bots/${id}`;
+    return `/api/review-bot-configs/${id}`;
   };
   private updateReviewBotConfigUrl(id: number): string {
-    return `/api/bots/${id}/update`;
+    return `/api/review-bot-configs/${id}/update`;
   }
 
   constructor(private http: Http) { }
