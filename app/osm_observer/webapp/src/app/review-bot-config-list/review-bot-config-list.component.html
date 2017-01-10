@@ -33,12 +33,12 @@
         <span *ngSwitchDefault>Failed</span>
       </td>
       <td>
-        <a class="btn btn-secondary"
+        <a class="btn btn-secondary btn-sm"
            role="button"
            [routerLink]="['edit', reviewBotConfig.id]">
           Edit
         </a>
-        <a class="btn btn-danger"
+        <a class="btn btn-danger btn-sm"
            role="button"
            (click)="deleteReviewBotConfig(reviewBotConfig.id)"
            >
