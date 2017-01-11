@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Review, ReviewStatus } from '../review';
-import { ReviewService } from '../review.service';
+import { ReviewService } from '../services/review.service';
 
 @Component({
   selector: 'review-form',

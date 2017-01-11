@@ -12,19 +12,19 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 import { CoverageListComponent } from './coverage-list/coverage-list.component';
 import { CoveragesComponent } from './coverages/coverages.component';
-import { CoverageService } from './coverage.service';
+import { CoverageService } from './services/coverage.service';
 
 import { ChangesetListComponent } from './changeset-list/changeset-list.component';
-import { ChangesetService } from './changeset.service';
+import { ChangesetService } from './services/changeset.service';
 import { ChangesetDetailsComponent } from './changeset-details/changeset-details.component';
 
 import { ReviewListComponent } from './review-list/review-list.component';
-import { ReviewService } from './review.service';
+import { ReviewService } from './services/review.service';
 import { ReviewFormComponent } from './review-form/review-form.component';
 
 
 import { ReviewBotConfigListComponent } from './review-bot-config-list/review-bot-config-list.component';
-import { ReviewBotConfigService } from './review-bot-config.service';
+import { ReviewBotConfigService } from './services/review-bot-config.service';
 import { ReviewBotConfigFormComponent } from './review-bot-config-form/review-bot-config-form.component';
 
 export function createTranslateLoader(http: Http) {

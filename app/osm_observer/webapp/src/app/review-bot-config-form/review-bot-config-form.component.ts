@@ -4,7 +4,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 
 import { ReviewBotConfig, DefaultBotConfig, UsernameBotConfig, TagValueBotConfig } from '../review-bot-config';
-import { ReviewBotConfigService } from '../review-bot-config.service';
+import { ReviewBotConfigService } from '../services/review-bot-config.service';
 
 @Component({
   selector: 'app-review-bot-config-form',

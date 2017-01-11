@@ -4,8 +4,8 @@ import { Http, URLSearchParams } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { BaseHttpService } from './base-http.service';
-import { Changeset } from './changeset';
-import { ChangesetDetails } from './changeset-details';
+import { Changeset } from '../changeset';
+import { ChangesetDetails } from '../changeset-details';
 
 @Injectable()
 export class ChangesetService extends BaseHttpService {

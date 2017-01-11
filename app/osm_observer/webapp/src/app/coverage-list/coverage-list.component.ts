@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Coverage } from '../coverage';
-import { CoverageService } from '../coverage.service'
+import { CoverageService } from '../services/coverage.service'
 
 @Component({
   selector: 'coverage-list',

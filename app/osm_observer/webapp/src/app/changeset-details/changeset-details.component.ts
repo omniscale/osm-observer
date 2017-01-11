@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { ChangesetDetails } from '../changeset-details';
-import { ChangesetService } from '../changeset.service'
+import { ChangesetService } from '../services/changeset.service'
 
 @Component({
   selector: 'changeset-details',

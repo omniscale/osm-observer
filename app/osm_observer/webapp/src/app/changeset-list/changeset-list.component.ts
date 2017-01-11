@@ -7,7 +7,7 @@ import {Subscription } from 'rxjs';
 import {TranslateService} from 'ng2-translate';
 
 import { Changeset } from '../changeset';
-import { ChangesetService } from '../changeset.service';
+import { ChangesetService } from '../services/changeset.service';
 
 @Component({
   selector: 'changeset-list',
