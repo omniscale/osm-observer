@@ -19,7 +19,10 @@ export class CoverageListComponent implements OnInit {
   }
 
   getCoverages(): void {
-    this.coverageService.getCoverages().then(coverages => this.assignCoverages(coverages));
+    this.coverageService.getCoverages()
+                        .then(coverages => this.assignCoverages(coverages))
+                        // TODO define onError actions
+                        .catch(error => {});
   }
 
   ngOnInit() {

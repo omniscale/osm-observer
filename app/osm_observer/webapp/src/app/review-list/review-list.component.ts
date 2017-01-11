@@ -25,6 +25,8 @@ export class ReviewListComponent implements OnInit {
   getReviews(): void {
     this.reviewService.getReviews(this.id)
                       .then(reviews => this.assignReviews(reviews))
+                      // TODO define onError actions
+                      .catch(error => {});
   }
 
   ngOnInit() {

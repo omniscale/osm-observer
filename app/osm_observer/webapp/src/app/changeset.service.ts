@@ -1,22 +1,24 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, URLSearchParams } from '@angular/http';
+import { Http, URLSearchParams } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
+import { BaseHttpService } from './base-http.service';
 import { Changeset } from './changeset';
 import { ChangesetDetails } from './changeset-details';
 
 @Injectable()
-export class ChangesetService {
+export class ChangesetService extends BaseHttpService {
 
-  private headers = new Headers({'Content-Type': 'application/json'});
   private changesetsUrl = '/api/changesets';
 
   private changesetDetailsUrl(id: number): string {
     return `/api/changesets/details/${id}`;
   }
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+    super();
+  }
 
   getChangesets(username: string, timeRange: string, averageScore: number, numReviews: number): Promise<Changeset[]> {
     let params = new URLSearchParams();
@@ -33,21 +35,24 @@ export class ChangesetService {
       params.set('numReviews', numReviews.toString());
     }
 
-    return this.http.get(this.changesetsUrl, {search: params})
+    let requestOptions = this.defaultRequestOptions;
+    requestOptions.search = params;
+
+    return this.http.get(this.changesetsUrl, requestOptions)
                .toPromise()
                .then(response => response.json() as Changeset[])
-               .catch(this.handleError);
+               .catch(error => {
+                 return this.handleError(error, 'getChangesets', this.changesetsUrl, params.paramsMap);
+               });
   }
 
   getChangesetDetails(id: number): Promise<ChangesetDetails> {
-    return this.http.get(this.changesetDetailsUrl(id))
+    let url = this.changesetDetailsUrl(id);
+    return this.http.get(url, this.defaultRequestOptions)
                .toPromise()
                .then(response => response.json() as ChangesetDetails)
-               .catch(this.handleError);
-  }
-
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error);
+               .catch(error => {
+                 return this.handleError(error, 'getChangesetDetails', url, {id: id});
+               });
   }
 }

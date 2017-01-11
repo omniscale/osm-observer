@@ -20,7 +20,9 @@ export class ReviewBotConfigListComponent implements OnInit {
 
   getReviewBotConfigs(): void {
     this.reviewBotConfigService.getReviewBotConfigs()
-                         .then(reviewBotConfigs => this.assignReviewBotConfigs(reviewBotConfigs));
+                         .then(reviewBotConfigs => this.assignReviewBotConfigs(reviewBotConfigs))
+                         // TODO define onError actions
+                         .catch((error) => {});
   }
 
   deleteReviewBotConfig(id: number): void {
@@ -28,6 +30,8 @@ export class ReviewBotConfigListComponent implements OnInit {
                                .then(v => {
                                  this.getReviewBotConfigs();
                                })
+                               // TODO define onError actions
+                               .catch(error => {});
   }
 
   ngOnInit() {

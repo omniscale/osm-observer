@@ -22,7 +22,9 @@ export class ChangesetDetailsComponent implements OnInit {
 
   getChangesetDetails(): void {
     this.changesetService.getChangesetDetails(this.id)
-                         .then(changesetDetails => this.assignChangesetDetails(changesetDetails));
+                         .then(changesetDetails => this.assignChangesetDetails(changesetDetails))
+                         // TODO define onError actions
+                         .catch(error => {});
   }
 
   ngOnInit() {

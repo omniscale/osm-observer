@@ -30,7 +30,11 @@ export class ReviewBotConfigFormComponent implements OnInit {
                                  .then((reviewBotConfig: ReviewBotConfig) => {
                                     this.model = reviewBotConfig;
                                     this.update = true;
-                                  });
+                                  })
+                                 // TODO define onError actions
+                                 .catch(e => {
+                                   this.router.navigate(['/reviewBotConfigs']);
+                                 });
     }
   }
 
@@ -53,11 +57,15 @@ export class ReviewBotConfigFormComponent implements OnInit {
           .then(v => {
             this.router.navigate(['/reviewBotConfigs']);
           })
+          // TODO define onError actions
+          .catch(e => {});
     } else {
       this.reviewBotConfigService.addReviewBotConfig(this.model)
           .then(v => {
             this.router.navigate(['/reviewBotConfigs']);
-          });
+          })
+          // TODO define onError actions
+          .catch(e => {});
     }
   }
 

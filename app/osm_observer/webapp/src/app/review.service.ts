@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 import { Subject }    from 'rxjs/Subject';
 
+import { BaseHttpService } from './base-http.service';
 import { Review } from './review';
 
 @Injectable()
-export class ReviewService {
+export class ReviewService extends BaseHttpService {
 
   private reviewsUrl(id: number): string {
     return `/api/reviews/${id}`;
@@ -19,29 +20,32 @@ export class ReviewService {
   private refreshReviewsSource = new Subject<boolean>();
   refreshReviews$ = this.refreshReviewsSource.asObservable();
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+    super();
+  }
 
   getReviews(changesetId: number): Promise<Review[]> {
-    return this.http.get(this.reviewsUrl(changesetId))
+    let url = this.reviewsUrl(changesetId);
+    return this.http.get(url, this.defaultRequestOptions)
                     .toPromise()
                     .then(response => response.json() as Review[])
-                    .catch(this.handleError);
+                    .catch(error => {
+                      return this.handleError(error, 'getReviews', url);
+                    });
   }
 
   addReview(changesetId: number, review: Review): Promise<Review> {
-    return this.http.post(this.addReviewUrl(changesetId), review)
+    let url = this.addReviewUrl(changesetId);
+    return this.http.post(url, review, this.defaultRequestOptions)
                     .toPromise()
                     .then(response => this.handleAddReviewResponse(response))
-                    .catch(this.handleError);
+                    .catch(error => {
+                      return this.handleError(error, 'addReview', url, review);
+                    });
   }
 
   private handleAddReviewResponse(response: any): Review {
     this.refreshReviewsSource.next(true);
     return response.json() as Review;
-  }
-
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error);
   }
 }

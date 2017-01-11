@@ -182,10 +182,15 @@ def configure_errorhandlers(app):
     if app.testing:
         return
 
+    def json_error_response(error, status_code):
+        response = jsonify(error=error)
+        response.status_code = status_code
+        return response
+
     @app.errorhandler(400)
     def bad_request(error):
         if request.is_xhr:
-            return jsonify(error='Sorry, bad request')
+            return json_error_response('Sorry, bad request', 400)
         return make_response(
             render_template('osm_observer/errors/400.html.j2', error=error),
             400)
@@ -193,7 +198,7 @@ def configure_errorhandlers(app):
     @app.errorhandler(404)
     def page_not_found(error):
         if request.is_xhr:
-            return jsonify(error='Sorry, page not found')
+            return json_error_response('Sorry, page not found', 404)
         return make_response(
             render_template('osm_observer/errors/404.html.j2', error=error),
             404)
@@ -201,7 +206,7 @@ def configure_errorhandlers(app):
     @app.errorhandler(403)
     def forbidden(error):
         if request.is_xhr:
-            return jsonify(error='Sorry, not allowed')
+            return json_error_response('Sorry, not allowed', 403)
         return make_response(
             render_template('osm_observer/errors/403.html.j2', error=error),
             403)
@@ -209,7 +214,7 @@ def configure_errorhandlers(app):
     @app.errorhandler(500)
     def server_error(error):
         if request.is_xhr:
-            return jsonify(error='Sorry, an error has occurred')
+            return json_error_response('Sorry, an error has occurred', 500)
         return make_response(
             render_template('osm_observer/errors/500.html.j2', error=error),
             500)

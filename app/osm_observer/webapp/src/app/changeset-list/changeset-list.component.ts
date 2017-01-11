@@ -41,7 +41,9 @@ export class ChangesetListComponent implements OnInit {
 
   getChangesets(): void {
     this.changesetService.getChangesets(this.username, this.timeRange, this.averageScore, this.numReviews)
-                         .then(changesets => this.assignChangesets(changesets));
+                         .then(changesets => this.assignChangesets(changesets))
+                         // TODO define onError actions
+                         .catch(error => {});
   }
 
   updateRouteParams(): void {

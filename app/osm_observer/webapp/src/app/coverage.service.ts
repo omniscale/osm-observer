@@ -1,27 +1,26 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
+import { BaseHttpService } from './base-http.service';
 import { Coverage } from './coverage';
 
 @Injectable()
-export class CoverageService {
+export class CoverageService extends BaseHttpService {
 
-  private headers = new Headers({'Content-Type': 'application/json'});
   private coveragesUrl = '/api/coverages';
 
-  constructor(private http: Http) { }
-
-  getCoverages(): Promise<Coverage[]> {
-    return this.http.get(this.coveragesUrl)
-               .toPromise()
-               .then(response => response.json() as Coverage[])
-               .catch(this.handleError);
+  constructor(private http: Http) {
+    super();
   }
 
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error);
+  getCoverages(): Promise<Coverage[]> {
+    return this.http.get(this.coveragesUrl, this.defaultRequestOptions)
+               .toPromise()
+               .then(response => response.json() as Coverage[])
+               .catch(error => {
+                 return this.handleError(error, 'getCoverages', this.coveragesUrl);
+               });
   }
 }

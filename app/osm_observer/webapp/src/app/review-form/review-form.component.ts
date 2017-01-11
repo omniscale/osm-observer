@@ -21,7 +21,8 @@ export class ReviewFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.reviewService.addReview(this.id, this.model);
+    this.reviewService.addReview(this.id, this.model)
+                      // TODO define onError actions
+                      .catch(error => {});
   };
-
 }
