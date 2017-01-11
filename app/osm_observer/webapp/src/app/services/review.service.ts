@@ -5,7 +5,7 @@ import 'rxjs/add/operator/toPromise';
 import { Subject }    from 'rxjs/Subject';
 
 import { BaseHttpService } from './base-http.service';
-import { Review } from '../review';
+import { Review } from '../types/review';
 
 @Injectable()
 export class ReviewService extends BaseHttpService {

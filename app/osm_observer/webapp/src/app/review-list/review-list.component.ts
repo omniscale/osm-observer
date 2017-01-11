@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Review } from '../review';
+import { Review } from '../types/review';
 import { ReviewService } from '../services/review.service';
 
 @Component({

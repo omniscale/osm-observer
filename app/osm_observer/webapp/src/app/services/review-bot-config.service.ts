@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { BaseHttpService } from './base-http.service';
-import { ReviewBotConfig } from '../review-bot-config';
+import { ReviewBotConfig } from '../types/review-bot-config';
 
 @Injectable()
 export class ReviewBotConfigService extends BaseHttpService {

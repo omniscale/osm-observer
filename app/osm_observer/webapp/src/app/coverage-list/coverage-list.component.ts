@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Coverage } from '../coverage';
+import { Coverage } from '../types/coverage';
 import { CoverageService } from '../services/coverage.service'
 
 @Component({

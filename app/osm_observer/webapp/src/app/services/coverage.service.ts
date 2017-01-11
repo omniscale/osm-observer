@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { BaseHttpService } from './base-http.service';
-import { Coverage } from '../coverage';
+import { Coverage } from '../types/coverage';
 
 @Injectable()
 export class CoverageService extends BaseHttpService {

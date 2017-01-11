@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ReviewBotConfig } from '../review-bot-config';
+import { ReviewBotConfig } from '../types/review-bot-config';
 import { ReviewBotConfigService } from '../services/review-bot-config.service';
 
 @Component({
