@@ -2,7 +2,7 @@ from osm_observer.extensions import db
 from geoalchemy2.types import Geometry
 from sqlalchemy.dialects.postgresql import HSTORE
 
-__all__ = ['changesets', 'nodes', 'ways', 'relations']
+__all__ = ['changesets', 'nodes', 'ways', 'relations', 'comments', 'nds', 'members']
 
 changesets = db.Table(
     'changesets', db.MetaData(),
