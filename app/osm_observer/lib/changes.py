@@ -4,7 +4,7 @@ from sqlalchemy.sql import select, func
 from sqlalchemy.sql.expression import join
 
 from osm_observer.model import Changeset, Review
-from osm_observer.model import changesets, nodes, ways, relations
+from osm_observer.model import changesets, nodes, ways, relations, comments
 from osm_observer.extensions import db
 
 def query_changesets(coverages=None, from_time=None, to_time=None, username=None, num_reviews=None, average_score=None):
@@ -87,8 +87,7 @@ def query_changeset_details(changeset_id=None):
     ]).where(relations.c.changeset==changeset_id).cte('relations')
 
     changeset_join = join(Changeset, changesets,
-         Changeset.osm_id == changeset_id
-    )
+                          Changeset.osm_id == changeset_id)
 
     stmt = select([
         Changeset.id.label('app_id'),
@@ -100,3 +99,11 @@ def query_changeset_details(changeset_id=None):
 
     conn = db.session.connection()
     return conn.execute(stmt).fetchone()
+
+
+def query_changeset_comments(changeset_id=None):
+    stmt = select([comments])
+    stmt = stmt.where(comments.c.changeset_id==changeset_id)
+    stmt = stmt.order_by(comments.c.timestamp.desc())
+    conn = db.session.connection()
+    return conn.execute(stmt).fetchall()

@@ -43,3 +43,20 @@
     </tr>
   </tbody>
 </table>
+
+<table class="table table-striped" *ngIf="changesetComments">
+  <thead>
+    <tr>
+      <th>{{ 'USERNAME' | translate }}</th>
+      <th>{{ 'DATE' | translate }}</th>
+      <th>{{ 'COMMENT' | translate }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let comment of changesetComments">
+      <td>{{ comment.userName }}</td>
+      <td>{{ comment.timestamp | date:'d.M.y HH:mm:ss' }}</td>
+      <td>{{ comment.text }}</td>
+    </tr>
+  </tbody>
+</table>

@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import { BaseHttpService } from './base-http.service';
 import { Changeset } from '../types/changeset';
 import { ChangesetDetails } from '../types/changeset-details';
+import { ChangesetComment } from '../types/changeset-comment';
 
 @Injectable()
 export class ChangesetService extends BaseHttpService {
@@ -14,6 +15,10 @@ export class ChangesetService extends BaseHttpService {
 
   private changesetDetailsUrl(id: number): string {
     return `/api/changesets/details/${id}`;
+  }
+
+  private changesetCommentsUrl(id: number): string {
+    return `/api/changesets/comments/${id}`;
   }
 
   constructor(private http: Http) {
@@ -54,5 +59,15 @@ export class ChangesetService extends BaseHttpService {
                .catch(error => {
                  return this.handleError(error, 'getChangesetDetails', url, {id: id});
                });
+  }
+
+  getChangesetComments(id: number): Promise<ChangesetComment[]> {
+    let url = this.changesetCommentsUrl(id);
+    return this.http.get(url, this.defaultRequestOptions)
+                    .toPromise()
+                    .then(response => response.json() as ChangesetComment[])
+                    .catch(error => {
+                      return this.handleError(error, 'getChangesetComments', url, {id: id});
+                    });
   }
 }

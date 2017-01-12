@@ -5,7 +5,9 @@ from flask import abort, jsonify, request
 from flask_login import login_required, current_user
 
 from osm_observer.views import api
-from osm_observer.lib.changes import query_changesets, query_changeset_details
+from osm_observer.lib.changes import (
+    query_changesets, query_changeset_details, query_changeset_comments
+)
 from osm_observer.model import Coverage
 
 
@@ -63,6 +65,12 @@ def changeset_details(changeset_id):
     return jsonify(serialize_changeset_details(details))
 
 
+@api.route('/changesets/comments/<int:changeset_id>')
+def changeset_comments(changeset_id):
+    comments = query_changeset_comments(changeset_id)
+    return jsonify(serialize_changeset_comments(comments))
+
+
 def serialize_changeset_details(changeset):
     return {
         'id': changeset['app_id'],
@@ -96,5 +104,19 @@ def serialize_changesets(changesets):
             'tags': changeset.tags,
             'numReviews': changeset.num_reviews,
             'averageScore': changeset.average_score,
+        })
+    return data
+
+
+def serialize_changeset_comments(comments):
+    data = []
+    for comment in comments:
+        data.append({
+            'changesetId': comment.changeset_id,
+            'idx': comment.idx,
+            'userName': comment.user_name,
+            'userId': comment.user_id,
+            'timestamp': comment.timestamp,
+            'text': comment.text
         })
     return data
