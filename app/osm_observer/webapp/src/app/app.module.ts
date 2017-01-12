@@ -27,6 +27,8 @@ import { ReviewBotConfigListComponent } from './review-bot-config-list/review-bo
 import { ReviewBotConfigService } from './services/review-bot-config.service';
 import { ReviewBotConfigFormComponent } from './review-bot-config-form/review-bot-config-form.component';
 
+import { KeyValueListPipe } from './pipes/key-value-list.pipe';
+
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, '/static/i18n', '.json');
 }
@@ -42,7 +44,8 @@ export function createTranslateLoader(http: Http) {
     ReviewListComponent,
     ReviewFormComponent,
     ReviewBotConfigListComponent,
-    ReviewBotConfigFormComponent
+    ReviewBotConfigFormComponent,
+    KeyValueListPipe
   ],
   imports: [
     BrowserModule,

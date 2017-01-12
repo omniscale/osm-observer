@@ -28,3 +28,18 @@
     </tr>
   </tbody>
 </table>
+
+<table class="table table-striped" *ngIf="changesetDetails">
+  <thead>
+    <tr>
+      <th>{{ 'KEY' | translate }}</th>
+      <th>{{ 'VALUE' | translate }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let obj of changesetDetails.tags | keyValueList">
+      <td>{{ obj.key }}</td>
+      <td>{{ obj.value }}</td>
+    </tr>
+  </tbody>
+</table>

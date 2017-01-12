@@ -69,6 +69,7 @@ def serialize_changeset_details(changeset):
         'osmId': changeset['id'],
         'createdAt': changeset['created_at'],
         'closedAt': changeset['closed_at'],
+        'tags': changeset['tags'],
         'nodesAdd': changeset['nodes_add'],
         'nodesModify': changeset['nodes_modify'],
         'nodesDelete': changeset['nodes_delete'],
