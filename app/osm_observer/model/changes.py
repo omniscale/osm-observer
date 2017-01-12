@@ -69,8 +69,7 @@ relations = db.Table(
 
 comments = db.Table(
     'comments', db.MetaData(),
-    db.Column('changeset_id', db.BigInteger, db.ForeignKey('changesets.id'),
-              nullable=False, primary_key=True),
+    db.Column('changeset_id', db.BigInteger, nullable=False, primary_key=True),
     db.Column('idx', db.Integer, primary_key=True),
     db.Column('user_name', db.String),
     db.Column('user_id', db.Integer),
@@ -81,10 +80,8 @@ comments = db.Table(
 
 nds = db.Table(
     'nds', db.MetaData(),
-    db.Column('way_id', db.Integer, db.ForeignKey('ways.id'), nullable=False,
-              primary_key=True),
-    db.Column('way_version', db.Integer, db.ForeignKey('ways.version'),
-              nullable=False, primary_key=True),
+    db.Column('way_id', db.Integer, nullable=False, primary_key=True),
+    db.Column('way_version', db.Integer, nullable=False, primary_key=True),
     db.Column('idx', db.Integer, primary_key=True),
     db.Column('node_id', db.BigInteger, nullable=False, primary_key=True),
     schema='changes',
@@ -92,10 +89,8 @@ nds = db.Table(
 
 members = db.Table(
     'members', db.MetaData(),
-    db.Column('relation_id', db.Integer, db.ForeignKey('relations.id'),
-              nullable=False, primary_key=True),
-    db.Column('relation_version', db.Integer,
-              db.ForeignKey('relations.version'), primary_key=True),
+    db.Column('relation_id', db.Integer, nullable=False, primary_key=True),
+    db.Column('relation_version', db.Integer, primary_key=True),
     db.Column('type', db.String),
     db.Column('role', db.String),
     db.Column('idx', db.Integer, primary_key=True),
