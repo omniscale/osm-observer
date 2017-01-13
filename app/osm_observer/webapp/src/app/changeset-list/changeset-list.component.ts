@@ -140,6 +140,15 @@ export class ChangesetListComponent implements OnInit {
     }, 200);
   }
 
+  resetFilters(): void {
+    this.username = undefined;
+    this.timeRange = undefined;
+    this.averageScore = undefined;
+    this.numReviews = undefined;
+    this.coverageId = undefined;
+    this.applyChange();
+  }
+
   ngOnInit() {
     this.subscription = this.route.params.subscribe(
       (params: any) => this.handleRouteParams(params)
