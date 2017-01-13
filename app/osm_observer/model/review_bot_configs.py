@@ -14,6 +14,12 @@ class ReviewBotConfig(db.Model):
     bot_name = db.Column(db.String)
     config = db.Column(db.JSON)
 
+    reviews = db.relationship(
+        'Review',
+        backref='review_bot_config',
+        cascade='all, delete-orphan'
+    )
+
     def __init__(self, bot_name, active, config):
         self.bot_name = bot_name
         self.active = active

@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from flask_login import current_user
 
 from osm_observer.views import api
 from osm_observer.extensions import db
@@ -20,6 +21,7 @@ def add_review(changeset_id):
         score=data['score'],
         status=data['status'],
         comment=data['comment'],
+        user_id=current_user.id
     )
     db.session.add(review)
     db.session.commit()

@@ -4,14 +4,21 @@ export class Review {
   status: number;
   comment: string;
   timeCreated: Date;
+  creator: Creator;
 
-  constructor(id?: number, score?: number, status?: number, comment?: string, timeCreated?: string) {
+  constructor(id?: number, score?: number, status?: number, comment?: string, timeCreated?: string, creator?: Creator) {
     this.id = id;
     this.score = score;
     this.status = status;
     this.comment = comment;
     this.timeCreated = new Date(timeCreated);
   }
+}
+
+export class Creator {
+  id: number;
+  name: string;
+  type: string;
 }
 
 export enum ReviewStatus {

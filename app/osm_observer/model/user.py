@@ -41,6 +41,12 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(256))
     last_login = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
+    reviews = db.relationship(
+        'Review',
+        backref='user',
+        cascade='all, delete-orphan'
+    )
+
     def __init__(self, username, password=None):
         self.username = username
         if password:

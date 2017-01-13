@@ -18,9 +18,11 @@ class BaseReviewBot():
         s = ReviewBotConfig.__table__.select()
         s = s.where(ReviewBotConfig.__table__.c.bot_name == self.__name__)
         s = s.where(ReviewBotConfig.__table__.c.active == True)
-        self.configs = [
-            dict(c)['config'] for c in self.conn.execute(s).fetchall()
-        ]
+
+        self.configs = {}
+        for bot_config in self.conn.execute(s).fetchall():
+            config = dict(bot_config)
+            self.configs[config['id']] = config['config']
 
     def __repr__(self):
         return '<%s>' % self.__name__
@@ -34,10 +36,11 @@ class UsernameReviewBot(BaseReviewBot):
         super().load_config()
 
         self.username_scores = {}
-        for config in self.configs:
+        for config_id, config in self.configs.items():
             self.username_scores[config['username']] = {
                 'score': config['score'],
                 'comment': config['comment'],
+                'config_id': config_id,
             }
 
     def review(self, changeset):
@@ -46,7 +49,8 @@ class UsernameReviewBot(BaseReviewBot):
             return Review(
                 score=self.username_scores[username]['score'],
                 comment=self.username_scores[username]['comment'],
-                status=REVIEW_STATUS.AUTOMATIC
+                status=REVIEW_STATUS.AUTOMATIC,
+                review_bot_config_id=self.username_scores[username]['config_id'],
             )
         return None
 
@@ -60,8 +64,10 @@ class TagValueReviewBot(BaseReviewBot):
 
         self.tag_value_scores = []
 
-        for config in self.configs:
-            self.tag_value_scores.append(config)
+        for config_id, config in self.configs.items():
+            c = {'config_id': config_id}
+            c.update(config)
+            self.tag_value_scores.append(c)
 
     def review(self, changeset):
         tags = changeset.tags
@@ -73,6 +79,7 @@ class TagValueReviewBot(BaseReviewBot):
                 return Review(
                     score=tag_value_score['score'],
                     comment=tag_value_score['comment'],
-                    status=REVIEW_STATUS.AUTOMATIC
+                    status=REVIEW_STATUS.AUTOMATIC,
+                    review_bot_config_id=tag_value_score['config_id'],
                 )
         return None
