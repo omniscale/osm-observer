@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4">
+      <h2>{{ 'LOGIN' | translate }}</h2>
+      <p>{{ message }}</p>
+      <form (submit)="login()">
+        <div class="form-group">
+          <label for="username">
+            {{ 'USERNAME' | translate }}
+          </label>
+          <input type="text"
+                 class="form-control"
+                 id="username"
+                 name="username"
+                 required
+                 [(ngModel)]="model.username" />
+        </div>
+        <div class="form-group">
+          <label for="password">
+            {{ 'PASSWORD' | translate }}
+          </label>
+          <input type="password"
+                 class="form-control"
+                 id="password"
+                 name="password"
+                 required
+                 [(ngModel)]="model.password" />
+        </div>
+        <button class="btn btn-primary btn-sm"
+                (click)="login()">
+          {{ 'LOGIN' | translate }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

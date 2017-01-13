@@ -27,6 +27,7 @@ import { ReviewService }          from './services/review.service';
 import { ReviewBotConfigService } from './services/review-bot-config.service';
 
 import { KeyValueListPipe } from './pipes/key-value-list.pipe';
+import { LoginComponent } from './login/login.component';
 
 
 export function createTranslateLoader(http: Http) {
@@ -47,7 +48,8 @@ export function createTranslateLoader(http: Http) {
     ReviewBotConfigFormComponent,
     KeyValueListPipe,
     ChangesetCommentListComponent,
-    ChangesetChangesListComponent
+    ChangesetChangesListComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

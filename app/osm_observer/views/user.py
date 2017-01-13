@@ -1,61 +1,78 @@
 import datetime
 
-from flask import (
-    Blueprint, flash, redirect, url_for, request, render_template, current_app
-)
+from flask import jsonify, request, current_app
 from flask_login import login_user, logout_user, current_user
 
 from osm_observer.model import User
-from osm_observer.form import LoginForm
 from osm_observer.extensions import db
 
-user = Blueprint(
-    'user',
-    __name__,
-    template_folder='../templates/osm_observer',
-    url_prefix='/user',
-)
+from osm_observer.views import api
 
 
-@user.route('/login', methods=['GET', 'POST'])
+@api.route('/login', methods=['POST'])
 def login():
     if current_user.is_authenticated:
-        flash('You are already logged in')
-        return redirect(url_for('frontend.index'))
+        return jsonify({
+            'message': 'Already logged in',
+            'success': True
+        })
 
-    form = LoginForm(request.form)
-    if request.method == 'POST' and form.validate():
-        username = request.form.get('username')
-        password = request.form.get('password')
+    data = request.json
 
-        user = None
-        if (current_app.config['LDAP_ENABLED'] and
-                User.try_ldap_login(username, password)):
-            user = User.by_username(username)
-            if user is None:
-                user = User(username, password)
-                db.session.add(user)
-                db.session.commit()
-        else:
-            user = User.by_username(username)
-            if user is None or not user.check_password(password):
-                user = None
-
-        if user is not None:
-            login_user(user)
-            flash('Logged in successfully', 'success')
-            next = request.args.get("next")
-            user.last_login = datetime.datetime.utcnow()
-            db.session.commit()
-            return redirect(next or url_for("frontend.index"))
-
-        flash('Invalid username or password. Please try again.',
-              'danger')
-
-    return render_template('user/login.html.j2', form=form)
+    if current_app.config['LDAP_ENABLED']:
+        return ldap_login(data['username'], data['password'])
+    else:
+        return local_login(data['username'], data['password'])
 
 
-@user.route('/logout', methods=['GET'])
+@api.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('frontend.index'))
+    return jsonify({
+        'message': 'Logged out successfully',
+        'success': True
+    })
+
+
+@api.route('/is-logged-in')
+def is_logged_in():
+    return jsonify({
+        'message': 'login status',
+        'success': current_user.is_authenticated
+    })
+
+
+def ldap_login(username, password):
+    if User.try_ldap_login(username, password):
+        user = User.by_username(username)
+        if User.by_username(username) is None:
+            user = User(username)
+            db.session.add(user)
+            user.last_login = datetime.datetime.utcnow()
+            db.session.commit()
+        login_user(user)
+        return jsonify({
+            'message': 'Logged in successfully',
+            'success': True
+        })
+    return jsonify({
+        'message': 'LDAP login faild',
+        'success': False
+    })
+
+
+def local_login(username, password):
+    user = User.by_username(username)
+    if user is not None and user.check_password(password):
+        user.last_login = datetime.datetime.utcnow()
+        db.session.commit()
+        login_user(user)
+        return jsonify({
+            'message': 'Logged in successfully',
+            'success': True
+        })
+
+    return jsonify({
+        'message': 'Invalid username or password',
+        'success': False
+    })

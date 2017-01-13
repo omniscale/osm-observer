@@ -68,7 +68,6 @@ def configure_app(app, config):
 def configure_blueprints(app):
     blueprints = [
         views.frontend,
-        views.user,
         views.api,
     ]
     for blueprint in blueprints:
