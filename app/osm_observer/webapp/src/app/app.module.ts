@@ -29,6 +29,7 @@ import { ReviewBotConfigFormComponent } from './review-bot-config-form/review-bo
 
 import { KeyValueListPipe } from './pipes/key-value-list.pipe';
 import { ChangesetCommentListComponent } from './changeset-comment-list/changeset-comment-list.component';
+import { ChangesetChangesListComponent } from './changeset-changes-list/changeset-changes-list.component';
 
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, '/static/i18n', '.json');
@@ -47,7 +48,8 @@ export function createTranslateLoader(http: Http) {
     ReviewBotConfigListComponent,
     ReviewBotConfigFormComponent,
     KeyValueListPipe,
-    ChangesetCommentListComponent
+    ChangesetCommentListComponent,
+    ChangesetChangesListComponent
   ],
   imports: [
     BrowserModule,

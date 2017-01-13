@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col-md-4" *ngIf="changesetNodeChanges">
+    <h5>{{ 'NODES' | translate }}</h5>
+    <ul *ngIf="changesetNodeChanges.length > 0">
+      <li *ngFor="let change of changesetNodeChanges">
+        <a href="http://www.openstreetmap.org/node/{{ change.id }}"
+           target="_blank"
+           class="changeset-change"
+           [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+          {{ change.id }} (v{{ change.version }})
+        </a>
+      </li>
+    </ul>
+    <span *ngIf="changesetNodeChanges.length === 0">
+      {{ 'NO CHANGED NODES' | translate }}
+    </span>
+  </div>
+  <div class="col-md-4" *ngIf="changesetWayChanges">
+    <h5>{{ 'WAYS' | translate }}</h5>
+    <ul *ngIf="changesetWayChanges.length > 0">
+      <li *ngFor="let change of changesetWayChanges">
+        <a href="http://www.openstreetmap.org/way/{{ change.id }}"
+           target="_blank"
+           class="changeset-change"
+           [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+          {{ change.id }} (v{{ change.version }})
+        </a>
+      </li>
+    </ul>
+    <span *ngIf="changesetWayChanges === 0">
+      {{ 'NO CHANGED WAYS' | translate }}
+    </span>
+  </div>
+  <div class="col-md-4" *ngIf="changesetRelationChanges">
+    <h5>{{ 'RELATIONS' | translate }}</h5>
+    <ul *ngIf="changesetRelationChanges.length > 0">
+      <li *ngFor="let change of changesetRelationChanges">
+        <a href="http://www.openstreetmap.org/relation/{{ change.id }}"
+           target="_blank"
+           class="changeset-change"
+           [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+          {{ change.id }} (v{{ change.version }})
+        </a>
+      </li>
+    </ul>
+    <span *ngIf="changesetRelationChanges.length === 0">
+      {{ 'NO CHANGED RELATIONS' | translate }}
+    </span>
+  </div>
+</div>

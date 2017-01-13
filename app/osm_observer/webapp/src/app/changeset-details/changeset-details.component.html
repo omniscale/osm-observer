@@ -54,56 +54,7 @@
       </table>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-4">
-      <h5>{{ 'NODES' | translate }}</h5>
-      <ul *ngIf="changesetNodeChanges">
-        <li *ngFor="let change of changesetNodeChanges">
-          <a href="http://www.openstreetmap.org/node/{{ change.id }}"
-             target="_blank"
-             class="changeset-change"
-             [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-            {{ change.id }} (v{{ change.version }})
-          </a>
-        </li>
-      </ul>
-      <span *ngIf="!changesetNodeChanges">
-        {{ 'NO CHANGED NODES' | translate }}
-      </span>
-    </div>
-    <div class="col-md-4">
-      <h5>{{ 'WAYS' | translate }}</h5>
-      <ul *ngIf="changesetWayChanges">
-        <li *ngFor="let change of changesetWayChanges">
-          <a href="http://www.openstreetmap.org/way/{{ change.id }}"
-             target="_blank"
-             class="changeset-change"
-             [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-            {{ change.id }} (v{{ change.version }})
-          </a>
-        </li>
-      </ul>
-      <span *ngIf="!changesetWayChanges">
-        {{ 'NO CHANGED WAYS' | translate }}
-      </span>
-    </div>
-    <div class="col-md-4">
-      <h5>{{ 'RELATIONS' | translate }}</h5>
-      <ul *ngIf="changesetRelationChanges">
-        <li *ngFor="let change of changesetRelationChanges">
-          <a href="http://www.openstreetmap.org/relation/{{ change.id }}"
-             target="_blank"
-             class="changeset-change"
-             [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-            {{ change.id }} (v{{ change.version }})
-          </a>
-        </li>
-      </ul>
-      <span *ngIf="!changesetRelationChanges">
-        {{ 'NO CHANGED RELATIONS' | translate }}
-      </span>
-    </div>
-  </div>
+  <changeset-changes-list [id]="changesetDetails.osmId"></changeset-changes-list>
   <div class="row">
     <div class="col-md-6">
       <review-list [id]="changesetDetails.id"></review-list>

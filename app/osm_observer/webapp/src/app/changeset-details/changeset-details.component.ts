@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { ChangesetDetails } from '../types/changeset-details';
-import { ChangesetChange } from '../types/changeset-change';
 import { ChangesetService } from '../services/changeset.service';
 
 @Component({
@@ -16,9 +15,6 @@ export class ChangesetDetailsComponent implements OnInit {
 
   changesetDetails: ChangesetDetails;
 
-  changesetNodeChanges: ChangesetChange[];
-  changesetWayChanges: ChangesetChange[];
-  changesetRelationChanges: ChangesetChange[];
 
   constructor(private changesetService: ChangesetService,
               private router: Router,
@@ -28,35 +24,9 @@ export class ChangesetDetailsComponent implements OnInit {
     this.changesetDetails = changesetDetails;
   }
 
-  assignChangesetChanges(changesetChanges: ChangesetChange[]) {
-    this.changesetNodeChanges = [];
-    this.changesetWayChanges = [];
-    this.changesetRelationChanges = [];
-    for (let change of changesetChanges) {
-      switch(change.type) {
-        case 'node':
-          this.changesetNodeChanges.push(change);
-          break;
-        case 'way':
-          this.changesetWayChanges.push(change);
-          break;
-        case 'relation':
-          this.changesetRelationChanges.push(change);
-          break;
-      }
-    }
-  }
-
   getChangesetDetails(id: number): void {
     this.changesetService.getChangesetDetails(id)
                          .then(changesetDetails => this.assignChangesetDetails(changesetDetails))
-                         // TODO define onError actions
-                         .catch(error => {});
-  }
-
-  getChangesetChanges(id: number): void {
-    this.changesetService.getChangesetChanges(id)
-                         .then(changesetChanges => this.assignChangesetChanges(changesetChanges))
                          // TODO define onError actions
                          .catch(error => {});
   }
@@ -65,7 +35,6 @@ export class ChangesetDetailsComponent implements OnInit {
     let id = this.route.snapshot.params['id'];
     if(id !== undefined) {
       this.getChangesetDetails(id);
-      this.getChangesetChanges(id);
     } else {
       this.router.navigate(['/changesets']);
     }
