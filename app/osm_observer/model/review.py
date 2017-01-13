@@ -5,6 +5,12 @@ from osm_observer.extensions import db
 __all__ = ['Review']
 
 
+class REVIEW_STATUS(object):
+    NOTHING = 0
+    AUTOMATIC = 1
+    FIXED = 99
+
+
 class Review(db.Model):
     __tablename__ = 'reviews'
     __table_args__ = {
@@ -25,16 +31,13 @@ class Review(db.Model):
         nullable=True
     )
 
-    class STATUS(object):
-        NOTHING = 0
-        FIXED = 99
-
     _review_status = {
         0: 'Nothing',
-        99: 'Fixed'
+        1: 'Automatic',
+        99: 'Fixed',
     }
 
-    def __init__(self, changeset_id=None, score=0, status=STATUS.NOTHING, comment=None):
+    def __init__(self, changeset_id=None, score=0, status=REVIEW_STATUS.NOTHING, comment=None):
         self.changeset_id = changeset_id
         self.score = score
         self.status = status
