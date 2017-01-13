@@ -60,3 +60,39 @@
     </tr>
   </tbody>
 </table>
+
+<h3>{{ 'NODES' | translate }}</h3>
+<ul *ngIf="changesetNodeChanges">
+  <li *ngFor="let change of changesetNodeChanges">
+    <a href="http://www.openstreetmap.org/node/{{ change.id }}"
+       target="_blank"
+       class="changeset-change"
+       [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+      {{ change.id }} (v{{ change.version }})
+    </a>
+  </li>
+</ul>
+
+<h3>{{ 'WAYS' | translate }}</h3>
+<ul *ngIf="changesetWayChanges">
+  <li *ngFor="let change of changesetWayChanges">
+    <a href="http://www.openstreetmap.org/way/{{ change.id }}"
+       target="_blank"
+       class="changeset-change"
+       [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+      {{ change.id }} (v{{ change.version }})
+    </a>
+  </li>
+</ul>
+
+<h3>{{ 'RELATIONS' | translate }}</h3>
+<ul *ngIf="changesetRelationChanges">
+  <li *ngFor="let change of changesetRelationChanges">
+    <a href="http://www.openstreetmap.org/relation/{{ change.id }}"
+       target="_blank"
+       class="changeset-change"
+       [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+      {{ change.id }} (v{{ change.version }})
+    </a>
+  </li>
+</ul>

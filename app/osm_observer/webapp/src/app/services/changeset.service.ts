@@ -7,6 +7,7 @@ import { BaseHttpService } from './base-http.service';
 import { Changeset } from '../types/changeset';
 import { ChangesetDetails } from '../types/changeset-details';
 import { ChangesetComment } from '../types/changeset-comment';
+import { ChangesetChange } from '../types/changeset-change';
 
 @Injectable()
 export class ChangesetService extends BaseHttpService {
@@ -19,6 +20,10 @@ export class ChangesetService extends BaseHttpService {
 
   private changesetCommentsUrl(id: number): string {
     return `/api/changesets/comments/${id}`;
+  }
+
+  private changesetChangesUrl(id: number): string {
+    return `/api/changesets/changes/${id}`;
   }
 
   constructor(private http: Http) {
@@ -68,6 +73,16 @@ export class ChangesetService extends BaseHttpService {
                     .then(response => response.json() as ChangesetComment[])
                     .catch(error => {
                       return this.handleError(error, 'getChangesetComments', url, {id: id});
+                    });
+  }
+
+  getChangesetChanges(id: number): Promise<ChangesetChange[]> {
+    let url = this.changesetChangesUrl(id);
+    return this.http.get(url, this.defaultRequestOptions)
+                    .toPromise()
+                    .then(response => response.json() as ChangesetChange[])
+                    .catch(error => {
+                      return this.handleError(error, 'getChangesetChanges', url, {id: id});
                     });
   }
 }

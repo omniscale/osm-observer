@@ -1,4 +1,4 @@
-from sqlalchemy import case, true
+from sqlalchemy import case, true, literal, union_all
 from sqlalchemy.sql import select, func
 
 from sqlalchemy.sql.expression import join
@@ -105,5 +105,30 @@ def query_changeset_comments(changeset_id=None):
     stmt = select([comments])
     stmt = stmt.where(comments.c.changeset_id==changeset_id)
     stmt = stmt.order_by(comments.c.timestamp.desc())
+    conn = db.session.connection()
+    return conn.execute(stmt).fetchall()
+
+
+def query_changeset_changes(changeset_id=None):
+    n = select([
+        literal('node').label('type'), nodes.c.id,
+        nodes.c['add'], nodes.c.modify, nodes.c.delete, nodes.c.user_name,
+        nodes.c.user_id, nodes.c.timestamp, nodes.c.version, nodes.c.tags
+    ]).where(nodes.c.changeset==changeset_id)
+
+    w = select([
+        literal('way').label('type'), ways.c.id,
+        ways.c['add'], ways.c.modify, ways.c.delete, ways.c.user_name,
+        ways.c.user_id, ways.c.timestamp, ways.c.version, ways.c.tags
+    ]).where(ways.c.changeset==changeset_id)
+
+    r = select([
+        literal('relation').label('type'), relations.c.id,
+        relations.c['add'], relations.c.modify, relations.c.delete,
+        relations.c.user_name, relations.c.user_id, relations.c.timestamp,
+        relations.c.version, relations.c.tags
+    ]).where(relations.c.changeset==changeset_id)
+
+    stmt = union_all(n, w, r)
     conn = db.session.connection()
     return conn.execute(stmt).fetchall()

@@ -3,7 +3,7 @@ export class ChangesetComment {
   idx: number;
   userName: string;
   userId: number;
-  timestamp: Date:
+  timestamp: Date;
   text: string;
 
   constructor(
