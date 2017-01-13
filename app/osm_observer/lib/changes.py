@@ -7,12 +7,12 @@ from osm_observer.model import Changeset, Review
 from osm_observer.model import changesets, nodes, ways, relations, comments
 from osm_observer.extensions import db
 
-def query_changesets(coverages=None, from_time=None, to_time=None, username=None, num_reviews=None, average_score=None):
+
+def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
+                     num_reviews=None, average_score=None):
 
     changeset_join = join(Changeset, changesets,
-         Changeset.osm_id == changesets.c.id
-    )
-
+                          Changeset.osm_id == changesets.c.id)
     # subquery to get informations from reviews
     # add more options e.g. sum score from reviews
     review_select = select([
@@ -22,12 +22,11 @@ def query_changesets(coverages=None, from_time=None, to_time=None, username=None
             func.sum(Review.score) / func.count('*')
         ).label('average_score')
     ]).group_by(
-        Review.changeset_id).alias('reviews'
-    )
+        Review.changeset_id).alias('reviews')
 
     review_join = join(changeset_join, review_select,
-         Changeset.id == review_select.c.changeset_id, isouter=True,
-    )
+                       Changeset.id == review_select.c.changeset_id,
+                       isouter=True)
 
     s = select([
         Changeset.id.label('app_id'),
@@ -37,8 +36,6 @@ def query_changesets(coverages=None, from_time=None, to_time=None, username=None
     ]).select_from(review_join)
 
     if coverages is not None:
-        if not isinstance(coverages, list):
-            coverages = [coverages]
         for coverage in coverages:
             s = s.where(changesets.c.bbox.ST_Intersects(coverage.geometry))
 

@@ -16,12 +16,13 @@ from osm_observer.model import Coverage
 @login_required
 def changesets_list():
     # filter with coverage
-    coverage = None
-    coverage_id = request.args.get('coverage', False)
+    coverages = []
+    coverage_id = request.args.get('coverageId', False)
     if coverage_id:
         coverage = Coverage.by_id(coverage_id)
         if coverage not in current_user.coverages:
             raise abort(403)
+        coverages.append(coverage)
 
     # filter with username
     username = request.args.get('username', None)
@@ -49,7 +50,7 @@ def changesets_list():
         to_time = None
 
     changesets = list(query_changesets(
-        coverages=coverage or current_user.coverages,
+        coverages=coverages or current_user.coverages,
         from_time=from_time,
         to_time=to_time,
         username=username,

@@ -39,6 +39,21 @@
              (keyup)="applyChange()"
              [(ngModel)]="numReviews" />
     </div>
+    <div class="form-group">
+      <select class="form-control form-control-sm"
+              id="coverage"
+              type="number"
+              #coverage
+              (change)="setCoverageId(coverage.value)">
+        <option [value]="undefined">
+          {{ 'SELECT COVERAGE' | translate }}
+        </option>
+        <option *ngFor="let coverage of coverages"
+                [value]="coverage.id">
+          {{ coverage.name }}
+        </option>
+      </select>
+    </div>
   </div>
 </div>
 <table class="table table-striped">

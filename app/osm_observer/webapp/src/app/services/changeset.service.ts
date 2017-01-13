@@ -30,7 +30,7 @@ export class ChangesetService extends BaseHttpService {
     super();
   }
 
-  getChangesets(username: string, timeRange: string, averageScore: number, numReviews: number): Promise<Changeset[]> {
+  getChangesets(username: string, timeRange: string, averageScore: number, numReviews: number, coverageId: number): Promise<Changeset[]> {
     let params = new URLSearchParams();
     if(username !== undefined && username !== null && username !== '') {
       params.set('username', username);
@@ -43,6 +43,9 @@ export class ChangesetService extends BaseHttpService {
     }
     if(numReviews !== undefined && numReviews !== null) {
       params.set('numReviews', numReviews.toString());
+    }
+    if(coverageId !== undefined && coverageId !== null) {
+      params.set('coverageId', coverageId.toString());
     }
 
     let requestOptions = this.defaultRequestOptions;
