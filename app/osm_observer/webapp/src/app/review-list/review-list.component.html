@@ -1,14 +1,23 @@
-<ul *ngIf="reviews">
-  <li *ngFor="let review of reviews">
-    <span class="tag"
-          [class.tag-warning]="review.score === 0"
-          [class.tag-danger]="review.score < 0"
-          [class.tag-primary]="review.score > 0">
-      {{ review.score }}
-    </span>
-    {{ review.status }}
-    {{ review.creator.name }}
-    {{ review.timeCreated | date:'d.M.y HH:mm:ss' }}
-    {{ review.comment }}
-  </li>
-</ul>
+<table class="table" *ngIf="reviews">
+  <thead>
+    <tr>
+      <th>{{ 'SCORE' | translate }}</th>
+      <th>{{ 'STATUS' | translate }}</th>
+      <th>{{ 'CREATED BY' | translate }}</th>
+      <th>{{ 'CREATED AT' | translate }}</th>
+      <th>{{ 'COMMENT' | translate }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let review of reviews"
+        [class.table-warning]="review.score === 0"
+        [class.table-danger]="review.score < 0"
+        [class.table-success]="review.score > 0">
+      <td>{{ review.score }}</td>
+      <td>{{ review.status }}</td>
+      <td>{{ review.creator.name }}</td>
+      <td>{{ review.timeCreated | date:'d.M.y HH:mm:ss' }}</td>
+      <td>{{ review.comment }}</td>
+    </tr>
+  </tbody>
+</table>
