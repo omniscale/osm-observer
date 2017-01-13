@@ -1,7 +1,7 @@
 from sqlalchemy import case, true, literal, union_all
 from sqlalchemy.sql import select, func
 
-from sqlalchemy.sql.expression import join
+from sqlalchemy.sql.expression import join, or_
 
 from osm_observer.model import Changeset, Review
 from osm_observer.model import changesets, nodes, ways, relations, comments
@@ -35,9 +35,11 @@ def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
         review_select.c.average_score
     ]).select_from(review_join)
 
-    if coverages is not None:
+    if len(coverages) > 0:
+        coverage_comnditions = []
         for coverage in coverages:
-            s = s.where(changesets.c.bbox.ST_Intersects(coverage.geometry))
+            coverage_comnditions.append(changesets.c.bbox.ST_Intersects(coverage.geometry))
+        s = s.where(or_(*coverage_comnditions))
 
     if username is not None:
         s = s.where(changesets.c.user_name==username)
