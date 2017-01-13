@@ -8,7 +8,6 @@ __all__ = ['Review']
 
 class REVIEW_STATUS(object):
     NOTHING = 0
-    AUTOMATIC = 1
     FIXED = 99
 
 
@@ -20,7 +19,7 @@ class Review(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     score = db.Column(db.Integer, default=0)
-    _status = db.Column(db.Integer, default=False)
+    _status = db.Column(db.Integer)
     comment = db.Column(db.String, nullable=False)
     time_created = db.Column(
         db.DateTime,
@@ -46,12 +45,11 @@ class Review(db.Model):
 
     _review_status = {
         0: 'Nothing',
-        1: 'Automatic',
         99: 'Fixed',
     }
 
     def __init__(self, changeset_id=None, score=0,
-                 status=REVIEW_STATUS.NOTHING, comment=None, user_id=None,
+                 status=None, comment=None, user_id=None,
                  review_bot_config_id=None):
         self.changeset_id = changeset_id
         self.score = score
@@ -86,6 +84,8 @@ class Review(db.Model):
 
     @property
     def status(self):
+        if self._status is None:
+            return None
         return self._review_status[self._status]
 
     @property

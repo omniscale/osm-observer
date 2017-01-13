@@ -1,4 +1,4 @@
-from osm_observer.model.review import Review, REVIEW_STATUS
+from osm_observer.model.review import Review
 from osm_observer.model.review_bot_configs import ReviewBotConfig
 
 
@@ -49,7 +49,6 @@ class UsernameReviewBot(BaseReviewBot):
             return Review(
                 score=self.username_scores[username]['score'],
                 comment=self.username_scores[username]['comment'],
-                status=REVIEW_STATUS.AUTOMATIC,
                 review_bot_config_id=self.username_scores[username]['config_id'],
             )
         return None
@@ -79,7 +78,6 @@ class TagValueReviewBot(BaseReviewBot):
                 return Review(
                     score=tag_value_score['score'],
                     comment=tag_value_score['comment'],
-                    status=REVIEW_STATUS.AUTOMATIC,
                     review_bot_config_id=tag_value_score['config_id'],
                 )
         return None
