@@ -1,22 +1,7 @@
 <div class="container" *ngIf="changesetDetails">
   <div class="row">
     <div class="col-md-6">
-      <table class="table table-striped" *ngIf="changesetComments">
-        <thead>
-          <tr>
-            <th>{{ 'USERNAME' | translate }}</th>
-            <th>{{ 'DATE' | translate }}</th>
-            <th>{{ 'COMMENT' | translate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let comment of changesetComments">
-            <td>{{ comment.userName }}</td>
-            <td>{{ comment.timestamp | date:'d.M.y HH:mm:ss' }}</td>
-            <td>{{ comment.text }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <changeset-comment-list [id]="changesetDetails.osmId"></changeset-comment-list>
     </div>
     <div class="col-md-6">
       <table class="table table-striped">

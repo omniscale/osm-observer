@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { ChangesetDetails } from '../types/changeset-details';
-import { ChangesetComment } from '../types/changeset-comment';
 import { ChangesetChange } from '../types/changeset-change';
 import { ChangesetService } from '../services/changeset.service';
 
@@ -16,7 +15,6 @@ export class ChangesetDetailsComponent implements OnInit {
   id: number;
 
   changesetDetails: ChangesetDetails;
-  changesetComments: ChangesetComment[];
 
   changesetNodeChanges: ChangesetChange[];
   changesetWayChanges: ChangesetChange[];
@@ -28,10 +26,6 @@ export class ChangesetDetailsComponent implements OnInit {
 
   assignChangesetDetails(changesetDetails: ChangesetDetails) {
     this.changesetDetails = changesetDetails;
-  }
-
-  assignChangesetComments(changesetComments: ChangesetComment[]) {
-    this.changesetComments = changesetComments;
   }
 
   assignChangesetChanges(changesetChanges: ChangesetChange[]) {
@@ -60,13 +54,6 @@ export class ChangesetDetailsComponent implements OnInit {
                          .catch(error => {});
   }
 
-  getChangesetComments(id: number): void {
-    this.changesetService.getChangesetComments(id)
-                         .then(changesetComments => this.assignChangesetComments(changesetComments))
-                         // TODO define onError actions
-                         .catch(error => {});
-  }
-
   getChangesetChanges(id: number): void {
     this.changesetService.getChangesetChanges(id)
                          .then(changesetChanges => this.assignChangesetChanges(changesetChanges))
@@ -78,7 +65,6 @@ export class ChangesetDetailsComponent implements OnInit {
     let id = this.route.snapshot.params['id'];
     if(id !== undefined) {
       this.getChangesetDetails(id);
-      this.getChangesetComments(id);
       this.getChangesetChanges(id);
     } else {
       this.router.navigate(['/changesets']);
