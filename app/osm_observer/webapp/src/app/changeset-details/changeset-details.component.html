@@ -1,27 +1,6 @@
 <div class="container" *ngIf="changesetDetails">
   <div class="row">
     <div class="col-md-6">
-    <changeset-comment-list [id]="changesetDetails.osmId"></changeset-comment-list>
-    </div>
-    <div class="col-md-6">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>{{ 'KEY' | translate }}</th>
-            <th>{{ 'VALUE' | translate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let obj of changesetDetails.tags | keyValueList">
-            <td>{{ obj.key }}</td>
-            <td>{{ obj.value }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
       <table class="table">
         <thead>
           <tr>
@@ -53,8 +32,31 @@
         </tbody>
       </table>
     </div>
+    <div class="col-md-6">
+      <changeset-changes-list [id]="changesetDetails.osmId"></changeset-changes-list>
+    </div>
   </div>
-  <changeset-changes-list [id]="changesetDetails.osmId"></changeset-changes-list>
+  <div class="row">
+    <div class="col-md-6">
+    <changeset-comment-list [id]="changesetDetails.osmId"></changeset-comment-list>
+    </div>
+    <div class="col-md-6">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>{{ 'KEY' | translate }}</th>
+            <th>{{ 'VALUE' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let obj of changesetDetails.tags | keyValueList">
+            <td>{{ obj.key }}</td>
+            <td>{{ obj.value }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
   <div class="row">
     <div class="col-md-6">
       <review-list [id]="changesetDetails.id"></review-list>
