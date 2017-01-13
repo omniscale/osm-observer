@@ -18,7 +18,8 @@ def add_review(changeset_id):
     review = Review(
         changeset_id=changeset_id,
         score=data['score'],
-        status=data['status']
+        status=data['status'],
+        comment=data['comment'],
     )
     db.session.add(review)
     db.session.commit()

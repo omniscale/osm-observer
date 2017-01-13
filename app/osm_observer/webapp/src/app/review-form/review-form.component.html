@@ -1,20 +1,48 @@
-<form (ngSubmit)="onSubmit()">
+<form #reviewForm="ngForm"
+      (ngSubmit)="onSubmit()">
   <div class="form-group">
-    <label for="score">{{ 'SCORE' | translate }}</label>
+    <label for="score">
+      {{ 'SCORE' | translate }}
+    </label>
     <input type="number"
            class="form-control"
            id="score"
-           [(ngModel)]="model.score"
            name="score"
            min="-100"
-           max="100" />
+           max="100"
+           required
+           [(ngModel)]="model.score" />
   </div>
-  {{ ReviewStatus }}
   <div class="form-group">
-    <label for="status">{{ 'STATUS' | translate }}</label>
-    <select class="form-control" id="status" [(ngModel)]="model.status" name="status">
-      <option *ngFor="let reviewStatusName of reviewStatus.names()" [value]="reviewStatus[reviewStatusName]">{{ reviewStatusName }}</option>
+    <label for="status">
+      {{ 'STATUS' | translate }}
+    </label>
+    <select
+      class="form-control"
+      id="status"
+      name="status"
+      required
+      [(ngModel)]="model.status">
+      <option *ngFor="let reviewStatusName of reviewStatus.names()"
+              [value]="reviewStatus[reviewStatusName]">
+        {{ reviewStatusName }}
+      </option>
     </select>
   </div>
-  <button type="submit" class="btn btn-primary">{{ 'ADD' | translate }}</button>
+  <div class="form-group">
+    <label for="comment">
+      {{ 'COMMENT' | translate }}
+    </label>
+    <textarea class="form-control"
+              id="comment"
+              name="comment"
+              required
+              [(ngModel)]="model.comment">
+    </textarea>
+  </div>
+  <button type="submit"
+          class="btn btn-primary"
+          [disabled]="!reviewForm.form.valid">
+    {{ 'ADD' | translate }}
+  </button>
 </form>

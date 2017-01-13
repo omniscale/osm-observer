@@ -27,11 +27,13 @@ export class DefaultBotConfig {
 
 export class UsernameBotConfig {
   username: string;
+  comment: string;
   score: number;
 }
 
 export class TagValueBotConfig {
   tag: string;
   value: string;
+  comment: string;
   score: string;
 }

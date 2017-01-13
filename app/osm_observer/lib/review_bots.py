@@ -35,12 +35,18 @@ class UsernameReviewBot(BaseReviewBot):
 
         self.username_scores = {}
         for config in self.configs:
-            self.username_scores[config['username']] = config['score']
+            self.username_scores[config['username']] = {
+                'score': config['score'],
+                'comment': config['comment'],
+            }
 
     def review(self, changeset):
         username = changeset.user_name
         if username in self.username_scores:
-            return Review(score=self.username_scores[username])
+            return Review(
+                score=self.username_scores[username]['score'],
+                comment=self.username_scores[username]['comment']
+            )
         return None
 
 
@@ -63,5 +69,8 @@ class TagValueReviewBot(BaseReviewBot):
             if tag_value_score['tag'] not in tags:
                 continue
             if tags[tag_value_score['tag']].startswith(tag_value_score['value']):
-                return Review(score=tag_value_score['score'])
+                return Review(
+                    score=tag_value_score['score'],
+                    comment=tag_value_score['comment'],
+                )
         return None

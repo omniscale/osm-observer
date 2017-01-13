@@ -14,6 +14,7 @@ class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     score = db.Column(db.Integer, default=0)
     _status = db.Column(db.Integer, default=False)
+    comment = db.Column(db.String, nullable=False)
     time_created = db.Column(
         db.DateTime,
         default=datetime.datetime.utcnow
@@ -33,10 +34,11 @@ class Review(db.Model):
         99: 'Fixed'
     }
 
-    def __init__(self, changeset_id=None, score=0, status=STATUS.NOTHING):
+    def __init__(self, changeset_id=None, score=0, status=STATUS.NOTHING, comment=None):
         self.changeset_id = changeset_id
         self.score = score
         self.status = status
+        self.comment = comment
 
     @property
     def serialize(self):
@@ -44,6 +46,7 @@ class Review(db.Model):
             'id': self.id,
             'score': self.score,
             'status': self.status,
+            'comment': self.comment,
             'timeCreated': self.time_created.timestamp() * 1000
         }
 

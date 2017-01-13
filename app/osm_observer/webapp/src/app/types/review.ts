@@ -2,12 +2,14 @@ export class Review {
   id: number;
   score: number;
   status: number;
+  comment: string;
   timeCreated: Date;
 
-  constructor(id?: number, score?: number, status?: number, timeCreated?: string) {
+  constructor(id?: number, score?: number, status?: number, comment?: string, timeCreated?: string) {
     this.id = id;
     this.score = score;
     this.status = status;
+    this.comment = comment;
     this.timeCreated = new Date(timeCreated);
   }
 }
