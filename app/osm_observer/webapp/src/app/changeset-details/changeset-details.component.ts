@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { ChangesetDetails } from '../types/changeset-details';
 import { ChangesetComment } from '../types/changeset-comment';
@@ -21,7 +22,9 @@ export class ChangesetDetailsComponent implements OnInit {
   changesetWayChanges: ChangesetChange[];
   changesetRelationChanges: ChangesetChange[];
 
-  constructor(private changesetService: ChangesetService) { }
+  constructor(private changesetService: ChangesetService,
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   assignChangesetDetails(changesetDetails: ChangesetDetails) {
     this.changesetDetails = changesetDetails;
@@ -50,30 +53,36 @@ export class ChangesetDetailsComponent implements OnInit {
     }
   }
 
-  getChangesetDetails(): void {
-    this.changesetService.getChangesetDetails(this.id)
+  getChangesetDetails(id: number): void {
+    this.changesetService.getChangesetDetails(id)
                          .then(changesetDetails => this.assignChangesetDetails(changesetDetails))
                          // TODO define onError actions
                          .catch(error => {});
   }
 
-  getChangesetComments(): void {
-    this.changesetService.getChangesetComments(this.id)
+  getChangesetComments(id: number): void {
+    this.changesetService.getChangesetComments(id)
                          .then(changesetComments => this.assignChangesetComments(changesetComments))
                          // TODO define onError actions
                          .catch(error => {});
   }
 
-  getChangesetChanges(): void {
-    this.changesetService.getChangesetChanges(this.id)
+  getChangesetChanges(id: number): void {
+    this.changesetService.getChangesetChanges(id)
                          .then(changesetChanges => this.assignChangesetChanges(changesetChanges))
                          // TODO define onError actions
                          .catch(error => {});
   }
 
   ngOnInit() {
-    this.getChangesetDetails();
-    this.getChangesetComments();
-    this.getChangesetChanges();
+    let id = this.route.snapshot.params['id'];
+    if(id !== undefined) {
+      this.getChangesetDetails(id);
+      this.getChangesetComments(id);
+      this.getChangesetChanges(id);
+    } else {
+      this.router.navigate(['/changesets']);
+    }
+
   }
 }

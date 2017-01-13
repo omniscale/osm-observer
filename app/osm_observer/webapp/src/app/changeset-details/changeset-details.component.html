@@ -1,98 +1,130 @@
-<table class="table" *ngIf="changesetDetails">
-  <thead>
-    <tr>
-      <th></th>
-      <th>{{ 'ADDED' | translate }}</th>
-      <th>{{ 'MODIFIED' | translate }}</th>
-      <th>{{ 'DELETED' | translate }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>{{ 'NODES' | translate }}</th>
-      <td>{{ changesetDetails.nodesAdd }}</td>
-      <td>{{ changesetDetails.nodesModify }}</td>
-      <td>{{ changesetDetails.nodesDelete }}</td>
-    </tr>
-    <tr>
-      <th>{{ 'WAYS' | translate }}</th>
-      <td>{{ changesetDetails.waysAdd }}</td>
-      <td>{{ changesetDetails.waysModify }}</td>
-      <td>{{ changesetDetails.waysDelete }}</td>
-    </tr>
-    <tr>
-      <th>{{ 'RELATIONS' | translate }}</th>
-      <td>{{ changesetDetails.relationsAdd }}</td>
-      <td>{{ changesetDetails.relationsModify }}</td>
-      <td>{{ changesetDetails.relationsDelete }}</td>
-    </tr>
-  </tbody>
-</table>
-
-<table class="table table-striped" *ngIf="changesetDetails">
-  <thead>
-    <tr>
-      <th>{{ 'KEY' | translate }}</th>
-      <th>{{ 'VALUE' | translate }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let obj of changesetDetails.tags | keyValueList">
-      <td>{{ obj.key }}</td>
-      <td>{{ obj.value }}</td>
-    </tr>
-  </tbody>
-</table>
-
-<table class="table table-striped" *ngIf="changesetComments">
-  <thead>
-    <tr>
-      <th>{{ 'USERNAME' | translate }}</th>
-      <th>{{ 'DATE' | translate }}</th>
-      <th>{{ 'COMMENT' | translate }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let comment of changesetComments">
-      <td>{{ comment.userName }}</td>
-      <td>{{ comment.timestamp | date:'d.M.y HH:mm:ss' }}</td>
-      <td>{{ comment.text }}</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3>{{ 'NODES' | translate }}</h3>
-<ul *ngIf="changesetNodeChanges">
-  <li *ngFor="let change of changesetNodeChanges">
-    <a href="http://www.openstreetmap.org/node/{{ change.id }}"
-       target="_blank"
-       class="changeset-change"
-       [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-      {{ change.id }} (v{{ change.version }})
-    </a>
-  </li>
-</ul>
-
-<h3>{{ 'WAYS' | translate }}</h3>
-<ul *ngIf="changesetWayChanges">
-  <li *ngFor="let change of changesetWayChanges">
-    <a href="http://www.openstreetmap.org/way/{{ change.id }}"
-       target="_blank"
-       class="changeset-change"
-       [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-      {{ change.id }} (v{{ change.version }})
-    </a>
-  </li>
-</ul>
-
-<h3>{{ 'RELATIONS' | translate }}</h3>
-<ul *ngIf="changesetRelationChanges">
-  <li *ngFor="let change of changesetRelationChanges">
-    <a href="http://www.openstreetmap.org/relation/{{ change.id }}"
-       target="_blank"
-       class="changeset-change"
-       [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-      {{ change.id }} (v{{ change.version }})
-    </a>
-  </li>
-</ul>
+<div class="container" *ngIf="changesetDetails">
+  <div class="row">
+    <div class="col-md-6">
+      <table class="table table-striped" *ngIf="changesetComments">
+        <thead>
+          <tr>
+            <th>{{ 'USERNAME' | translate }}</th>
+            <th>{{ 'DATE' | translate }}</th>
+            <th>{{ 'COMMENT' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let comment of changesetComments">
+            <td>{{ comment.userName }}</td>
+            <td>{{ comment.timestamp | date:'d.M.y HH:mm:ss' }}</td>
+            <td>{{ comment.text }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-6">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>{{ 'KEY' | translate }}</th>
+            <th>{{ 'VALUE' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let obj of changesetDetails.tags | keyValueList">
+            <td>{{ obj.key }}</td>
+            <td>{{ obj.value }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>{{ 'ADDED' | translate }}</th>
+            <th>{{ 'MODIFIED' | translate }}</th>
+            <th>{{ 'DELETED' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>{{ 'NODES' | translate }}</th>
+            <td>{{ changesetDetails.nodesAdd }}</td>
+            <td>{{ changesetDetails.nodesModify }}</td>
+            <td>{{ changesetDetails.nodesDelete }}</td>
+          </tr>
+          <tr>
+            <th>{{ 'WAYS' | translate }}</th>
+            <td>{{ changesetDetails.waysAdd }}</td>
+            <td>{{ changesetDetails.waysModify }}</td>
+            <td>{{ changesetDetails.waysDelete }}</td>
+          </tr>
+          <tr>
+            <th>{{ 'RELATIONS' | translate }}</th>
+            <td>{{ changesetDetails.relationsAdd }}</td>
+            <td>{{ changesetDetails.relationsModify }}</td>
+            <td>{{ changesetDetails.relationsDelete }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <h5>{{ 'NODES' | translate }}</h5>
+      <ul *ngIf="changesetNodeChanges">
+        <li *ngFor="let change of changesetNodeChanges">
+          <a href="http://www.openstreetmap.org/node/{{ change.id }}"
+             target="_blank"
+             class="changeset-change"
+             [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+            {{ change.id }} (v{{ change.version }})
+          </a>
+        </li>
+      </ul>
+      <span *ngIf="!changesetNodeChanges">
+        {{ 'NO CHANGED NODES' | translate }}
+      </span>
+    </div>
+    <div class="col-md-4">
+      <h5>{{ 'WAYS' | translate }}</h5>
+      <ul *ngIf="changesetWayChanges">
+        <li *ngFor="let change of changesetWayChanges">
+          <a href="http://www.openstreetmap.org/way/{{ change.id }}"
+             target="_blank"
+             class="changeset-change"
+             [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+            {{ change.id }} (v{{ change.version }})
+          </a>
+        </li>
+      </ul>
+      <span *ngIf="!changesetWayChanges">
+        {{ 'NO CHANGED WAYS' | translate }}
+      </span>
+    </div>
+    <div class="col-md-4">
+      <h5>{{ 'RELATIONS' | translate }}</h5>
+      <ul *ngIf="changesetRelationChanges">
+        <li *ngFor="let change of changesetRelationChanges">
+          <a href="http://www.openstreetmap.org/relation/{{ change.id }}"
+             target="_blank"
+             class="changeset-change"
+             [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+            {{ change.id }} (v{{ change.version }})
+          </a>
+        </li>
+      </ul>
+      <span *ngIf="!changesetRelationChanges">
+        {{ 'NO CHANGED RELATIONS' | translate }}
+      </span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <review-list [id]="changesetDetails.id"></review-list>
+    </div>
+    <div class="col-md-6">
+      <review-form [id]="changesetDetails.id"></review-form>
+    </div>
+  </div>
+</div>

@@ -68,7 +68,16 @@ export function createTranslateLoader(http: Http) {
       },
       {
         path: 'changesets',
-        component: ChangesetListComponent
+        children: [
+          {
+            path: '',
+            component: ChangesetListComponent
+          },
+          {
+            path: ':id/details',
+            component: ChangesetDetailsComponent
+          }
+        ]
       },
       {
         path: 'reviewBotConfigs',

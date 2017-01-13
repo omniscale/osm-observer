@@ -82,22 +82,11 @@
         <td>{{ changeset.numReviews }}</td>
         <td>{{ changeset.averageScore }}</td>
         <td>
-          <button class="btn btn-default btn-sm" (click)="show= show === changeset.id ? undefined : changeset.id">{{ 'TOGGLE' | translate }}</button>
-        </td>
-      </tr>
-      <tr *ngIf="show === changeset.id">
-        <td colspan="4">
-          <changeset-details [id]="changeset.osmId"></changeset-details>
-        </td>
-      </tr>
-      <tr *ngIf="show === changeset.id">
-        <td colspan="4">
-          <review-form [id]="changeset.id"></review-form>
-        </td>
-      </tr>
-      <tr *ngIf="show === changeset.id">
-        <td colspan="4">
-          <review-list [id]="changeset.id"></review-list>
+          <a class="btn btn-secondary btn-sm"
+             role="button"
+             [routerLink]="[changeset.osmId, 'details']">
+            {{ 'DETAILS' | translate }}
+          </a>
         </td>
       </tr>
     </ng-container>
