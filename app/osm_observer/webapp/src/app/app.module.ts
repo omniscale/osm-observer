@@ -10,7 +10,6 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { AppComponent }     from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { DashboardComponent }            from './dashboard/dashboard.component';
 import { CoverageListComponent }         from './coverage-list/coverage-list.component';
 import { CoveragesComponent }            from './coverages/coverages.component';
 import { ChangesetListComponent }        from './changeset-list/changeset-list.component';
@@ -40,7 +39,6 @@ export function createTranslateLoader(http: Http) {
     AppComponent,
     CoverageListComponent,
     CoveragesComponent,
-    DashboardComponent,
     ChangesetListComponent,
     ChangesetDetailsComponent,
     ReviewListComponent,

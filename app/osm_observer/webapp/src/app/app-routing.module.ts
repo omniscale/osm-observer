@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthService }      from './services/auth.service';
 import { AuthGuardService } from './services/auth-guard.service';
 
-import { DashboardComponent }           from './dashboard/dashboard.component';
 import { CoverageListComponent }        from './coverage-list/coverage-list.component';
 import { ChangesetListComponent }       from './changeset-list/changeset-list.component';
 import { ChangesetDetailsComponent }    from './changeset-details/changeset-details.component';
@@ -16,11 +15,6 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent
-  },
-  {
-    path: 'dashboard',
-    canActivate: [AuthGuardService],
-    component: DashboardComponent
   },
   {
     path: 'changesets',
@@ -56,7 +50,7 @@ const appRoutes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/dashboard'
+    redirectTo: '/changesets'
   }
 ]
 
