@@ -23,6 +23,7 @@
     "@angular/platform-browser": "^2.3.1",
     "@angular/platform-browser-dynamic": "^2.3.1",
     "@angular/router": "^3.3.1",
+    "angular2-cookie": "^1.2.6",
     "core-js": "^2.4.1",
     "ng2-translate": "^5.0.0",
     "ng2-validation": "^3.1.3",

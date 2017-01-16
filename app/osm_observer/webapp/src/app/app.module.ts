@@ -5,6 +5,7 @@ import { HttpModule, Http } from '@angular/http';
 
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
 import { CustomFormsModule }                                       from 'ng2-validation'
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { AppComponent }     from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -64,6 +65,7 @@ export function createTranslateLoader(http: Http) {
     })
   ],
   providers: [
+    CookieService,
     CoverageService,
     ChangesetService,
     ReviewService,
