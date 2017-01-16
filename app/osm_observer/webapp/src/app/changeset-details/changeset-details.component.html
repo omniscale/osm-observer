@@ -1,4 +1,59 @@
 <div class="container" *ngIf="changesetDetails">
+  <h3>{{ 'CHANGESET DETAILS' | translate }}</h3>
+  <div class="row">
+    <div class="col-md-2">
+      <dl>
+        <dt>{{ 'CLOSED AT' | translate }}</dt>
+        <dd>{{ changesetDetails.closedAt | date:'d.M.y HH:mm:ss'}}
+      </dl>
+    </div>
+    <div class="col-md-2">
+      <dl>
+        <dt>{{ 'OSM ID' | translate }}</dt>
+        <dd>
+          <a href="http://www.openstreetmap.org/changeset/{{ changesetDetails.osmId }}"
+             target="_blank">
+            {{ changesetDetails.osmId }}
+          </a>
+        </dd>
+      </dl>
+    </div>
+    <div class="col-md-2">
+      <dl>
+        <dt>{{ 'USERNAME' | translate }}</dt>
+        <dd>
+          <a href="http://www.openstreetmap.org/user/{{ changesetDetails.username }}"
+             target="_blank">
+            {{ changesetDetails.username }}
+          </a>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h4>{{ 'COMMENTS' | translate }}</h4>
+      <changeset-comment-list [id]="changesetDetails.osmId"></changeset-comment-list>
+    </div>
+    <div class="col-md-6">
+      <h4>{{ 'TAGS' | translate }}</h4>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>{{ 'KEY' | translate }}</th>
+            <th>{{ 'VALUE' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let obj of changesetDetails.tags | keyValueList">
+            <td>{{ obj.key }}</td>
+            <td>{{ obj.value }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <h3>{{ 'CHANGES' | translate }}</h3>
   <div class="row">
     <div class="col-md-6">
@@ -35,28 +90,6 @@
     </div>
     <div class="col-md-6">
       <changeset-changes-list [id]="changesetDetails.osmId"></changeset-changes-list>
-    </div>
-  </div>
-  <h3>{{ 'CHANGESET DETAILS' | translate }}</h3>
-  <div class="row">
-    <div class="col-md-6">
-    <changeset-comment-list [id]="changesetDetails.osmId"></changeset-comment-list>
-    </div>
-    <div class="col-md-6">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>{{ 'KEY' | translate }}</th>
-            <th>{{ 'VALUE' | translate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let obj of changesetDetails.tags | keyValueList">
-            <td>{{ obj.key }}</td>
-            <td>{{ obj.value }}</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 
