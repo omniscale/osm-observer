@@ -84,11 +84,16 @@ def changeset_changes(changeset_id):
 
 def serialize_changeset_details(changeset):
     return {
-        'id': changeset['app_id'],
-        'osmId': changeset['id'],
-        'createdAt': changeset['created_at'],
-        'closedAt': changeset['closed_at'],
-        'tags': changeset['tags'],
+        'id': changeset.app_id,
+        'osmId': changeset.id,
+        'createdAt': changeset.created_at,
+        'closedAt': changeset.closed_at,
+        'username': changeset.user_name,
+        'numChanges': changeset.num_changes,
+        'userId': changeset.user_id,
+        'tags': changeset.tags,
+        'numReviews': changeset.num_reviews,
+        'averageScore': changeset.average_score,
         'nodesAdd': changeset['nodes_add'],
         'nodesModify': changeset['nodes_modify'],
         'nodesDelete': changeset['nodes_delete'],

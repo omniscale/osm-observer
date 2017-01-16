@@ -88,13 +88,30 @@ def query_changeset_details(changeset_id=None):
     changeset_join = join(Changeset, changesets,
                           Changeset.osm_id == changeset_id)
 
+    # subquery to get informations from reviews
+    # add more options e.g. sum score from reviews
+    review_select = select([
+        Review.changeset_id.label('changeset_id'),
+        func.count('*').label('num_reviews'),
+        func.coalesce(
+            func.sum(Review.score) / func.count('*')
+        ).label('average_score')
+    ]).group_by(
+        Review.changeset_id).alias('reviews')
+
+    review_join = join(changeset_join, review_select,
+                       Changeset.id == review_select.c.changeset_id,
+                       isouter=True)
+
     stmt = select([
         Changeset.id.label('app_id'),
         changesets,
+        review_select.c.num_reviews,
+        review_select.c.average_score,
         n,
         w,
         r,
-    ]).select_from(changeset_join).where(changesets.c.id==changeset_id)
+    ]).select_from(review_join).where(changesets.c.id==changeset_id)
 
     conn = db.session.connection()
     return conn.execute(stmt).fetchone()
