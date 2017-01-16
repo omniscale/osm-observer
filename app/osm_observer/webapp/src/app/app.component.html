@@ -1,8 +1,10 @@
 <h1>
   {{ title }}
 </h1>
-<a routerLink="/dashboard">{{ 'DASHBOARD' | translate }}</a>
-<a routerLink="/changesets">{{ 'CHANGESETS' | translate }}</a>
-<a routerLink="/reviewBotConfigs">{{ 'REVIEW BOT CONFIGS' | translate }}</a>
-<button class="btn btn-default btn-sm" (click)="logout()">{{ 'LOGOUT' | translate }}</button>
+<div *ngIf="authService.isLoggedIn()">
+  <a routerLink="/dashboard">{{ 'DASHBOARD' | translate }}</a>
+  <a routerLink="/changesets">{{ 'CHANGESETS' | translate }}</a>
+  <a routerLink="/reviewBotConfigs">{{ 'REVIEW BOT CONFIGS' | translate }}</a>
+  <button class="btn btn-default btn-sm" (click)="logout()">{{ 'LOGOUT' | translate }}</button>
+</div>
 <router-outlet></router-outlet>
