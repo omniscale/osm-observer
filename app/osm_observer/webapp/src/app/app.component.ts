@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 import {TranslateService} from 'ng2-translate';
 
@@ -15,7 +16,7 @@ import { AuthResponse } from './types/auth-response';
 export class AppComponent {
   title = 'OSM Observer';
 
-  constructor(translate: TranslateService, private authService: AuthService) {
+  constructor(translate: TranslateService, public authService: AuthService, private router: Router) {
     // this language will be used as a fallback when a translation isn't found in the current language
     translate.setDefaultLang('en');
 
@@ -25,5 +26,6 @@ export class AppComponent {
 
   logout() {
     this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
