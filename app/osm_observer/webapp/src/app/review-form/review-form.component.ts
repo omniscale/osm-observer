@@ -26,5 +26,6 @@ export class ReviewFormComponent implements OnInit {
                         this.model = new Review();
                       })
                       .catch(error => {});
+    return false;
   };
 }

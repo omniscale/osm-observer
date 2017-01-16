@@ -67,6 +67,7 @@ export class ReviewBotConfigFormComponent implements OnInit {
           // TODO define onError actions
           .catch(e => {});
     }
+    return false;
   }
 
   onCancel() {

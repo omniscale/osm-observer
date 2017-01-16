@@ -37,6 +37,7 @@ export class LoginComponent {
                     })
                     // TODO define onError actions
                     .catch(e => {});
+    return false;
   }
 
   logout() {
