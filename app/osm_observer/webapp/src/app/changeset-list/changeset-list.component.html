@@ -44,7 +44,8 @@
               id="coverage"
               type="number"
               #coverage
-              (change)="setCoverageId(coverage.value)">
+              (change)="setCoverageId(coverage.value)"
+              [(ngModel)]="coverageId">
         <option [value]="undefined">
           {{ 'SELECT COVERAGE' | translate }}
         </option>
