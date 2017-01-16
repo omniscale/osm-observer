@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { Router } from '@angular/router';
 
 import 'rxjs/add/operator/toPromise';
 import { Subject }    from 'rxjs/Subject';
@@ -20,8 +21,8 @@ export class ReviewService extends BaseHttpService {
   private refreshReviewsSource = new Subject<boolean>();
   refreshReviews$ = this.refreshReviewsSource.asObservable();
 
-  constructor(private http: Http) {
-    super();
+  constructor(router: Router, private http: Http) {
+    super(router);
   }
 
   getReviews(changesetId: number): Promise<Review[]> {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { Router } from '@angular/router';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -11,8 +12,8 @@ export class CoverageService extends BaseHttpService {
 
   private coveragesUrl = '/api/coverages';
 
-  constructor(private http: Http) {
-    super();
+  constructor(router: Router, private http: Http) {
+    super(router);
   }
 
   getCoverages(): Promise<Coverage[]> {

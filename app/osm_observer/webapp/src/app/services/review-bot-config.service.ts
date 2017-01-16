@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { Router } from '@angular/router';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -21,8 +22,8 @@ export class ReviewBotConfigService extends BaseHttpService {
     return `/api/review-bot-configs/${id}/delete`;
   }
 
-  constructor(private http: Http) {
-    super();
+  constructor(router: Router, private http: Http) {
+    super(router);
   }
 
   getReviewBotConfigs(): Promise<ReviewBotConfig[]> {

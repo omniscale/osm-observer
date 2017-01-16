@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { Router } from '@angular/router';
 
 import { BaseHttpService } from './base-http.service';
 import { User } from '../types/user';
@@ -13,8 +14,8 @@ export class AuthService extends BaseHttpService {
 
   redirectUrl: string;
 
-  constructor(private http: Http) {
-    super();
+  constructor(router: Router, private http: Http) {
+    super(router);
   }
 
   login(user: User): Promise<AuthResponse> {

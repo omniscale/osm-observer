@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, URLSearchParams } from '@angular/http';
+import { Router } from '@angular/router';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -26,8 +27,8 @@ export class ChangesetService extends BaseHttpService {
     return `/api/changesets/changes/${id}`;
   }
 
-  constructor(private http: Http) {
-    super();
+  constructor(router: Router, private http: Http) {
+    super(router);
   }
 
   getChangesets(username: string, timeRange: string, averageScore: number, numReviews: number, coverageId: number): Promise<Changeset[]> {
