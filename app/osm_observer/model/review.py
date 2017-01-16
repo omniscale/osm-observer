@@ -7,8 +7,9 @@ __all__ = ['Review']
 
 
 class REVIEW_STATUS(object):
-    NOTHING = 0
-    FIXED = 99
+    BROKEN = 1
+    FIXED = 50
+    OK = 99
 
 
 class Review(db.Model):
@@ -44,8 +45,9 @@ class Review(db.Model):
     )
 
     _review_status = {
-        0: 'Nothing',
-        99: 'Fixed',
+        1: 'Broken',
+        50: 'Fixed',
+        99: 'OK',
     }
 
     def __init__(self, changeset_id=None, score=0,
