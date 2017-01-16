@@ -62,18 +62,21 @@ def changesets_list():
 
 
 @api.route('/changesets/details/<int:changeset_id>')
+@login_required
 def changeset_details(changeset_id):
     details = query_changeset_details(changeset_id)
     return jsonify(serialize_changeset_details(details))
 
 
 @api.route('/changesets/comments/<int:changeset_id>')
+@login_required
 def changeset_comments(changeset_id):
     comments = query_changeset_comments(changeset_id)
     return jsonify(serialize_changeset_comments(comments))
 
 
 @api.route('/changesets/changes/<int:changeset_id>')
+@login_required
 def changeset_changes(changeset_id):
     changes = query_changeset_changes(changeset_id)
     return jsonify(serialize_changeset_changes(changes))
