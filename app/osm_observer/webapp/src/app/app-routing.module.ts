@@ -53,6 +53,10 @@ const appRoutes: Routes = [
         component: ReviewBotConfigFormComponent
       }
     ]
+  },
+  {
+    path: '**',
+    redirectTo: '/dashboard'
   }
 ]
 
