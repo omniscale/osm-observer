@@ -11,7 +11,7 @@ export class BaseHttpService {
     })
   });
 
-  constructor(private router: Router) {}
+  constructor(public router: Router) {}
 
   handleError(error: Response, caller: string, url: string, opt?: any): Promise<any> {
     if(error.status === 401 || error.status === 403) {

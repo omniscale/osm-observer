@@ -40,7 +40,10 @@ export class AuthService extends BaseHttpService {
   logout(): Promise<AuthResponse> {
     return this.http.get(this.logoutUrl, this.defaultRequestOptions)
                     .toPromise()
-                    .then(response => response.json() as AuthResponse)
+                    .then(response => {
+                      this.router.navigate(['/login']);
+                      return response.json() as AuthResponse;
+                    })
                     .catch(error => {
                       return this.handleError(error, 'logout', this.logoutUrl);
                     });
