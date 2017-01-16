@@ -19,19 +19,30 @@ def login():
 
     data = request.json
 
+    json_response = None
+
     if current_app.config['LDAP_ENABLED']:
-        return ldap_login(data['username'], data['password'])
+        json_response = ldap_login(data['username'], data['password'])
     else:
-        return local_login(data['username'], data['password'])
+        json_response = local_login(data['username'], data['password'])
+
+    response = jsonify(json_response)
+
+    if json_response['success'] is True:
+        response.set_cookie('loggedIn', '1')
+
+    return response
 
 
 @api.route('/logout')
 def logout():
     logout_user()
-    return jsonify({
+    response = jsonify({
         'message': 'Logged out successfully',
         'success': True
     })
+    response.set_cookie('loggedIn', '', expires=0)
+    return response
 
 
 @api.route('/is-logged-in')
@@ -51,14 +62,14 @@ def ldap_login(username, password):
             user.last_login = datetime.datetime.utcnow()
             db.session.commit()
         login_user(user)
-        return jsonify({
-            'message': 'Logged in successfully',
-            'success': True
-        })
-    return jsonify({
-        'message': 'LDAP login faild',
-        'success': False
-    })
+        return dict(
+            message='Logged in successfully',
+            success=True
+        )
+    return dict(
+        message='LDAP login faild',
+        success=False
+    )
 
 
 def local_login(username, password):
@@ -67,12 +78,12 @@ def local_login(username, password):
         user.last_login = datetime.datetime.utcnow()
         db.session.commit()
         login_user(user)
-        return jsonify({
-            'message': 'Logged in successfully',
-            'success': True
-        })
+        return dict(
+            message='Logged in successfully',
+            success=True
+        )
 
-    return jsonify({
-        'message': 'Invalid username or password',
-        'success': False
-    })
+    return dict(
+        message='Invalid username or password',
+        success=False
+    )
