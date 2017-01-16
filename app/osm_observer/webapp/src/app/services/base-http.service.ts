@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, RequestOptions, Response } from '@angular/http';
 import { Router } from '@angular/router';
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 @Injectable()
 export class BaseHttpService {
@@ -11,10 +12,11 @@ export class BaseHttpService {
     })
   });
 
-  constructor(public router: Router) {}
+  constructor(public router: Router, public cookieService: CookieService) {}
 
   handleError(error: Response, caller: string, url: string, opt?: any): Promise<any> {
     if(error.status === 401 || error.status === 403) {
+      this.cookieService.remove('loggedIn');
       this.router.navigate(['/login']);
       return;
     }

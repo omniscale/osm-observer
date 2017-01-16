@@ -3,6 +3,7 @@ import { Http, URLSearchParams } from '@angular/http';
 import { Router } from '@angular/router';
 
 import 'rxjs/add/operator/toPromise';
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { BaseHttpService } from './base-http.service';
 import { Changeset } from '../types/changeset';
@@ -27,8 +28,8 @@ export class ChangesetService extends BaseHttpService {
     return `/api/changesets/changes/${id}`;
   }
 
-  constructor(router: Router, private http: Http) {
-    super(router);
+  constructor(router: Router, private http: Http, cookieService: CookieService) {
+    super(router, cookieService);
   }
 
   getChangesets(username: string, timeRange: string, averageScore: number, numReviews: number, coverageId: number): Promise<Changeset[]> {

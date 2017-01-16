@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 import { Router } from '@angular/router';
 
 import 'rxjs/add/operator/toPromise';
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { BaseHttpService } from './base-http.service';
 import { ReviewBotConfig } from '../types/review-bot-config';
@@ -22,8 +23,8 @@ export class ReviewBotConfigService extends BaseHttpService {
     return `/api/review-bot-configs/${id}/delete`;
   }
 
-  constructor(router: Router, private http: Http) {
-    super(router);
+  constructor(router: Router, private http: Http, cookieService: CookieService) {
+    super(router, cookieService);
   }
 
   getReviewBotConfigs(): Promise<ReviewBotConfig[]> {

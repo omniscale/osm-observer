@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router } from '@angular/router';
 
+import { CookieService } from 'angular2-cookie/services/cookies.service';
+
 import { BaseHttpService } from './base-http.service';
 import { User } from '../types/user';
 import { AuthResponse } from '../types/auth-response';
@@ -14,8 +16,8 @@ export class AuthService extends BaseHttpService {
 
   redirectUrl: string;
 
-  constructor(router: Router, private http: Http) {
-    super(router);
+  constructor(router: Router, private http: Http, cookieService: CookieService) {
+    super(router, cookieService);
   }
 
   login(user: User): Promise<AuthResponse> {
@@ -27,21 +29,18 @@ export class AuthService extends BaseHttpService {
                     });
   }
 
-  isLoggedIn(): Promise<AuthResponse> {
-
-    return this.http.get(this.isLoggedInUrl, this.defaultRequestOptions)
-                    .toPromise()
-                    .then(response => response.json() as AuthResponse)
-                    .catch(error => {
-                      return this.handleError(error, 'isLoggedIn', this.isLoggedInUrl);
-                    });
+  isLoggedIn(): boolean {
+    let loggedIn = this.cookieService.get('loggedIn');
+    if(loggedIn === '1') {
+      return true;
+    }
+    return false;
   }
 
   logout(): Promise<AuthResponse> {
     return this.http.get(this.logoutUrl, this.defaultRequestOptions)
                     .toPromise()
                     .then(response => {
-                      this.router.navigate(['/login']);
                       return response.json() as AuthResponse;
                     })
                     .catch(error => {

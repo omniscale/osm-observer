@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import 'rxjs/add/operator/toPromise';
 import { Subject }    from 'rxjs/Subject';
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { BaseHttpService } from './base-http.service';
 import { Review } from '../types/review';
@@ -21,8 +22,8 @@ export class ReviewService extends BaseHttpService {
   private refreshReviewsSource = new Subject<boolean>();
   refreshReviews$ = this.refreshReviewsSource.asObservable();
 
-  constructor(router: Router, private http: Http) {
-    super(router);
+  constructor(router: Router, private http: Http, cookieService: CookieService) {
+    super(router, cookieService);
   }
 
   getReviews(changesetId: number): Promise<Review[]> {
