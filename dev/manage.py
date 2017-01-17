@@ -66,7 +66,7 @@ def insert_changesets(created_at=None):
 
     # todo refactor to speed up
     for changeset in queried_changesets:
-        cs = Changeset.by_id(changeset.id)
+        cs = Changeset.by_osm_id(changeset.id)
         if not cs:
             cs = Changeset(
                 osm_id=changeset.id,
