@@ -19,7 +19,7 @@ class Review(db.Model):
     }
 
     id = db.Column(db.Integer, primary_key=True)
-    score = db.Column(db.Integer, default=0)
+    score = db.Column(db.Integer)
     _status = db.Column(db.Integer)
     comment = db.Column(db.String, nullable=False)
     time_created = db.Column(
