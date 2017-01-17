@@ -32,7 +32,12 @@ export class ChangesetDetailsComponent implements OnInit {
                          .catch(error => {});
   }
 
-
+  next() {
+    let changeset = this.changesetService.getNextChangeset(this.changeset);
+    if(changeset !== undefined) {
+      this.changeset = changeset;
+      this.getChangesetDetails(this.changeset.osmId);
+    }
   }
 
   ngOnInit() {

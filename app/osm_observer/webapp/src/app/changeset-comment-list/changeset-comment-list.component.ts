@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { ChangesetComment } from '../types/changeset-comment';
 import { ChangesetService } from '../services/changeset.service';
@@ -8,7 +8,7 @@ import { ChangesetService } from '../services/changeset.service';
   templateUrl: './changeset-comment-list.component.html',
   styleUrls: ['./changeset-comment-list.component.sass']
 })
-export class ChangesetCommentListComponent implements OnInit {
+export class ChangesetCommentListComponent implements OnInit, OnChanges {
 
   @Input() id: number;
 
@@ -25,6 +25,11 @@ export class ChangesetCommentListComponent implements OnInit {
                          .then(changesetComments => this.assignChangesetComments(changesetComments))
                          // TODO define onError actions
                          .catch(error => {});
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.id = changes['id'].currentValue;
+    this.getChangesetComments();
   }
 
   ngOnInit() {

@@ -1,3 +1,7 @@
+<button class="btn btn-default btn-sm"
+        (click)="next(changesetDetails)">
+  {{ 'NEXT' | translate }}
+</button>
 <div class="container" *ngIf="changesetDetails">
   <h3>{{ 'CHANGESET DETAILS' | translate }}</h3>
   <div class="row">

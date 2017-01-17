@@ -16,10 +16,6 @@ export class ChangesetService extends BaseHttpService {
 
   private changesetsUrl = '/api/changesets';
 
-  private changesetUrl(id: number): string {
-    return `/api/changesets/${id}`;
-  }
-
   private changesetDetailsUrl(id: number): string {
     return `/api/changesets/details/${id}`;
   }
@@ -38,7 +34,7 @@ export class ChangesetService extends BaseHttpService {
     super(router, cookieService);
   }
 
-  getChangesets(username: string, timeRange: string, averageScore: number, numReviews: number, coverageId: number): Promise<Changeset[]> {
+  getChangesets(username?: string, timeRange?: string, averageScore?: number, numReviews?: number, coverageId?: number): Promise<Changeset[]> {
     let params = new URLSearchParams();
     if(username !== undefined && username !== null && username !== '') {
       params.set('username', username);
@@ -71,13 +67,24 @@ export class ChangesetService extends BaseHttpService {
   }
 
   getChangeset(id: number): Promise<Changeset> {
-    let url = this.changesetUrl(id);
-    return this.http.get(url, this.defaultRequestOptions)
-                    .toPromise()
-                    .then(response => response.json() as Changeset)
-                    .catch(error => {
-                      return this.handleError(error, 'getChangeset', url, {id: id});
-                    });
+    // load changesets when not loaded already
+    // e.g. when reloading changeset detail page
+    if(this.changesets === undefined) {
+      return this.getChangesets().then(v => {
+        return this.getChangeset(id);
+      })
+    } else {
+      for(let changeset of this.changesets) {
+        if(changeset.osmId === id) {
+          return new Promise((resolve, reject) => {
+            resolve(changeset);
+          });
+        }
+      }
+      return new Promise((resolve, reject) => {
+        reject();
+      })
+    }
   }
 
   getChangesetDetails(id: number): Promise<ChangesetDetails> {

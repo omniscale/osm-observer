@@ -7,7 +7,7 @@ from flask_login import login_required, current_user
 from osm_observer.views import api
 from osm_observer.lib.changes import (
     query_changesets, query_changeset_details, query_changeset_comments,
-    query_changeset_changes, query_changeset
+    query_changeset_changes
 )
 from osm_observer.model import Coverage
 
@@ -59,13 +59,6 @@ def changesets_list():
     ))
 
     return jsonify(serialize_changesets(changesets))
-
-
-@api.route('/changesets/<int:changeset_id>')
-@login_required
-def changeset(changeset_id):
-    changeset = query_changeset(changeset_id)
-    return jsonify(serialize_changeset(changeset))
 
 
 @api.route('/changesets/details/<int:changeset_id>')

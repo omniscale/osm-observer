@@ -10,7 +10,7 @@ export class ChangesetDetailResolver implements Resolve<Changeset> {
   constructor(private changesetService: ChangesetService, private router: Router) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<Changeset> {
-    let id = route.params['id'];
+    let id = parseInt(route.params['id']);
 
     return this.changesetService.getChangeset(id).then(changeset => {
       if(changeset) {
