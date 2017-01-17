@@ -68,6 +68,7 @@
       <th>{{ 'OSM ID' | translate }}</th>
       <th>{{ 'CLOSED AT' | translate }}</th>
       <th>{{ 'USERNAME' | translate }}</th>
+      <th>{{ 'CHANGES' | translate }}</th>
       <th>{{ 'REVIEWS' | translate }}</th>
       <th>{{ 'SCORE' | translate }}</th>
       <th></th>
@@ -80,6 +81,7 @@
         <td><a href="http://www.openstreetmap.org/changeset/{{ changeset.osmId }}" target="_blank">{{ changeset.osmId }}</a></td>
         <td>{{ changeset.closedAt | date:'d.M.y HH:mm:ss' }}</td>
         <td><a href="http://www.openstreetmap.org/user/{{ changeset.username }}" target="_blank">{{ changeset.username }}</a></td>
+        <td>{{ changeset.numChanges }}</td>
         <td>{{ changeset.numReviews }}</td>
         <td>{{ changeset.sumScore }}</td>
         <td>
