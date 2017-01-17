@@ -28,7 +28,7 @@ export class ReviewService extends BaseHttpService {
 
   getReviews(changesetId: number): Promise<Review[]> {
     let url = this.reviewsUrl(changesetId);
-    return this.http.get(url, this.defaultRequestOptions)
+    return this.http.get(url, this.getRequestOptions())
                     .toPromise()
                     .then(response => response.json() as Review[])
                     .catch(error => {
@@ -38,7 +38,7 @@ export class ReviewService extends BaseHttpService {
 
   addReview(changesetId: number, review: Review): Promise<Review> {
     let url = this.addReviewUrl(changesetId);
-    return this.http.post(url, review, this.defaultRequestOptions)
+    return this.http.post(url, review, this.getRequestOptions())
                     .toPromise()
                     .then(response => this.handleAddReviewResponse(response))
                     .catch(error => {

@@ -52,8 +52,7 @@ export class ChangesetService extends BaseHttpService {
       params.set('coverageId', coverageId.toString());
     }
 
-    let requestOptions = this.defaultRequestOptions;
-    requestOptions.search = params;
+    let requestOptions = this.getRequestOptions(params);
 
     return this.http.get(this.changesetsUrl, requestOptions)
                .toPromise()
@@ -89,7 +88,7 @@ export class ChangesetService extends BaseHttpService {
 
   getChangesetDetails(id: number): Promise<ChangesetDetails> {
     let url = this.changesetDetailsUrl(id);
-    return this.http.get(url, this.defaultRequestOptions)
+    return this.http.get(url, this.getRequestOptions())
                .toPromise()
                .then(response => response.json() as ChangesetDetails)
                .catch(error => {
@@ -99,7 +98,7 @@ export class ChangesetService extends BaseHttpService {
 
   getChangesetComments(id: number): Promise<ChangesetComment[]> {
     let url = this.changesetCommentsUrl(id);
-    return this.http.get(url, this.defaultRequestOptions)
+    return this.http.get(url, this.getRequestOptions())
                     .toPromise()
                     .then(response => response.json() as ChangesetComment[])
                     .catch(error => {
@@ -109,7 +108,7 @@ export class ChangesetService extends BaseHttpService {
 
   getChangesetChanges(id: number): Promise<ChangesetChange[]> {
     let url = this.changesetChangesUrl(id);
-    return this.http.get(url, this.defaultRequestOptions)
+    return this.http.get(url, this.getRequestOptions())
                     .toPromise()
                     .then(response => response.json() as ChangesetChange[])
                     .catch(error => {

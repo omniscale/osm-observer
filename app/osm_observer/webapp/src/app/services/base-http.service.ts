@@ -1,18 +1,25 @@
 import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, Response } from '@angular/http';
+import { Headers, RequestOptions, Response, URLSearchParams } from '@angular/http';
 import { Router } from '@angular/router';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 @Injectable()
 export class BaseHttpService {
-  defaultRequestOptions = new RequestOptions({
-    headers: new Headers({
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest'
-    })
-  });
-
   constructor(public router: Router, public cookieService: CookieService) {}
+
+  getRequestOptions(params?: URLSearchParams): RequestOptions {
+    let requestOptions = new RequestOptions({
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      })
+    });
+    if(params !== undefined) {
+      requestOptions.search = params;
+    }
+
+    return requestOptions;
+  }
 
   handleError(error: Response, caller: string, url: string, opt?: any): Promise<any> {
     if(error.status === 401 || error.status === 403) {

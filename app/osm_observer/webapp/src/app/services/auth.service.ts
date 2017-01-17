@@ -21,7 +21,7 @@ export class AuthService extends BaseHttpService {
   }
 
   login(user: User): Promise<AuthResponse> {
-    return this.http.post(this.loginUrl, user, this.defaultRequestOptions)
+    return this.http.post(this.loginUrl, user, this.getRequestOptions())
                     .toPromise()
                     .then(response => response.json() as AuthResponse)
                     .catch(error => {
@@ -38,7 +38,7 @@ export class AuthService extends BaseHttpService {
   }
 
   logout(): Promise<AuthResponse> {
-    return this.http.get(this.logoutUrl, this.defaultRequestOptions)
+    return this.http.get(this.logoutUrl, this.getRequestOptions())
                     .toPromise()
                     .then(response => {
                       return response.json() as AuthResponse;

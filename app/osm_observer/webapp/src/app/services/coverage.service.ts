@@ -18,7 +18,7 @@ export class CoverageService extends BaseHttpService {
   }
 
   getCoverages(): Promise<Coverage[]> {
-    return this.http.get(this.coveragesUrl, this.defaultRequestOptions)
+    return this.http.get(this.coveragesUrl, this.getRequestOptions())
                .toPromise()
                .then(response => response.json() as Coverage[])
                .catch(error => {

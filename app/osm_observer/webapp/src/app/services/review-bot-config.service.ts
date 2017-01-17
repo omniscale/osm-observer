@@ -28,7 +28,7 @@ export class ReviewBotConfigService extends BaseHttpService {
   }
 
   getReviewBotConfigs(): Promise<ReviewBotConfig[]> {
-    return this.http.get(this.reviewBotConfigsUrl, this.defaultRequestOptions)
+    return this.http.get(this.reviewBotConfigsUrl, this.getRequestOptions())
                     .toPromise()
                     .then(response => response.json() as ReviewBotConfig[])
                     .catch(error => {
@@ -38,7 +38,7 @@ export class ReviewBotConfigService extends BaseHttpService {
 
   getReviewBotConfig(reviewBotId: number): Promise<ReviewBotConfig> {
     let url = this.reviewBotConfigUrl(reviewBotId);
-    return this.http.get(url, this.defaultRequestOptions)
+    return this.http.get(url, this.getRequestOptions())
                     .toPromise()
                     .then(response => response.json() as ReviewBotConfig)
                     .catch(error => {
@@ -47,7 +47,7 @@ export class ReviewBotConfigService extends BaseHttpService {
   }
 
   addReviewBotConfig(reviewBotConfig: ReviewBotConfig): Promise<ReviewBotConfig> {
-    return this.http.post(this.addReviewBotConfigUrl, reviewBotConfig, this.defaultRequestOptions)
+    return this.http.post(this.addReviewBotConfigUrl, reviewBotConfig, this.getRequestOptions())
                     .toPromise()
                     .then(response => response.json() as ReviewBotConfig)
                     .catch(error => {
@@ -57,7 +57,7 @@ export class ReviewBotConfigService extends BaseHttpService {
 
   updateReviewBotConfig(reviewBotConfig: ReviewBotConfig): Promise<ReviewBotConfig> {
     let url = this.updateReviewBotConfigUrl(reviewBotConfig.id);
-    return this.http.post(url, reviewBotConfig, this.defaultRequestOptions)
+    return this.http.post(url, reviewBotConfig, this.getRequestOptions())
                     .toPromise()
                     .then(response => response.json() as ReviewBotConfig)
                     .catch(error => {
@@ -67,7 +67,7 @@ export class ReviewBotConfigService extends BaseHttpService {
 
   deleteReviewBotConfig(id: number): Promise<any> {
     let url = this.deleteReviewBotConfigUrl(id);
-    return this.http.get(url, this.defaultRequestOptions)
+    return this.http.get(url, this.getRequestOptions())
                     .toPromise()
                     .catch(error => {
                       return this.handleError(error, 'deleteReviewBotConfig', url, {id: id});
