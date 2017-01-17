@@ -14,7 +14,9 @@ export class ChangesetDetailsComponent implements OnInit {
   @Input() id: number;
 
   changesetDetails: ChangesetDetails;
-  changeset: Changeset;
+  prevChangeset: Changeset;
+  currentChangeset: Changeset;
+  nextChangeset: Changeset;
 
 
   constructor(private changesetService: ChangesetService,
@@ -33,26 +35,30 @@ export class ChangesetDetailsComponent implements OnInit {
   }
 
   next() {
-    let changeset = this.changesetService.getNextChangeset(this.changeset);
-    if(changeset !== undefined) {
-      this.changeset = changeset;
-      this.getChangesetDetails(this.changeset.osmId);
+    if(this.nextChangeset !== undefined) {
+      this.prevChangeset = this.currentChangeset;
+      this.currentChangeset = this.nextChangeset;
+      this.nextChangeset = this.changesetService.getNextChangeset(this.currentChangeset);
+      this.getChangesetDetails(this.currentChangeset.osmId);
     }
   }
 
   prev() {
-    let changeset = this.changesetService.getPrevChangeset(this.changeset);
-    if(changeset !== undefined) {
-      this.changeset = changeset;
-      this.getChangesetDetails(this.changeset.osmId);
+    if(this.prevChangeset !== undefined) {
+      this.nextChangeset = this.currentChangeset;
+      this.currentChangeset = this.prevChangeset;
+      this.prevChangeset = this.changesetService.getPrevChangeset(this.currentChangeset);
+      this.getChangesetDetails(this.currentChangeset.osmId);
     }
   }
 
   ngOnInit() {
     this.route.data
         .subscribe((data: {changeset: Changeset}) => {
-          this.changeset = data.changeset;
-          this.getChangesetDetails(this.changeset.osmId);
+          this.currentChangeset = data.changeset;
+          this.prevChangeset = this.changesetService.getPrevChangeset(this.currentChangeset);
+          this.nextChangeset = this.changesetService.getNextChangeset(this.currentChangeset);
+          this.getChangesetDetails(this.currentChangeset.osmId);
         });
   }
 }

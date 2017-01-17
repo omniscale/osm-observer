@@ -1,9 +1,11 @@
 <button class="btn btn-default btn-sm"
-        (click)="prev(changesetDetails)">
+        (click)="prev(changesetDetails)"
+        [disabled]="!prevChangeset">
   {{ 'PREVIOUS' | translate }}
 </button>
 <button class="btn btn-default btn-sm"
-        (click)="next(changesetDetails)">
+        (click)="next(changesetDetails)"
+        [disabled]="!nextChangeset">
   {{ 'NEXT' | translate }}
 </button>
 <div class="container" *ngIf="changesetDetails">
