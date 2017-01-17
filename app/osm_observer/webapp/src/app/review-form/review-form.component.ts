@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { Review, ReviewStatus } from '../types/review';
 import { ReviewService } from '../services/review.service';
@@ -8,9 +8,8 @@ import { ReviewService } from '../services/review.service';
   templateUrl: './review-form.component.html',
   styleUrls: ['./review-form.component.sass']
 })
-export class ReviewFormComponent implements OnInit {
-  @Input()
-  id: number;
+export class ReviewFormComponent implements OnInit, OnChanges {
+  @Input() id: number;
 
   model = new Review();
   reviewStatus = ReviewStatus;
@@ -28,4 +27,8 @@ export class ReviewFormComponent implements OnInit {
                       .catch(error => {});
     return false;
   };
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.id = changes['id'].currentValue;
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { Review } from '../types/review';
 import { ReviewService } from '../services/review.service';
@@ -8,7 +8,7 @@ import { ReviewService } from '../services/review.service';
   templateUrl: './review-list.component.html',
   styleUrls: ['./review-list.component.sass']
 })
-export class ReviewListComponent implements OnInit {
+export class ReviewListComponent implements OnInit, OnChanges {
   @Input()
   id: number;
 
@@ -27,6 +27,11 @@ export class ReviewListComponent implements OnInit {
                       .then(reviews => this.assignReviews(reviews))
                       // TODO define onError actions
                       .catch(error => {});
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.id = changes['id'].currentValue;
+    this.getReviews();
   }
 
   ngOnInit() {
