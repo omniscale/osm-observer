@@ -31,7 +31,7 @@ def changesets_list():
     num_reviews = request.args.get('numReviews', None)
 
     # filter with average sorce
-    average_score = request.args.get('averageScore', None)
+    sum_score = request.args.get('sumScore', None)
 
     # filter with time_range
     # actually we support today, yesterday and last_week
@@ -55,7 +55,7 @@ def changesets_list():
         to_time=to_time,
         username=username,
         num_reviews=num_reviews,
-        average_score=average_score,
+        sum_score=sum_score,
     ))
 
     return jsonify(serialize_changesets(changesets))
@@ -93,7 +93,7 @@ def serialize_changeset_details(changeset):
         'userId': changeset.user_id,
         'tags': changeset.tags,
         'numReviews': changeset.num_reviews,
-        'averageScore': changeset.average_score,
+        'sumScore': changeset.sum_score,
         'nodesAdd': changeset['nodes_add'],
         'nodesModify': changeset['nodes_modify'],
         'nodesDelete': changeset['nodes_delete'],
@@ -117,7 +117,7 @@ def serialize_changeset(changeset):
         'userId': changeset.user_id,
         'tags': changeset.tags,
         'numReviews': changeset.num_reviews,
-        'averageScore': changeset.average_score,
+        'sumScore': changeset.sum_score,
     }
 
 

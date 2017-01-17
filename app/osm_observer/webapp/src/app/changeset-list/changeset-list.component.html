@@ -27,9 +27,9 @@
       <input type="number"
              class="form-control form-control-sm"
              id="average-score"
-             placeholder="{{ 'AVERAGE SCORE' | translate }}"
+             placeholder="{{ 'SCORE' | translate }}"
              (keyup)="applyChange()"
-             [(ngModel)]="averageScore" />
+             [(ngModel)]="sumScore" />
     </div>
     <div class="form-group">
       <input type="number"
@@ -69,7 +69,7 @@
       <th>{{ 'CLOSED AT' | translate }}</th>
       <th>{{ 'USERNAME' | translate }}</th>
       <th>{{ 'REVIEWS' | translate }}</th>
-      <th>{{ 'AVERAGE SCORE' | translate }}</th>
+      <th>{{ 'SCORE' | translate }}</th>
       <th></th>
     </tr>
   </thead>
@@ -81,7 +81,7 @@
         <td>{{ changeset.closedAt | date:'d.M.y HH:mm:ss' }}</td>
         <td><a href="http://www.openstreetmap.org/user/{{ changeset.username }}" target="_blank">{{ changeset.username }}</a></td>
         <td>{{ changeset.numReviews }}</td>
-        <td>{{ changeset.averageScore }}</td>
+        <td>{{ changeset.sumScore }}</td>
         <td>
           <a class="btn btn-secondary btn-sm"
              role="button"

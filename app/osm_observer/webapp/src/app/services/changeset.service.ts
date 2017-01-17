@@ -34,7 +34,7 @@ export class ChangesetService extends BaseHttpService {
     super(router, cookieService);
   }
 
-  getChangesets(username?: string, timeRange?: string, averageScore?: number, numReviews?: number, coverageId?: number): Promise<Changeset[]> {
+  getChangesets(username?: string, timeRange?: string, sumScore?: number, numReviews?: number, coverageId?: number): Promise<Changeset[]> {
     let params = new URLSearchParams();
     if(username !== undefined && username !== null && username !== '') {
       params.set('username', username);
@@ -42,8 +42,8 @@ export class ChangesetService extends BaseHttpService {
     if(timeRange !== undefined && timeRange !== null && timeRange !== '') {
       params.set('timeRange', timeRange);
     }
-    if(averageScore !== undefined && averageScore !== null) {
-      params.set('averageScore', averageScore.toString());
+    if(sumScore !== undefined && sumScore !== null) {
+      params.set('sumScore', sumScore.toString());
     }
     if(numReviews !== undefined && numReviews !== null) {
       params.set('numReviews', numReviews.toString());

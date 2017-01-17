@@ -9,7 +9,7 @@ from osm_observer.extensions import db
 
 
 def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
-                     num_reviews=None, average_score=None):
+                     num_reviews=None, sum_score=None):
 
     changeset_join = join(Changeset, changesets,
                           Changeset.osm_id == changesets.c.id)
@@ -19,8 +19,8 @@ def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
         Review.changeset_id.label('changeset_id'),
         func.count('*').label('num_reviews'),
         func.coalesce(
-            func.sum(Review.score) / func.count('*')
-        ).label('average_score')
+            func.sum(Review.score)
+        ).label('sum_score')
     ]).group_by(
         Review.changeset_id).alias('reviews')
 
@@ -32,7 +32,7 @@ def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
         Changeset.id.label('app_id'),
         changesets,
         review_select.c.num_reviews,
-        review_select.c.average_score
+        review_select.c.sum_score
     ]).select_from(review_join)
 
     if len(coverages) > 0:
@@ -50,8 +50,8 @@ def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
         else:
             s = s.where(review_select.c.num_reviews>=num_reviews)
 
-    if average_score is not None:
-        s = s.where(review_select.c.average_score>=average_score)
+    if sum_score is not None:
+        s = s.where(review_select.c.sum_score>=sum_score)
 
     if from_time is not None and to_time is not None:
         s = s.where(changesets.c.closed_at>=from_time)
@@ -93,8 +93,8 @@ def query_changeset_details(changeset_id=None):
         Review.changeset_id.label('changeset_id'),
         func.count('*').label('num_reviews'),
         func.coalesce(
-            func.sum(Review.score) / func.count('*')
-        ).label('average_score')
+            func.sum(Review.score)
+        ).label('sum_score')
     ]).group_by(
         Review.changeset_id).alias('reviews')
 
@@ -106,7 +106,7 @@ def query_changeset_details(changeset_id=None):
         Changeset.id.label('app_id'),
         changesets,
         review_select.c.num_reviews,
-        review_select.c.average_score,
+        review_select.c.sum_score,
         n,
         w,
         r,

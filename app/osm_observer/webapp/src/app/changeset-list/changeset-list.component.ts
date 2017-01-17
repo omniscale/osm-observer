@@ -24,7 +24,7 @@ export class ChangesetListComponent implements OnInit {
 
   username: string;
   timeRange: string;
-  averageScore: number;
+  sumScore: number;
   numReviews: number;
   coverageId: number;
 
@@ -57,7 +57,7 @@ export class ChangesetListComponent implements OnInit {
   }
 
   getChangesets(): void {
-    this.changesetService.getChangesets(this.username, this.timeRange, this.averageScore, this.numReviews, this.coverageId)
+    this.changesetService.getChangesets(this.username, this.timeRange, this.sumScore, this.numReviews, this.coverageId)
                          .then(changesets => this.assignChangesets(changesets))
                          // TODO define onError actions
                          .catch(error => {});
@@ -78,8 +78,8 @@ export class ChangesetListComponent implements OnInit {
     if(this.timeRange !== undefined && this.timeRange !== null && this.timeRange !== '') {
       routeParams['timeRange'] = this.timeRange;
     }
-    if(this.averageScore !== undefined && this.averageScore !== null) {
-      routeParams['averageScore'] = this.averageScore;
+    if(this.sumScore !== undefined && this.sumScore !== null) {
+      routeParams['score'] = this.sumScore;
     }
     if(this.numReviews !== undefined && this.numReviews !== null) {
       routeParams['numReviews'] = this.numReviews;
@@ -95,9 +95,9 @@ export class ChangesetListComponent implements OnInit {
   handleRouteParams(params: any): void {
     this.username = params['username'] as string;
     this.timeRange = params['timeRange'] as string;
-    this.averageScore = parseInt(params['averageScore']) as number;
-    if(isNaN(this.averageScore)) {
-      this.averageScore = undefined;
+    this.sumScore = parseInt(params['score']) as number;
+    if(isNaN(this.sumScore)) {
+      this.sumScore = undefined;
     }
     this.numReviews = parseInt(params['numReviews']) as number;
     if(isNaN(this.numReviews)) {
@@ -143,7 +143,7 @@ export class ChangesetListComponent implements OnInit {
   resetFilters(): void {
     this.username = undefined;
     this.timeRange = undefined;
-    this.averageScore = undefined;
+    this.sumScore = undefined;
     this.numReviews = undefined;
     this.coverageId = undefined;
     this.applyChange();
