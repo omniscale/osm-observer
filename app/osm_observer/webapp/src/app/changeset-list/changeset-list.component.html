@@ -84,7 +84,12 @@
           </a>
         </td>
         <td>{{ changeset.closedAt | date:'d.M.y HH:mm:ss' }}</td>
-        <td><a href="http://www.openstreetmap.org/user/{{ changeset.username }}" target="_blank">{{ changeset.username }}</a></td>
+        <td>
+          <a href="javascript:void(0)"
+             (click)="username=changeset.username;applyChange();">
+            {{ changeset.username }}
+          </a>
+        </td>
         <td>{{ changeset.numChanges }}</td>
         <td>{{ changeset.numReviews }}</td>
         <td>{{ changeset.sumScore }}</td>
