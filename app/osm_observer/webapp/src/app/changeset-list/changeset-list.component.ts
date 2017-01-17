@@ -31,6 +31,9 @@ export class ChangesetListComponent implements OnInit {
   allowedTimeRanges = ['today', 'yesterday', 'lastWeek']
   allowedCoverageIds: number[];
 
+  orderBy: string = 'closedAt';
+  order: string = 'desc';
+
   private timer;
 
   private subscription: Subscription;
@@ -45,6 +48,8 @@ export class ChangesetListComponent implements OnInit {
   ) { }
 
   assignChangesets(changesets: Changeset[]) {
+    this.orderBy = 'closedAt';
+    this.order = 'desc';
     this.changesets = changesets;
   }
 
@@ -147,6 +152,16 @@ export class ChangesetListComponent implements OnInit {
     this.numReviews = undefined;
     this.coverageId = undefined;
     this.applyChange();
+  }
+
+  sortBy(by: string): void {
+    if(this.orderBy === by) {
+      this.order = this.order === 'desc' ? 'asc' : 'desc';
+    } else {
+      this.order = 'desc';
+    }
+    this.orderBy = by;
+    this.changesetService.sortChangesets(this.orderBy, this.order);
   }
 
   ngOnInit() {

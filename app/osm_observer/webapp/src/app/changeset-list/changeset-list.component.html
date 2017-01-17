@@ -64,13 +64,55 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>{{ 'ID' | translate }}</th>
-      <th>{{ 'OSM ID' | translate }}</th>
-      <th>{{ 'CLOSED AT' | translate }}</th>
-      <th>{{ 'USERNAME' | translate }}</th>
-      <th>{{ 'CHANGES' | translate }}</th>
-      <th>{{ 'REVIEWS' | translate }}</th>
-      <th>{{ 'SCORE' | translate }}</th>
+      <th (click)="sortBy('id')">
+        {{ 'ID' | translate }}
+        <span *ngIf="orderBy==='id'">
+          <span *ngIf="order==='asc'">v</span>
+          <span *ngIf="order==='desc'">^</span>
+        </span>
+      </th>
+      <th (click)="sortBy('osmId')">
+        {{ 'OSM ID' | translate }}
+        <span *ngIf="orderBy==='osmId'">
+          <span *ngIf="order==='asc'">v</span>
+          <span *ngIf="order==='desc'">^</span>
+        </span>
+      </th>
+      <th (click)="sortBy('closedAt')">
+        {{ 'CLOSED AT' | translate }}
+        <span *ngIf="orderBy==='closedAt'">
+          <span *ngIf="order==='asc'">v</span>
+          <span *ngIf="order==='desc'">^</span>
+        </span>
+      </th>
+      <th (click)="sortBy('username')">
+        {{ 'USERNAME' | translate }}
+        <span *ngIf="orderBy==='username'">
+          <span *ngIf="order==='asc'">v</span>
+          <span *ngIf="order==='desc'">^</span>
+        </span>
+      </th>
+      <th (click)="sortBy('numChanges')">
+        {{ 'CHANGES' | translate }}
+        <span *ngIf="orderBy==='numChanges'">
+          <span *ngIf="order==='asc'">v</span>
+          <span *ngIf="order==='desc'">^</span>
+        </span>
+      </th>
+      <th (click)="sortBy('numReviews')">
+        {{ 'REVIEWS' | translate }}
+        <span *ngIf="orderBy==='numReviews'">
+          <span *ngIf="order==='asc'">v</span>
+          <span *ngIf="order==='desc'">^</span>
+        </span>
+      </th>
+      <th (click)="sortBy('sumScore')">
+        {{ 'SCORE' | translate }}
+        <span *ngIf="orderBy==='sumScore'">
+          <span *ngIf="order==='asc'">v</span>
+          <span *ngIf="order==='desc'">^</span>
+        </span>
+      </th>
       <th></th>
     </tr>
   </thead>
