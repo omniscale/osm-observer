@@ -1,8 +1,9 @@
 import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AuthService }      from './services/auth.service';
-import { AuthGuardService } from './services/auth-guard.service';
+import { AuthService }             from './services/auth.service';
+import { AuthGuardService }        from './services/auth-guard.service';
+import { ChangesetDetailResolver } from './services/changeset-detail-resolver.service';
 
 import { CoverageListComponent }        from './coverage-list/coverage-list.component';
 import { ChangesetListComponent }       from './changeset-list/changeset-list.component';
@@ -26,7 +27,10 @@ const appRoutes: Routes = [
       },
       {
         path: ':id/details',
-        component: ChangesetDetailsComponent
+        component: ChangesetDetailsComponent,
+        resolve: {
+          changeset: ChangesetDetailResolver
+        }
       }
     ]
   },
@@ -63,7 +67,8 @@ const appRoutes: Routes = [
   ],
   providers: [
     AuthService,
-    AuthGuardService
+    AuthGuardService,
+    ChangesetDetailResolver
   ]
 })
 

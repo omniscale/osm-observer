@@ -16,6 +16,10 @@ export class ChangesetService extends BaseHttpService {
 
   private changesetsUrl = '/api/changesets';
 
+  private changesetUrl(id: number): string {
+    return `/api/changesets/${id}`;
+  }
+
   private changesetDetailsUrl(id: number): string {
     return `/api/changesets/details/${id}`;
   }
@@ -27,6 +31,8 @@ export class ChangesetService extends BaseHttpService {
   private changesetChangesUrl(id: number): string {
     return `/api/changesets/changes/${id}`;
   }
+
+  private changesets: Changeset[];
 
   constructor(router: Router, private http: Http, cookieService: CookieService) {
     super(router, cookieService);
@@ -55,10 +61,23 @@ export class ChangesetService extends BaseHttpService {
 
     return this.http.get(this.changesetsUrl, requestOptions)
                .toPromise()
-               .then(response => response.json() as Changeset[])
+               .then(response => {
+                 this.changesets = response.json() as Changeset[];
+                 return this.changesets;
+               })
                .catch(error => {
                  return this.handleError(error, 'getChangesets', this.changesetsUrl, params.paramsMap);
                });
+  }
+
+  getChangeset(id: number): Promise<Changeset> {
+    let url = this.changesetUrl(id);
+    return this.http.get(url, this.defaultRequestOptions)
+                    .toPromise()
+                    .then(response => response.json() as Changeset)
+                    .catch(error => {
+                      return this.handleError(error, 'getChangeset', url, {id: id});
+                    });
   }
 
   getChangesetDetails(id: number): Promise<ChangesetDetails> {
@@ -89,5 +108,21 @@ export class ChangesetService extends BaseHttpService {
                     .catch(error => {
                       return this.handleError(error, 'getChangesetChanges', url, {id: id});
                     });
+  }
+
+  getNextChangeset(current: Changeset): Changeset {
+    if(this.changesets === undefined) {
+      console.warn('changeset list not loaded');
+      return;
+    }
+    let idx = this.changesets.indexOf(current);
+    if(idx === -1) {
+      console.warn('current changeset not found');
+    }
+    idx += 1;
+    if(idx === this.changesets.length) {
+      console.warn('current changeset is last of list')
+    }
+    return this.changesets[idx];
   }
 }

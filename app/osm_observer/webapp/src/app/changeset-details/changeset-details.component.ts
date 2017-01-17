@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { ChangesetDetails } from '../types/changeset-details';
+import { Changeset } from '../types/changeset';
 import { ChangesetService } from '../services/changeset.service';
 
 @Component({
@@ -10,10 +11,10 @@ import { ChangesetService } from '../services/changeset.service';
   styleUrls: ['./changeset-details.component.sass']
 })
 export class ChangesetDetailsComponent implements OnInit {
-  @Input()
-  id: number;
+  @Input() id: number;
 
   changesetDetails: ChangesetDetails;
+  changeset: Changeset;
 
 
   constructor(private changesetService: ChangesetService,
@@ -31,13 +32,14 @@ export class ChangesetDetailsComponent implements OnInit {
                          .catch(error => {});
   }
 
-  ngOnInit() {
-    let id = this.route.snapshot.params['id'];
-    if(id !== undefined) {
-      this.getChangesetDetails(id);
-    } else {
-      this.router.navigate(['/changesets']);
-    }
 
+  }
+
+  ngOnInit() {
+    this.route.data
+        .subscribe((data: {changeset: Changeset}) => {
+          this.changeset = data.changeset;
+          this.getChangesetDetails(this.changeset.osmId);
+        });
   }
 }

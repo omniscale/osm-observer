@@ -7,7 +7,7 @@ from flask_login import login_required, current_user
 from osm_observer.views import api
 from osm_observer.lib.changes import (
     query_changesets, query_changeset_details, query_changeset_comments,
-    query_changeset_changes
+    query_changeset_changes, query_changeset
 )
 from osm_observer.model import Coverage
 
@@ -61,6 +61,13 @@ def changesets_list():
     return jsonify(serialize_changesets(changesets))
 
 
+@api.route('/changesets/<int:changeset_id>')
+@login_required
+def changeset(changeset_id):
+    changeset = query_changeset(changeset_id)
+    return jsonify(serialize_changeset(changeset))
+
+
 @api.route('/changesets/details/<int:changeset_id>')
 @login_required
 def changeset_details(changeset_id):
@@ -106,21 +113,25 @@ def serialize_changeset_details(changeset):
     }
 
 
+def serialize_changeset(changeset):
+    return {
+        'id': changeset.app_id,
+        'osmId': changeset.id,
+        'createdAt': changeset.created_at,
+        'closedAt': changeset.closed_at,
+        'username': changeset.user_name,
+        'numChanges': changeset.num_changes,
+        'userId': changeset.user_id,
+        'tags': changeset.tags,
+        'numReviews': changeset.num_reviews,
+        'averageScore': changeset.average_score,
+    }
+
+
 def serialize_changesets(changesets):
     data = []
     for changeset in changesets:
-        data.append({
-            'id': changeset.app_id,
-            'osmId': changeset.id,
-            'createdAt': changeset.created_at,
-            'closedAt': changeset.closed_at,
-            'username': changeset.user_name,
-            'numChanges': changeset.num_changes,
-            'userId': changeset.user_id,
-            'tags': changeset.tags,
-            'numReviews': changeset.num_reviews,
-            'averageScore': changeset.average_score,
-        })
+        data.append(serialize_changeset(changeset))
     return data
 
 

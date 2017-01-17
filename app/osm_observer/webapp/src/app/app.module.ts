@@ -25,6 +25,7 @@ import { CoverageService }        from './services/coverage.service';
 import { ChangesetService }       from './services/changeset.service';
 import { ReviewService }          from './services/review.service';
 import { ReviewBotConfigService } from './services/review-bot-config.service';
+import { ChangesetDetailResolver } from './services/changeset-detail-resolver.service';
 
 import { KeyValueListPipe } from './pipes/key-value-list.pipe';
 import { LoginComponent } from './login/login.component';
@@ -67,7 +68,8 @@ export function createTranslateLoader(http: Http) {
     CoverageService,
     ChangesetService,
     ReviewService,
-    ReviewBotConfigService
+    ReviewBotConfigService,
+    ChangesetDetailResolver
   ],
   bootstrap: [AppComponent]
 })
