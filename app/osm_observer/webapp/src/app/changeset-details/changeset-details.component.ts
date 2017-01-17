@@ -40,6 +40,14 @@ export class ChangesetDetailsComponent implements OnInit {
     }
   }
 
+  prev() {
+    let changeset = this.changesetService.getPrevChangeset(this.changeset);
+    if(changeset !== undefined) {
+      this.changeset = changeset;
+      this.getChangesetDetails(this.changeset.osmId);
+    }
+  }
+
   ngOnInit() {
     this.route.data
         .subscribe((data: {changeset: Changeset}) => {

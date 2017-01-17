@@ -117,7 +117,7 @@ export class ChangesetService extends BaseHttpService {
                     });
   }
 
-  getNextChangeset(current: Changeset): Changeset {
+  getChangesetIdx(current: Changeset): number {
     if(this.changesets === undefined) {
       console.warn('changeset list not loaded');
       return;
@@ -125,10 +125,32 @@ export class ChangesetService extends BaseHttpService {
     let idx = this.changesets.indexOf(current);
     if(idx === -1) {
       console.warn('current changeset not found');
+      return;
+    }
+    return idx;
+  }
+
+  getNextChangeset(current: Changeset): Changeset {
+    let idx = this.getChangesetIdx(current);
+    if(idx === undefined) {
+      return;
     }
     idx += 1;
     if(idx === this.changesets.length) {
-      console.warn('current changeset is last of list')
+      console.warn('current changeset is last of list');
+      return;
+    }
+    return this.changesets[idx];
+  }
+
+  getPrevChangeset(current: Changeset): Changeset {
+    let idx = this.getChangesetIdx(current);
+    if(idx === undefined) {
+      return;
+    }
+    idx -= 1;
+    if(idx < 0) {
+      console.warn('current changeset is first of list');
     }
     return this.changesets[idx];
   }
