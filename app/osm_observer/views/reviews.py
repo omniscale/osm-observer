@@ -20,9 +20,9 @@ def add_review(changeset_id):
     data = request.json
     review = Review(
         changeset_id=changeset_id,
-        score=data['score'],
-        status=data['status'],
-        comment=data['comment'],
+        score=data.get('score'),
+        status=data.get('status'),
+        comment=data.get('comment'),
         user_id=current_user.id
     )
     db.session.add(review)

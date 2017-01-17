@@ -1,3 +1,7 @@
+<button class="btn btn-success btn-sm"
+        (click)="reviewOK()">
+  {{ 'CHANGESET OK' | translate }}
+</button>
 <form novalidate
       #reviewForm="ngForm"
       (ngSubmit)="onSubmit()">
