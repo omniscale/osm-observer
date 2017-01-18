@@ -55,8 +55,7 @@ Using Angular-CLI for the app
     npm install -g angular-cli
 
 ::
-    cd ../app/osm_observer/webapp
-    npm install
+    (cd ../app/osm_observer/webapp && npm install)
 
 
 Building WebApp
