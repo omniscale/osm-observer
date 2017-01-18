@@ -47,6 +47,8 @@ class DefaultConfig(object):
     ADMINS = ['admin@example.org']
     TEMPLATES_AUTO_RELOAD = True
 
+    CHANGESETS_LIMIT = 1000
+
 
 class TestConfig(object):
     ADMIN_PARTY = True

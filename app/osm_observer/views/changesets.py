@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 
-from flask import abort, jsonify, request
+from flask import abort, jsonify, request, current_app
 
 from flask_login import login_required, current_user
 
@@ -56,6 +56,7 @@ def changesets_list():
         username=username,
         num_reviews=num_reviews,
         sum_score=sum_score,
+        limit=current_app.config.get('CHANGESETS_LIMIT')
     ))
 
     return jsonify(serialize_changesets(changesets))
