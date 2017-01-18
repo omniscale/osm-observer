@@ -29,6 +29,7 @@
              id="average-score"
              placeholder="{{ 'SCORE' | translate }}"
              (keyup)="applyChange()"
+             (change)="applyChange()"
              [(ngModel)]="sumScore" />
     </div>
     <div class="form-group">
@@ -37,6 +38,7 @@
              id="num-reviews"
              placeholder="{{ 'REVIEWS' | translate }}"
              (keyup)="applyChange()"
+             (change)="applyChange()"
              [(ngModel)]="numReviews" />
     </div>
     <div class="form-group">
