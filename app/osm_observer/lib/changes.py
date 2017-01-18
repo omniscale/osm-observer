@@ -20,7 +20,8 @@ def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
         func.count('*').label('num_reviews'),
         func.coalesce(
             func.sum(Review.score)
-        ).label('sum_score')
+        ).label('sum_score'),
+        func.max('_status').label('status'),
     ]).group_by(
         Review.changeset_id).alias('reviews')
 
