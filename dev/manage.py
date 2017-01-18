@@ -94,6 +94,15 @@ def watch_webapp():
 
 
 @manager.command
+def build_webapp():
+    "Build webapp"
+    os.chdir('../app/osm_observer/webapp')
+    call([
+        'ng', 'build', '--output-path', '../static/webapp'
+    ])
+
+
+@manager.command
 def update_ng_translation(path='../static/i18n/de.json'):
     "Updates ng2-translations. Path is relative to webapp folder."
 

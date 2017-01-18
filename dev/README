@@ -59,6 +59,13 @@ Using Angular-CLI for the app
     npm install
 
 
+Building WebApp
+---------------
+
+::
+    python manage.py build_webapp
+
+
 Development
 -----------
 
