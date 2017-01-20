@@ -123,6 +123,7 @@ export class ChangesetListComponent implements OnInit {
     if(isNaN(this.statusId)) {
       this.statusId = undefined;
     }
+    this.applyChange()
   }
 
   setTimeRange(timeRange: string): void {
@@ -187,7 +188,6 @@ export class ChangesetListComponent implements OnInit {
     this.subscription = this.route.params.subscribe(
       (params: any) => this.handleRouteParams(params)
     )
-    this.getChangesets();
     this.getCoverages();
   }
 
