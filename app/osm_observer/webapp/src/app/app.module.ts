@@ -25,9 +25,11 @@ import { ChangesetService }       from './services/changeset.service';
 import { ReviewService }          from './services/review.service';
 import { ReviewBotConfigService } from './services/review-bot-config.service';
 import { ChangesetDetailResolver } from './services/changeset-detail-resolver.service';
+import { MessageService } from './services/message.service';
 
 import { KeyValueListPipe } from './pipes/key-value-list.pipe';
 import { LoginComponent } from './login/login.component';
+import { MessageViewerComponent } from './message-viewer/message-viewer.component';
 
 
 export function createTranslateLoader(http: Http) {
@@ -47,7 +49,8 @@ export function createTranslateLoader(http: Http) {
     KeyValueListPipe,
     ChangesetCommentListComponent,
     ChangesetChangesListComponent,
-    LoginComponent
+    LoginComponent,
+    MessageViewerComponent
   ],
   imports: [
     BrowserModule,
@@ -67,7 +70,8 @@ export function createTranslateLoader(http: Http) {
     ChangesetService,
     ReviewService,
     ReviewBotConfigService,
-    ChangesetDetailResolver
+    ChangesetDetailResolver,
+    MessageService
   ],
   bootstrap: [AppComponent]
 })

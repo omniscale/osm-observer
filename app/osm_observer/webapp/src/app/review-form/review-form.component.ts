@@ -4,6 +4,7 @@ import {TranslateService} from 'ng2-translate';
 
 import { Review, ReviewStatus } from '../types/review';
 import { ReviewService } from '../services/review.service';
+import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'review-form',
@@ -13,20 +14,28 @@ import { ReviewService } from '../services/review.service';
 export class ReviewFormComponent implements OnInit, OnChanges {
   @Input() id: number;
   reviewOKComment: string;
+  reviewAddedText: string;
+  reviewUpdatedText: string
 
   model = new Review();
   reviewStatus = ReviewStatus;
 
-  constructor(private reviewService: ReviewService, private translate: TranslateService) { }
+  constructor(private reviewService: ReviewService, private translate: TranslateService, private messageService: MessageService) { }
 
   reviewOK() {
-    this.reviewService.addReview(this.id, new Review(undefined, undefined, ReviewStatus.OK, this.reviewOKComment));
+    this.reviewService.addReview(this.id, new Review(undefined, undefined, ReviewStatus.OK, this.reviewOKComment))
+                      .then(v => {
+                        this.model = new Review();
+                        this.messageService.add(this.reviewUpdatedText, 'success');
+                      })
+                      .catch(error => {});;
   }
 
   onSubmit() {
     this.reviewService.addReview(this.id, this.model)
                       .then(v => {
                         this.model = new Review();
+                        this.messageService.add(this.reviewAddedText, 'success');
                       })
                       .catch(error => {});
     return false;
@@ -38,7 +47,13 @@ export class ReviewFormComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.translate.get('OK').subscribe((res: string) => {
-      this.reviewOKComment = res
+      this.reviewOKComment = res;
+    });
+    this.translate.get('REVIEW ADDED').subscribe((res: string) => {
+      this.reviewAddedText = res;
+    });
+    this.translate.get('REVIEW UPDATED').subscribe((res: string) => {
+      this.reviewUpdatedText = res;
     });
   }
 }

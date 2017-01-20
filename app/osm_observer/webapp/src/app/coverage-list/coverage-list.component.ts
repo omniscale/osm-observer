@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
+import {TranslateService} from 'ng2-translate';
+
 import { Coverage } from '../types/coverage';
 import { CoverageService } from '../services/coverage.service'
+import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'coverage-list',
@@ -12,7 +15,10 @@ export class CoverageListComponent implements OnInit {
 
   coverages: Coverage[];
 
-  constructor(private coverageService: CoverageService) { }
+  private changesSavedText: string;
+  private changesDiscardedText: string;
+
+  constructor(private coverageService: CoverageService, private messageService: MessageService, private translate: TranslateService) { }
 
   assignCoverages(coverages: Coverage[]) {
     this.coverages = coverages;
@@ -34,6 +40,7 @@ export class CoverageListComponent implements OnInit {
     }
     this.coverageService.setActiveCoverages(activeCoverageIds)
                         .then(v => {
+                          this.messageService.add(this.changesSavedText, 'success');
                           this.getCoverages();
                         })
                         // TODO define onError actions
@@ -42,9 +49,16 @@ export class CoverageListComponent implements OnInit {
 
   cancelChanges(): void {
     this.getCoverages();
+    this.messageService.add(this.changesDiscardedText, 'success');
   }
 
   ngOnInit() {
+    this.translate.get('CHANGES SAVED').subscribe((res: string) => {
+      this.changesSavedText = res;
+    });
+    this.translate.get('CHANGES DISCARDED').subscribe((res: string) => {
+      this.changesDiscardedText = res;
+    });
     this.getCoverages();
   }
 

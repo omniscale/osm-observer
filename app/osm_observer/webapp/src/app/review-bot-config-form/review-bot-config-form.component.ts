@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+import {TranslateService} from 'ng2-translate';
+
 import { ReviewBotConfig, DefaultBotConfig, UsernameBotConfig, TagValueBotConfig } from '../types/review-bot-config';
 import { ReviewBotConfigService } from '../services/review-bot-config.service';
+import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'app-review-bot-config-form',
@@ -17,11 +20,22 @@ export class ReviewBotConfigFormComponent implements OnInit {
 
   update = false;
 
+  private botConfigAddedText: string;
+  private botConfigUpdatedText: string;
+
   constructor(private reviewBotConfigService: ReviewBotConfigService,
+              private messageService: MessageService,
+              private translate: TranslateService,
               private router: Router,
               private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.translate.get('BOT CONFIG ADDED').subscribe((res: string) => {
+      this.botConfigAddedText = res;
+    });
+    this.translate.get('BOT CONFIG UPDATED').subscribe((res: string) => {
+      this.botConfigUpdatedText = res;
+    });
     let id = this.route.snapshot.params['id'];
     if(id !== undefined) {
       this.reviewBotConfigService.getReviewBotConfig(+id)
@@ -54,6 +68,7 @@ export class ReviewBotConfigFormComponent implements OnInit {
       this.reviewBotConfigService.updateReviewBotConfig(this.model)
           .then(v => {
             this.router.navigate(['/reviewBotConfigs']);
+            this.messageService.add(this.botConfigUpdatedText, 'success');
           })
           // TODO define onError actions
           .catch(e => {});
@@ -61,6 +76,7 @@ export class ReviewBotConfigFormComponent implements OnInit {
       this.reviewBotConfigService.addReviewBotConfig(this.model)
           .then(v => {
             this.router.navigate(['/reviewBotConfigs']);
+            this.messageService.add(this.botConfigAddedText, 'success');
           })
           // TODO define onError actions
           .catch(e => {});

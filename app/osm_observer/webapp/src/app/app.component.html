@@ -1,6 +1,7 @@
 <h1>
   {{ title }}
 </h1>
+<message-viewer></message-viewer>
 <div *ngIf="authService.isLoggedIn()">
   <a routerLink="/changesets">{{ 'CHANGESETS' | translate }}</a>
   <a routerLink="/reviewBotConfigs">{{ 'REVIEW BOT CONFIGS' | translate }}</a>

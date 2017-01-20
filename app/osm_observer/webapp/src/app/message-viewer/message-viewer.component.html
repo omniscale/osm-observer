@@ -1,0 +1,12 @@
+<div class="messages-container"
+     *ngIf="messages !== undefined">
+  <div class="message alert"
+       *ngFor="let message of messages"
+       [class.alert-success]="message.type === 'success'"
+       [class.alert-danger]="message.type === 'error'"
+       [class.alert-info]="message.type === 'info'">
+    <div class="closer"
+         (click)="close(message)">x</div>
+    {{ message.message }}
+  </div>
+</div>
