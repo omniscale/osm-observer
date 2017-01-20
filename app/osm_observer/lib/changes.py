@@ -21,7 +21,7 @@ def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
         func.coalesce(
             func.sum(Review.score)
         ).label('sum_score'),
-        func.max('_status').label('status'),
+        func.max(Review._status).label('status'),
     ]).group_by(
         Review.changeset_id).alias('reviews')
 
@@ -33,7 +33,8 @@ def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
         Changeset.id.label('app_id'),
         changesets,
         review_select.c.num_reviews,
-        review_select.c.sum_score
+        review_select.c.sum_score,
+        review_select.c.status,
     ]).select_from(review_join)
 
     if len(coverages) > 0:
@@ -99,7 +100,8 @@ def query_changeset_details(changeset_id=None):
         func.count('*').label('num_reviews'),
         func.coalesce(
             func.sum(Review.score)
-        ).label('sum_score')
+        ).label('sum_score'),
+        func.max(Review._status).label('status'),
     ]).group_by(
         Review.changeset_id).alias('reviews')
 
@@ -112,6 +114,7 @@ def query_changeset_details(changeset_id=None):
         changesets,
         review_select.c.num_reviews,
         review_select.c.sum_score,
+        review_select.c.status,
         n,
         w,
         r,

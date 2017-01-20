@@ -95,6 +95,7 @@ def serialize_changeset_details(changeset):
         'tags': changeset.tags,
         'numReviews': changeset.num_reviews,
         'sumScore': changeset.sum_score,
+        'status': changeset.status,
         'nodesAdd': changeset['nodes_add'],
         'nodesModify': changeset['nodes_modify'],
         'nodesDelete': changeset['nodes_delete'],
@@ -119,6 +120,7 @@ def serialize_changeset(changeset):
         'tags': changeset.tags,
         'numReviews': changeset.num_reviews,
         'sumScore': changeset.sum_score,
+        'status': changeset.status,
     }
 
 
