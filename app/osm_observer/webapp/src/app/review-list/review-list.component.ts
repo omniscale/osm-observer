@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { Review } from '../types/review';
 import { ReviewService } from '../services/review.service';
@@ -8,7 +8,7 @@ import { ReviewService } from '../services/review.service';
   templateUrl: './review-list.component.html',
   styleUrls: ['./review-list.component.sass']
 })
-export class ReviewListComponent implements OnInit, OnChanges {
+export class ReviewListComponent implements OnChanges {
   @Input()
   id: number;
 
@@ -33,9 +33,4 @@ export class ReviewListComponent implements OnInit, OnChanges {
     this.id = changes['id'].currentValue;
     this.getReviews();
   }
-
-  ngOnInit() {
-    this.getReviews();
-  }
-
 }
