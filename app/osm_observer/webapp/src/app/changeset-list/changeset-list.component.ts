@@ -28,6 +28,7 @@ export class ChangesetListComponent implements OnInit {
   sumScore: number;
   numReviews: number;
   coverageId: number;
+  statusId: number;
 
   allowedTimeRanges = ['today', 'yesterday', 'lastWeek']
   allowedCoverageIds: number[];
@@ -65,7 +66,7 @@ export class ChangesetListComponent implements OnInit {
   }
 
   getChangesets(): void {
-    this.changesetService.getChangesets(this.username, this.timeRange, this.sumScore, this.numReviews, this.coverageId)
+    this.changesetService.getChangesets(this.username, this.timeRange, this.sumScore, this.numReviews, this.coverageId, this.statusId)
                          .then(changesets => this.assignChangesets(changesets))
                          // TODO define onError actions
                          .catch(error => {});
@@ -93,7 +94,10 @@ export class ChangesetListComponent implements OnInit {
       routeParams['numReviews'] = this.numReviews;
     }
     if(this.coverageId !== undefined && this.coverageId !== null) {
-      routeParams['coverageId'] = this.coverageId
+      routeParams['coverageId'] = this.coverageId;
+    }
+    if(this.statusId !== undefined && this.statusId !== null) {
+      routeParams['statusId'] = this.statusId;
     }
     this.router.navigateByUrl(
       this.router.createUrlTree(['/changesets', routeParams])
@@ -115,7 +119,10 @@ export class ChangesetListComponent implements OnInit {
     if(isNaN(this.coverageId)) {
       this.coverageId = undefined;
     }
-
+    this.statusId = parseInt(params['statusId']) as number;
+    if(isNaN(this.statusId)) {
+      this.statusId = undefined;
+    }
   }
 
   setTimeRange(timeRange: string): void {
@@ -137,6 +144,14 @@ export class ChangesetListComponent implements OnInit {
 
   }
 
+  setStatusId(statusId: string): void {
+    this.statusId = parseInt(statusId);
+    if(isNaN(this.statusId)) {
+      this.statusId = undefined;
+    }
+    this.applyChange();
+  }
+
   applyChange(): void {
     if(this.timer !== undefined) {
       clearTimeout(this.timer);
@@ -154,6 +169,7 @@ export class ChangesetListComponent implements OnInit {
     this.sumScore = undefined;
     this.numReviews = undefined;
     this.coverageId = undefined;
+    this.statusId = undefined;
     this.applyChange();
   }
 

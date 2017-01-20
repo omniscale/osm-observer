@@ -57,6 +57,21 @@
         </option>
       </select>
     </div>
+    <div class="form-group">
+      <select class="form-control form-control-sm"
+              id="status"
+              #status
+              (change)="setStatusId(status.value)"
+              [(ngModel)]="statusId">
+        <option [value]="undefined">
+          {{ 'SELECT STATUS' | translate }}
+        </option>
+        <option *ngFor="let reviewStatusName of reviewStatus.names()"
+                [value]="reviewStatus[reviewStatusName]">
+          {{ reviewStatusName }}
+        </option>
+      </select>
+    </div>
     <button class="btn btn-default btn-sm"
             (click)="resetFilters()">
       {{ 'RESET FILTERS' | translate }}

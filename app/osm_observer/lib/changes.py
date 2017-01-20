@@ -9,7 +9,8 @@ from osm_observer.extensions import db
 
 
 def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
-                     num_reviews=None, sum_score=None, limit=None):
+                     num_reviews=None, sum_score=None, status_id=None,
+                     limit=None):
 
     changeset_join = join(Changeset, changesets,
                           Changeset.osm_id == changesets.c.id)
@@ -55,6 +56,9 @@ def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
     if sum_score is not None:
         s = s.where(review_select.c.sum_score>=sum_score)
 
+    if status_id is not None:
+        s = s.where(review_select.c.status == status_id)
+
     if from_time is not None and to_time is not None:
         s = s.where(changesets.c.closed_at>=from_time)
         s = s.where(changesets.c.closed_at<to_time)
@@ -66,7 +70,6 @@ def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
 
     if limit is not None:
         s = s.limit(limit)
-
     conn = db.session.connection()
     return conn.execute(s).fetchall()
 
