@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import 'rxjs/add/operator/switchMap';
-
 import { ReviewBotConfig, DefaultBotConfig, UsernameBotConfig, TagValueBotConfig } from '../types/review-bot-config';
 import { ReviewBotConfigService } from '../services/review-bot-config.service';
 

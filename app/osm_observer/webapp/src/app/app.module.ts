@@ -11,7 +11,6 @@ import { AppComponent }     from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { CoverageListComponent }         from './coverage-list/coverage-list.component';
-import { CoveragesComponent }            from './coverages/coverages.component';
 import { ChangesetListComponent }        from './changeset-list/changeset-list.component';
 import { ChangesetDetailsComponent }     from './changeset-details/changeset-details.component';
 import { ReviewListComponent }           from './review-list/review-list.component';
@@ -39,7 +38,6 @@ export function createTranslateLoader(http: Http) {
   declarations: [
     AppComponent,
     CoverageListComponent,
-    CoveragesComponent,
     ChangesetListComponent,
     ChangesetDetailsComponent,
     ReviewListComponent,

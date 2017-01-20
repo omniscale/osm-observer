@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import {Subscription } from 'rxjs';
-
-import {TranslateService} from 'ng2-translate';
+import { Subscription } from 'rxjs';
 
 import { Changeset } from '../types/changeset';
 import { Coverage } from '../types/coverage';
@@ -46,9 +43,7 @@ export class ChangesetListComponent implements OnInit {
     private changesetService: ChangesetService,
     private coverageService: CoverageService,
     private route: ActivatedRoute,
-    private router: Router,
-    private location: Location,
-    translate: TranslateService
+    private router: Router
   ) { }
 
   assignChangesets(changesets: Changeset[]) {

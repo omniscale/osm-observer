@@ -6,7 +6,6 @@ import {
 }                         from '@angular/router';
 
 import { AuthService }    from './auth.service';
-import { AuthResponse }   from '../types/auth-response';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
