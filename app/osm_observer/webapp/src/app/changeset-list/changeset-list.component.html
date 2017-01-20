@@ -1,17 +1,20 @@
 <div>
   <div class="form-inline">
-    <button class="btn btn-default btn-sm"
+    <button class="btn btn-sm"
             [class.btn-primary]="timeRange==='today'"
+            [class.btn-secondary]="timeRange!=='today'"
             (click)="setTimeRange('today')">
       {{ 'TODAY' | translate }}
     </button>
-    <button class="btn btn-default btn-sm"
+    <button class="btn btn-sm"
             [class.btn-primary]="timeRange==='yesterday'"
+            [class.btn-secondary]="timeRange!=='yesterday'"
             (click)="setTimeRange('yesterday')">
       {{ 'YESTERDAY' | translate }}
     </button>
-    <button class="btn btn-default btn-sm"
+    <button class="btn btn-sm"
             [class.btn-primary]="timeRange==='lastWeek'"
+            [class.btn-secondary]="timeRange!=='lastWeek'"
             (click)="setTimeRange('lastWeek')">
       {{ 'LAST WEEK' | translate }}
     </button>
@@ -72,6 +75,18 @@
         </option>
       </select>
     </div>
+    <button class="btn btn-sm"
+            [class.btn-primary]="currentUserReviewed===true"
+            [class.btn-secondary]="currentUserReviewed!==true"
+            (click)="setCurrentUserReviewed(true)">
+      {{ 'SELF REVIEWED' | translate }}
+    </button>
+    <button class="btn btn-sm"
+            [class.btn-primary]="currentUserReviewed===false"
+            [class.btn-secondary]="currentUserReviewed!==false"
+            (click)="setCurrentUserReviewed(false)">
+      {{ 'NOT SELF REVIEWED' | translate }}
+    </button>
     <button class="btn btn-default btn-sm"
             (click)="resetFilters()">
       {{ 'RESET FILTERS' | translate }}

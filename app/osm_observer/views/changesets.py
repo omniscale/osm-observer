@@ -36,6 +36,9 @@ def changesets_list():
     # filter with status
     status_id = request.args.get('statusId', None)
 
+    # filter with current user reviewed
+    current_user_reviewed = request.args.get('currentUserReviewed', None)
+
     # filter with time_range
     # actually we support today, yesterday and last_week
     time_range = request.args.get('timeRange', None)
@@ -61,6 +64,7 @@ def changesets_list():
         num_reviews=num_reviews,
         sum_score=sum_score,
         status_id=status_id,
+        current_user_reviewed=current_user_reviewed,
         limit=current_app.config.get('CHANGESETS_LIMIT')
     ))
 

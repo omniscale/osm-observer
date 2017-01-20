@@ -26,6 +26,7 @@ export class ChangesetListComponent implements OnInit {
   numReviews: number;
   coverageId: number;
   statusId: number;
+  currentUserReviewed: boolean;
 
   allowedTimeRanges = ['today', 'yesterday', 'lastWeek']
   allowedCoverageIds: number[];
@@ -61,7 +62,7 @@ export class ChangesetListComponent implements OnInit {
   }
 
   getChangesets(): void {
-    this.changesetService.getChangesets(this.username, this.timeRange, this.sumScore, this.numReviews, this.coverageId, this.statusId)
+    this.changesetService.getChangesets(this.username, this.timeRange, this.sumScore, this.numReviews, this.coverageId, this.statusId, this.currentUserReviewed)
                          .then(changesets => this.assignChangesets(changesets))
                          // TODO define onError actions
                          .catch(error => {});
@@ -94,6 +95,9 @@ export class ChangesetListComponent implements OnInit {
     if(this.statusId !== undefined && this.statusId !== null) {
       routeParams['statusId'] = this.statusId;
     }
+    if((typeof(this.currentUserReviewed) === "boolean")) {
+      routeParams['currentUserReviewed'] = this.currentUserReviewed;
+    }
     this.router.navigateByUrl(
       this.router.createUrlTree(['/changesets', routeParams])
     );
@@ -118,7 +122,17 @@ export class ChangesetListComponent implements OnInit {
     if(isNaN(this.statusId)) {
       this.statusId = undefined;
     }
-    this.applyChange()
+    switch(params['currentUserReviewed']) {
+      case 'true':
+        this.currentUserReviewed = true;
+        break;
+      case 'false':
+        this.currentUserReviewed = false;
+        break;
+      default:
+        this.currentUserReviewed = undefined;
+    }
+    this.applyChange();
   }
 
   setTimeRange(timeRange: string): void {
@@ -127,8 +141,7 @@ export class ChangesetListComponent implements OnInit {
     } else {
       this.timeRange = timeRange;
     }
-    this.updateRouteParams();
-    this.getChangesets();
+    this.applyChange();
   }
 
   setCoverageId(coverageId: string): void {
@@ -144,6 +157,15 @@ export class ChangesetListComponent implements OnInit {
     this.statusId = parseInt(statusId);
     if(isNaN(this.statusId)) {
       this.statusId = undefined;
+    }
+    this.applyChange();
+  }
+
+  setCurrentUserReviewed(currentUserReviewed: boolean): void {
+    if(this.currentUserReviewed === currentUserReviewed) {
+      this.currentUserReviewed = undefined;
+    } else {
+      this.currentUserReviewed = currentUserReviewed;
     }
     this.applyChange();
   }
@@ -166,6 +188,7 @@ export class ChangesetListComponent implements OnInit {
     this.numReviews = undefined;
     this.coverageId = undefined;
     this.statusId = undefined;
+    this.currentUserReviewed = undefined;
     this.applyChange();
   }
 
