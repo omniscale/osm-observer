@@ -88,18 +88,8 @@ def changeset_changes(changeset_id):
 
 
 def serialize_changeset_details(changeset):
-    return {
-        'id': changeset.app_id,
-        'osmId': changeset.id,
-        'createdAt': changeset.created_at,
-        'closedAt': changeset.closed_at,
-        'username': changeset.user_name,
-        'numChanges': changeset.num_changes,
-        'userId': changeset.user_id,
-        'tags': changeset.tags,
-        'numReviews': changeset.num_reviews,
-        'sumScore': changeset.sum_score,
-        'status': changeset.status,
+    data = serialize_changeset(changeset)
+    details = {
         'nodesAdd': changeset['nodes_add'],
         'nodesModify': changeset['nodes_modify'],
         'nodesDelete': changeset['nodes_delete'],
@@ -110,6 +100,8 @@ def serialize_changeset_details(changeset):
         'relationsModify': changeset['relations_modify'],
         'relationsDelete': changeset['relations_delete'],
     }
+    data.update(details)
+    return data
 
 
 def serialize_changeset(changeset):
