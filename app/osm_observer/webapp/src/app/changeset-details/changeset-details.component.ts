@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { ChangesetDetails } from '../types/changeset-details';
 import { Changeset } from '../types/changeset';
+import { ReviewStatus } from '../types/review';
 import { ChangesetService } from '../services/changeset.service';
 
 @Component({
@@ -17,6 +18,8 @@ export class ChangesetDetailsComponent implements OnInit {
   prevChangeset: Changeset;
   currentChangeset: Changeset;
   nextChangeset: Changeset;
+
+  reviewStatus = ReviewStatus;
 
 
   constructor(private changesetService: ChangesetService,

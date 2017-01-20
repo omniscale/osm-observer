@@ -51,6 +51,12 @@
         <dd>{{ changesetDetails.sumScore }}</dd>
       </dl>
     </div>
+    <div class="col-md-2">
+      <dl>
+        <dt>{{ 'STATUS' | translate }}</dt>
+        <dd>{{ reviewStatus[changesetDetails.status] }}</dd>
+      </dl>
+    </div>
   </div>
   <div class="row">
     <div class="col-md-6">
