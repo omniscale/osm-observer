@@ -53,6 +53,11 @@ const appRoutes: Routes = [
     ]
   },
   {
+    path: 'coverages',
+    canActivate: [AuthGuardService],
+    component: CoverageListComponent
+  },
+  {
     path: '**',
     redirectTo: '/changesets'
   }

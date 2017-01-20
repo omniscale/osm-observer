@@ -73,7 +73,7 @@ export class ChangesetListComponent implements OnInit {
   }
 
   getCoverages(): void {
-    this.coverageService.getCoverages()
+    this.coverageService.getActiveCoverages()
                         .then(coverages => this.assignCoverages(coverages))
                         // TODO define onError actions
                         .catch(error => {});

@@ -11,7 +11,9 @@ import { Coverage } from '../types/coverage';
 @Injectable()
 export class CoverageService extends BaseHttpService {
 
-  private coveragesUrl = '/api/coverages';
+  private coveragesUrl = '/api/coverages/all';
+  private activeCoveragesUrl = '/api/coverages/actives';
+  private setActiveCoveragesUrl = '/api/coverages/set-actives';
 
   constructor(router: Router, private http: Http, cookieService: CookieService) {
     super(router, cookieService);
@@ -24,5 +26,23 @@ export class CoverageService extends BaseHttpService {
                .catch(error => {
                  return this.handleError(error, 'getCoverages', this.coveragesUrl);
                });
+  }
+
+  getActiveCoverages(): Promise<Coverage[]> {
+    return this.http.get(this.activeCoveragesUrl, this.getRequestOptions())
+               .toPromise()
+               .then(response => response.json() as Coverage[])
+               .catch(error => {
+                 return this.handleError(error, 'getActiveCoverages', this.activeCoveragesUrl);
+               });
+  }
+
+  setActiveCoverages(coverageIds: number[]): Promise<any> {
+    let data = {'coverageIds': coverageIds}
+    return this.http.post(this.setActiveCoveragesUrl, data, this.getRequestOptions())
+                    .toPromise()
+                    .catch(error => {
+                      return this.handleError(error, 'setActiveCoverages', this.setActiveCoveragesUrl, data);
+                    })
   }
 }

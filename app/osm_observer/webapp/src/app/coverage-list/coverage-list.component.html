@@ -1,6 +1,33 @@
 <h3>{{ 'COVERAGE LIST' | translate }}</h3>
-<ul>
-  <li *ngFor="let coverage of coverages">
-    <span class="badge">{{ coverage.id }}</span> {{ coverage.name }}
-  </li>
-</ul>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>{{ 'ID' | translate }}</th>
+      <th>{{ 'USED' | translate }}</th>
+      <th>{{ 'NAME' | translate }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let coverage of coverages">
+      <td>
+        {{ coverage.id }}
+      </td>
+      <td>
+        <input type="checkbox"
+               [checked]="coverage.active"
+               (change)="coverage.active = $event.target.checked" />
+      </td>
+      <td>
+        {{ coverage.name }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+<button class="btn btn-primary btn-sm"
+        (click)="applyChanges()">
+  {{ 'APPLY' | translate }}
+</button>
+<button class="btn btn-secondary btn-sm"
+        (click)="cancelChanges()">
+  {{ 'CANCEL' | translate }}
+</button>

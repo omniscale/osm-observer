@@ -141,6 +141,11 @@
     </tr>
   </thead>
   <tbody>
+    <tr *ngIf="changesets !== undefined && changesets.length === 0">
+      <td colspan="9">
+        {{ 'NO CHANGESETS' | translate }}
+      </td>
+    </tr>
     <ng-container *ngFor="let changeset of changesets">
       <tr>
         <td>{{ changeset.id }}</td>

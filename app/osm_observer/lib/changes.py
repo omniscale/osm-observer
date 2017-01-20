@@ -43,6 +43,8 @@ def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
         for coverage in coverages:
             coverage_comnditions.append(changesets.c.bbox.ST_Intersects(coverage.geometry))
         s = s.where(or_(*coverage_comnditions))
+    else:
+        return []
 
     if username is not None:
         s = s.where(changesets.c.user_name==username)

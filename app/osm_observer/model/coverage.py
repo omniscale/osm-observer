@@ -61,3 +61,8 @@ class Coverage(db.Model):
     def by_id(cls, id):
         q = cls.query.filter(cls.id == id)
         return q.first_or_404()
+
+    @classmethod
+    def by_ids(cls, ids):
+        q = cls.query.filter(cls.id.in_(ids))
+        return q.all()

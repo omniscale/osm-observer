@@ -4,6 +4,7 @@
 <div *ngIf="authService.isLoggedIn()">
   <a routerLink="/changesets">{{ 'CHANGESETS' | translate }}</a>
   <a routerLink="/reviewBotConfigs">{{ 'REVIEW BOT CONFIGS' | translate }}</a>
+  <a routerLink="/coverages">{{ 'COVERAGES' | translate }}</a>
   <button class="btn btn-default btn-sm" (click)="logout()">{{ 'LOGOUT' | translate }}</button>
 </div>
 <router-outlet></router-outlet>

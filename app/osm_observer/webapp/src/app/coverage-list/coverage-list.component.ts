@@ -25,6 +25,25 @@ export class CoverageListComponent implements OnInit {
                         .catch(error => {});
   }
 
+  applyChanges(): void {
+    let activeCoverageIds: number[] = [];
+    for(let coverage of this.coverages) {
+      if(coverage.active) {
+        activeCoverageIds.push(coverage.id);
+      }
+    }
+    this.coverageService.setActiveCoverages(activeCoverageIds)
+                        .then(v => {
+                          this.getCoverages();
+                        })
+                        // TODO define onError actions
+                        .catch(error => {});
+  }
+
+  cancelChanges(): void {
+    this.getCoverages();
+  }
+
   ngOnInit() {
     this.getCoverages();
   }
