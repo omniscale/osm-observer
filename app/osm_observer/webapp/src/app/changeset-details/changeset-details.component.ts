@@ -5,6 +5,7 @@ import { ChangesetDetails } from '../types/changeset-details';
 import { Changeset } from '../types/changeset';
 import { ReviewStatus } from '../types/review';
 import { ChangesetService } from '../services/changeset.service';
+import { ReviewService } from '../services/review.service';
 
 @Component({
   selector: 'changeset-details',
@@ -23,6 +24,7 @@ export class ChangesetDetailsComponent implements OnInit {
 
 
   constructor(private changesetService: ChangesetService,
+              private reviewService: ReviewService,
               private router: Router,
               private route: ActivatedRoute) { }
 
@@ -56,6 +58,10 @@ export class ChangesetDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.reviewService.refreshReviews$
+        .subscribe(e => {
+          this.getChangesetDetails(this.currentChangeset.osmId);
+        });
     this.route.data
         .subscribe((data: {changeset: Changeset}) => {
           this.currentChangeset = data.changeset;
