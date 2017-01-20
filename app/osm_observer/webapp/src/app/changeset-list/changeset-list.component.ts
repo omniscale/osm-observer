@@ -8,6 +8,7 @@ import {TranslateService} from 'ng2-translate';
 
 import { Changeset } from '../types/changeset';
 import { Coverage } from '../types/coverage';
+import { ReviewStatus } from '../types/review';
 import { ChangesetService } from '../services/changeset.service';
 import { CoverageService } from '../services/coverage.service';
 
@@ -33,6 +34,8 @@ export class ChangesetListComponent implements OnInit {
 
   orderBy: string = 'closedAt';
   order: string = 'desc';
+
+  reviewStatus = ReviewStatus;
 
   private timer;
 

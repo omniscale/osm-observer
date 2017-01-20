@@ -115,6 +115,13 @@
           <span *ngIf="order==='desc'">^</span>
         </span>
       </th>
+      <th (click)="sortBy('status')">
+        {{ 'STATUS' | translate }}
+        <span *ngIf="orderBy==='status'">
+          <span *ngIf="order==='asc'">v</span>
+          <span *ngIf="order==='desc'">^</span>
+        </span>
+      </th>
       <th></th>
     </tr>
   </thead>
@@ -137,6 +144,7 @@
         <td>{{ changeset.numChanges }}</td>
         <td>{{ changeset.numReviews }}</td>
         <td>{{ changeset.sumScore }}</td>
+        <td>{{ reviewStatus[changeset.status] }}</td>
         <td>
           <a class="btn btn-secondary btn-sm"
              role="button"

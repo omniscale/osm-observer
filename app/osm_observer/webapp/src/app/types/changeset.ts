@@ -9,11 +9,12 @@ export class Changeset {
   userId: number;
   sumScore: number;
   tags: Tags;
+  status: number;
 
   constructor(
     id: number, osmId: number, createdAt: string, closedAt: string,
     numReviews: number, username: string, numChanges: number,
-    userId: number, sumScore: number, tags: Tags
+    userId: number, sumScore: number, tags: Tags, status: number
   ) {
     this.id = id;
     this.osmId = osmId;
@@ -23,6 +24,7 @@ export class Changeset {
     this.numChanges = numChanges;
     this.sumScore = sumScore;
     this.tags = tags;
+    this.status = status;
 
     this.createdAt = new Date(createdAt);
     this.closedAt = new Date(closedAt);
