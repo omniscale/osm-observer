@@ -8,9 +8,9 @@ from osm_observer.model import changesets, nodes, ways, relations, comments
 from osm_observer.extensions import db
 
 
-def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
-                     num_reviews=None, sum_score=None, status_id=None,
-                     limit=None):
+def query_changesets(current_user_id, coverages=[], from_time=None,
+                     to_time=None, username=None, num_reviews=None,
+                     sum_score=None, status_id=None, limit=None):
 
     changeset_join = join(Changeset, changesets,
                           Changeset.osm_id == changesets.c.id)
@@ -23,6 +23,11 @@ def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
             func.sum(Review.score)
         ).label('sum_score'),
         func.max(Review._status).label('status'),
+        case(
+            [(func.sum(case(
+                [(Review.user_id == current_user_id, 1)], else_=0
+            )) > 0, True)], else_=False
+        ).label('current_user_reviewed'),
     ]).group_by(
         Review.changeset_id).alias('reviews')
 
@@ -36,6 +41,7 @@ def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
         review_select.c.num_reviews,
         review_select.c.sum_score,
         review_select.c.status,
+        review_select.c.current_user_reviewed,
     ]).select_from(review_join)
 
     if len(coverages) > 0:
@@ -76,7 +82,7 @@ def query_changesets(coverages=[], from_time=None, to_time=None, username=None,
     return conn.execute(s).fetchall()
 
 
-def query_changeset_details(changeset_id=None):
+def query_changeset_details(current_user_id, changeset_id=None):
     n = select([
         func.coalesce(func.sum(case([(nodes.c['add']==true(), 1)], else_=0)), 0).label('nodes_add'),
         func.coalesce(func.sum(case([(nodes.c.modify==true(), 1)], else_=0)), 0).label('nodes_modify'),
@@ -107,6 +113,11 @@ def query_changeset_details(changeset_id=None):
             func.sum(Review.score)
         ).label('sum_score'),
         func.max(Review._status).label('status'),
+        case(
+            [(func.sum(case(
+                [(Review.user_id == current_user_id, 1)], else_=0
+            )) > 0, True)], else_=False
+        ).label('current_user_reviewed')
     ]).group_by(
         Review.changeset_id).alias('reviews')
 
@@ -120,6 +131,7 @@ def query_changeset_details(changeset_id=None):
         review_select.c.num_reviews,
         review_select.c.sum_score,
         review_select.c.status,
+        review_select.c.current_user_reviewed,
         n,
         w,
         r,

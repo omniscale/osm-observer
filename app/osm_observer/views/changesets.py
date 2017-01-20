@@ -53,6 +53,7 @@ def changesets_list():
         to_time = None
 
     changesets = list(query_changesets(
+        current_user_id=current_user.id,
         coverages=coverages or current_user.coverages,
         from_time=from_time,
         to_time=to_time,
@@ -69,7 +70,7 @@ def changesets_list():
 @api.route('/changesets/details/<int:changeset_id>')
 @login_required
 def changeset_details(changeset_id):
-    details = query_changeset_details(changeset_id)
+    details = query_changeset_details(current_user.id, changeset_id)
     return jsonify(serialize_changeset_details(details))
 
 
@@ -117,6 +118,7 @@ def serialize_changeset(changeset):
         'numReviews': changeset.num_reviews,
         'sumScore': changeset.sum_score,
         'status': changeset.status,
+        'currentUserReviewed': changeset.current_user_reviewed,
     }
 
 

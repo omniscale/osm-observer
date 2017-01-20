@@ -147,7 +147,7 @@
       </td>
     </tr>
     <ng-container *ngFor="let changeset of changesets">
-      <tr>
+      <tr [class.table-success]="changeset.currentUserReviewed === true">
         <td>{{ changeset.id }}</td>
         <td>
           <a [routerLink]="[changeset.osmId, 'details']">
