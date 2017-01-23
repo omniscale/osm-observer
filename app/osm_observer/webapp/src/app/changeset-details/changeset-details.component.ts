@@ -41,19 +41,13 @@ export class ChangesetDetailsComponent implements OnInit {
 
   next() {
     if(this.nextChangeset !== undefined) {
-      this.prevChangeset = this.currentChangeset;
-      this.currentChangeset = this.nextChangeset;
-      this.nextChangeset = this.changesetService.getNextChangeset(this.currentChangeset);
-      this.getChangesetDetails(this.currentChangeset.osmId);
+      this.router.navigate(['changesets', this.nextChangeset.osmId, 'details'])
     }
   }
 
   prev() {
     if(this.prevChangeset !== undefined) {
-      this.nextChangeset = this.currentChangeset;
-      this.currentChangeset = this.prevChangeset;
-      this.prevChangeset = this.changesetService.getPrevChangeset(this.currentChangeset);
-      this.getChangesetDetails(this.currentChangeset.osmId);
+      this.router.navigate(['changesets', this.prevChangeset.osmId, 'details'])
     }
   }
 
