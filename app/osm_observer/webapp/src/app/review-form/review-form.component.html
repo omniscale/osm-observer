@@ -1,44 +1,47 @@
-<button class="btn btn-success btn-sm"
-        (click)="reviewOK()">
-  {{ 'CHANGESET OK' | translate }}
-</button>
-<form novalidate
-      #reviewForm="ngForm"
-      (ngSubmit)="onSubmit()">
-  <div class="form-group"
-       [class.has-danger]="hasFormError(reviewForm.controls.status)">
-    <label for="status">
-      {{ 'STATUS' | translate }}
-    </label>
-    <select
-      class="form-control"
-      id="status"
-      name="status"
-      required
-      [(ngModel)]="model.status"
-      [class.form-control-danger]="hasFormError(reviewForm.controls.status)">
-      <option *ngFor="let reviewStatusName of reviewStatus.names()"
-              [value]="reviewStatus[reviewStatusName]">
-        {{ reviewStatusName }}
-      </option>
-    </select>
-  </div>
-  <div class="form-group"
-       [class.has-danger]="hasFormError(reviewForm.controls.comment)">
-    <label for="comment">
-      {{ 'COMMENT' | translate }}
-    </label>
-    <textarea class="form-control"
-              id="comment"
-              name="comment"
-              required
-              [class.form-control-danger]="hasFormError(reviewForm.controls.comment)"
-              [(ngModel)]="model.comment">
-    </textarea>
-  </div>
-  <button type="submit"
-          class="btn btn-primary"
-          [disabled]="!reviewForm.form.valid">
-    {{ 'ADD' | translate }}
+<div class="component-container">
+  <h4>{{ 'ADD REVIEW' | translate }}</h4>
+  <button class="btn btn-success btn-sm float-right"
+          (click)="reviewOK()">
+    {{ 'CHANGESET OK' | translate }}
   </button>
-</form>
+  <form novalidate
+        #reviewForm="ngForm"
+        (ngSubmit)="onSubmit()">
+    <div class="form-group"
+         [class.has-danger]="hasFormError(reviewForm.controls.status)">
+      <label for="status">
+        {{ 'STATUS' | translate }}
+      </label>
+      <select
+        class="form-control"
+        id="status"
+        name="status"
+        required
+        [(ngModel)]="model.status"
+        [class.form-control-danger]="hasFormError(reviewForm.controls.status)">
+        <option *ngFor="let reviewStatusName of reviewStatus.names()"
+                [value]="reviewStatus[reviewStatusName]">
+          {{ reviewStatusName }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group"
+         [class.has-danger]="hasFormError(reviewForm.controls.comment)">
+      <label for="comment">
+        {{ 'COMMENT' | translate }}
+      </label>
+      <textarea class="form-control"
+                id="comment"
+                name="comment"
+                required
+                [class.form-control-danger]="hasFormError(reviewForm.controls.comment)"
+                [(ngModel)]="model.comment">
+      </textarea>
+    </div>
+    <button type="submit"
+            class="btn btn-sm btn-primary"
+            [disabled]="!reviewForm.form.valid">
+      {{ 'ADD' | translate }}
+    </button>
+  </form>
+</div>
