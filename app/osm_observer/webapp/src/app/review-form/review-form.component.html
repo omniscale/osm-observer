@@ -5,7 +5,8 @@
 <form novalidate
       #reviewForm="ngForm"
       (ngSubmit)="onSubmit()">
-  <div class="form-group">
+  <div class="form-group"
+       [class.has-danger]="hasFormError(reviewForm.controls.status)">
     <label for="status">
       {{ 'STATUS' | translate }}
     </label>
@@ -14,14 +15,16 @@
       id="status"
       name="status"
       required
-      [(ngModel)]="model.status">
+      [(ngModel)]="model.status"
+      [class.form-control-danger]="hasFormError(reviewForm.controls.status)">
       <option *ngFor="let reviewStatusName of reviewStatus.names()"
               [value]="reviewStatus[reviewStatusName]">
         {{ reviewStatusName }}
       </option>
     </select>
   </div>
-  <div class="form-group">
+  <div class="form-group"
+       [class.has-danger]="hasFormError(reviewForm.controls.comment)">
     <label for="comment">
       {{ 'COMMENT' | translate }}
     </label>
@@ -29,6 +32,7 @@
               id="comment"
               name="comment"
               required
+              [class.form-control-danger]="hasFormError(reviewForm.controls.comment)"
               [(ngModel)]="model.comment">
     </textarea>
   </div>

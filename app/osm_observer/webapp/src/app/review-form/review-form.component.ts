@@ -31,6 +31,10 @@ export class ReviewFormComponent implements OnInit, OnChanges {
                       .catch(error => {});;
   }
 
+  hasFormError(field) {
+    return field !== undefined && field.touched && field.invalid;
+  }
+
   onSubmit() {
     this.reviewService.addReview(this.id, this.model)
                       .then(v => {

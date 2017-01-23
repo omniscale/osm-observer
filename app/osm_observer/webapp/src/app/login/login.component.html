@@ -3,8 +3,12 @@
     <div class="col-xs-12 col-sm-6 col-md-4">
       <h2>{{ 'LOGIN' | translate }}</h2>
       <p>{{ message }}</p>
-      <form (submit)="login()" novalidate>
-        <div class="form-group">
+      <form name="login-form"
+            novalidate
+            (submit)="login()"
+            #loginForm="ngForm">
+        <div class="form-group"
+             [class.has-danger]="hasFormError(loginForm.controls.username)">
           <label for="username">
             {{ 'USERNAME' | translate }}
           </label>
@@ -13,9 +17,11 @@
                  id="username"
                  name="username"
                  required
-                 [(ngModel)]="model.username" />
+                 [(ngModel)]="model.username"
+                 [class.form-control-danger]="hasFormError(loginForm.controls.username)" />
         </div>
-        <div class="form-group">
+        <div class="form-group"
+             [class.has-danger]="hasFormError(loginForm.controls.password)">
           <label for="password">
             {{ 'PASSWORD' | translate }}
           </label>
@@ -24,6 +30,7 @@
                  id="password"
                  name="password"
                  required
+                 [class.has-danger]="hasFormError(loginForm.controls.password)"
                  [(ngModel)]="model.password" />
         </div>
         <button class="btn btn-primary btn-sm"

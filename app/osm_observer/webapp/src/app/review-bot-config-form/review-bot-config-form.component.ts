@@ -63,6 +63,10 @@ export class ReviewBotConfigFormComponent implements OnInit {
     }
   }
 
+  hasFormError(field) {
+    return field !== undefined && field.touched && field.invalid;
+  }
+
   onSubmit() {
     if(this.update) {
       this.reviewBotConfigService.updateReviewBotConfig(this.model)
@@ -87,5 +91,4 @@ export class ReviewBotConfigFormComponent implements OnInit {
   onCancel() {
     this.router.navigate(['/reviewBotConfigs']);
   }
-
 }

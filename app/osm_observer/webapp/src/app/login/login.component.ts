@@ -47,4 +47,8 @@ export class LoginComponent {
                     })
   }
 
+  hasFormError(field) {
+    return field !== undefined && field.touched && field.invalid;
+  }
+
 }
