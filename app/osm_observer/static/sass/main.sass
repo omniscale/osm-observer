@@ -42,6 +42,15 @@ table.table
       th
         border-top: 0
         border-bottom: 0
+  thead
+    tr
+      &.header-row
+        th
+          padding-bottom: 0
+      &.filter-row
+        th
+          padding-top: 0
+          padding-bottom: 0
 table.table-striped
   tbody
     tr
@@ -50,3 +59,6 @@ table.table-striped
 
 a.btn.btn-danger
   color: #fff
+
+.btn:focus
+  box-shadow: none

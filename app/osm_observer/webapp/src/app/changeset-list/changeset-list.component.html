@@ -1,193 +1,217 @@
-<div>
+<div class="component-container">
+  <h4>{{ 'FILTERS' | translate }}</h4>
+  <button class="btn btn-default btn-sm float-right"
+          (click)="resetFilters()">
+    {{ 'RESET FILTERS' | translate }}
+  </button>
+
   <div class="form-inline">
-    <button class="btn btn-sm"
-            [class.btn-primary]="timeRange==='today'"
-            [class.btn-secondary]="timeRange!=='today'"
-            (click)="setTimeRange('today')">
-      {{ 'TODAY' | translate }}
-    </button>
-    <button class="btn btn-sm"
-            [class.btn-primary]="timeRange==='yesterday'"
-            [class.btn-secondary]="timeRange!=='yesterday'"
-            (click)="setTimeRange('yesterday')">
-      {{ 'YESTERDAY' | translate }}
-    </button>
-    <button class="btn btn-sm"
-            [class.btn-primary]="timeRange==='lastWeek'"
-            [class.btn-secondary]="timeRange!=='lastWeek'"
-            (click)="setTimeRange('lastWeek')">
-      {{ 'LAST WEEK' | translate }}
-    </button>
-    <div class="form-group">
-      <input type="text"
-             class="form-control form-control-sm"
-             id="username"
-             placeholder="{{ 'USERNAME' | translate }}"
-             (keyup)="applyChange()"
-             [(ngModel)]="username" />
+    <div class="btn-group btn-group-sm mr-2">
+      <button class="btn btn-sm"
+              [class.btn-primary]="timeRange==='today'"
+              [class.btn-secondary]="timeRange!=='today'"
+              (click)="setTimeRange('today')">
+        {{ 'TODAY' | translate }}
+      </button>
+      <button class="btn btn-sm"
+              [class.btn-primary]="timeRange==='yesterday'"
+              [class.btn-secondary]="timeRange!=='yesterday'"
+              (click)="setTimeRange('yesterday')">
+        {{ 'YESTERDAY' | translate }}
+      </button>
+      <button class="btn btn-sm"
+              [class.btn-primary]="timeRange==='lastWeek'"
+              [class.btn-secondary]="timeRange!=='lastWeek'"
+              (click)="setTimeRange('lastWeek')">
+        {{ 'LAST WEEK' | translate }}
+      </button>
     </div>
-    <div class="form-group">
-      <input type="number"
-             class="form-control form-control-sm"
-             id="average-score"
-             placeholder="{{ 'SCORE' | translate }}"
-             (keyup)="applyChange()"
-             (change)="applyChange()"
-             [(ngModel)]="sumScore" />
+
+    <div class="btn-group btn-group-sm mr-2">
+      <button class="btn btn-sm"
+              [class.btn-primary]="currentUserReviewed===true"
+              [class.btn-secondary]="currentUserReviewed!==true"
+              (click)="setCurrentUserReviewed(true)">
+        {{ 'SELF REVIEWED' | translate }}
+      </button>
+      <button class="btn btn-sm"
+              [class.btn-primary]="currentUserReviewed===false"
+              [class.btn-secondary]="currentUserReviewed!==false"
+              (click)="setCurrentUserReviewed(false)">
+        {{ 'NOT SELF REVIEWED' | translate }}
+      </button>
     </div>
-    <div class="form-group">
-      <input type="number"
-             class="form-control form-control-sm"
-             id="num-reviews"
-             placeholder="{{ 'REVIEWS' | translate }}"
-             (keyup)="applyChange()"
-             (change)="applyChange()"
-             [(ngModel)]="numReviews" />
-    </div>
-    <div class="form-group">
-      <select class="form-control form-control-sm"
-              id="coverage"
-              type="number"
-              #coverage
-              (change)="setCoverageId(coverage.value)"
-              [(ngModel)]="coverageId">
-        <option [value]="undefined">
-          {{ 'SELECT COVERAGE' | translate }}
-        </option>
-        <option *ngFor="let coverage of coverages"
-                [value]="coverage.id">
-          {{ coverage.name }}
-        </option>
-      </select>
-    </div>
-    <div class="form-group">
-      <select class="form-control form-control-sm"
-              id="status"
-              #status
-              (change)="setStatusId(status.value)"
-              [(ngModel)]="statusId">
-        <option [value]="undefined">
-          {{ 'SELECT STATUS' | translate }}
-        </option>
-        <option *ngFor="let reviewStatusName of reviewStatus.names()"
-                [value]="reviewStatus[reviewStatusName]">
-          {{ reviewStatusName }}
-        </option>
-      </select>
-    </div>
-    <button class="btn btn-sm"
-            [class.btn-primary]="currentUserReviewed===true"
-            [class.btn-secondary]="currentUserReviewed!==true"
-            (click)="setCurrentUserReviewed(true)">
-      {{ 'SELF REVIEWED' | translate }}
-    </button>
-    <button class="btn btn-sm"
-            [class.btn-primary]="currentUserReviewed===false"
-            [class.btn-secondary]="currentUserReviewed!==false"
-            (click)="setCurrentUserReviewed(false)">
-      {{ 'NOT SELF REVIEWED' | translate }}
-    </button>
-    <button class="btn btn-default btn-sm"
-            (click)="resetFilters()">
-      {{ 'RESET FILTERS' | translate }}
-    </button>
+
+    <select class="form-control form-control-sm"
+            id="coverage"
+            type="number"
+            #coverage
+            (change)="setCoverageId(coverage.value)"
+            [(ngModel)]="coverageId">
+      <option [value]="undefined">
+        {{ 'SELECT COVERAGE' | translate }}
+      </option>
+      <option *ngFor="let coverage of coverages"
+              [value]="coverage.id">
+        {{ coverage.name }}
+      </option>
+    </select>
   </div>
 </div>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th (click)="sortBy('id')">
-        {{ 'ID' | translate }}
-        <span *ngIf="orderBy==='id'">
-          <span *ngIf="order==='asc'">v</span>
-          <span *ngIf="order==='desc'">^</span>
-        </span>
-      </th>
-      <th (click)="sortBy('osmId')">
-        {{ 'OSM ID' | translate }}
-        <span *ngIf="orderBy==='osmId'">
-          <span *ngIf="order==='asc'">v</span>
-          <span *ngIf="order==='desc'">^</span>
-        </span>
-      </th>
-      <th (click)="sortBy('closedAt')">
-        {{ 'CLOSED AT' | translate }}
-        <span *ngIf="orderBy==='closedAt'">
-          <span *ngIf="order==='asc'">v</span>
-          <span *ngIf="order==='desc'">^</span>
-        </span>
-      </th>
-      <th (click)="sortBy('username')">
-        {{ 'USERNAME' | translate }}
-        <span *ngIf="orderBy==='username'">
-          <span *ngIf="order==='asc'">v</span>
-          <span *ngIf="order==='desc'">^</span>
-        </span>
-      </th>
-      <th (click)="sortBy('numChanges')">
-        {{ 'CHANGES' | translate }}
-        <span *ngIf="orderBy==='numChanges'">
-          <span *ngIf="order==='asc'">v</span>
-          <span *ngIf="order==='desc'">^</span>
-        </span>
-      </th>
-      <th (click)="sortBy('numReviews')">
-        {{ 'REVIEWS' | translate }}
-        <span *ngIf="orderBy==='numReviews'">
-          <span *ngIf="order==='asc'">v</span>
-          <span *ngIf="order==='desc'">^</span>
-        </span>
-      </th>
-      <th (click)="sortBy('sumScore')">
-        {{ 'SCORE' | translate }}
-        <span *ngIf="orderBy==='sumScore'">
-          <span *ngIf="order==='asc'">v</span>
-          <span *ngIf="order==='desc'">^</span>
-        </span>
-      </th>
-      <th (click)="sortBy('status')">
-        {{ 'STATUS' | translate }}
-        <span *ngIf="orderBy==='status'">
-          <span *ngIf="order==='asc'">v</span>
-          <span *ngIf="order==='desc'">^</span>
-        </span>
-      </th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngIf="changesets !== undefined && changesets.length === 0">
-      <td colspan="9">
-        {{ 'NO CHANGESETS' | translate }}
-      </td>
-    </tr>
-    <ng-container *ngFor="let changeset of changesets">
-      <tr [class.table-success]="changeset.currentUserReviewed === true">
-        <td>{{ changeset.id }}</td>
-        <td>
-          <a [routerLink]="[changeset.osmId, 'details']">
-            {{ changeset.osmId }}
-          </a>
-        </td>
-        <td>{{ changeset.closedAt | date:'d.M.y HH:mm:ss' }}</td>
-        <td>
-          <a href="javascript:void(0)"
-             (click)="username=changeset.username;applyChange();">
-            {{ changeset.username }}
-          </a>
-        </td>
-        <td>{{ changeset.numChanges }}</td>
-        <td>{{ changeset.numReviews }}</td>
-        <td>{{ changeset.sumScore }}</td>
-        <td>{{ reviewStatus[changeset.status] }}</td>
-        <td>
-          <a class="btn btn-secondary btn-sm"
-             role="button"
-             [routerLink]="[changeset.osmId, 'details']">
-            {{ 'DETAILS' | translate }}
-          </a>
+<div class="component-container">
+  <h4>{{ 'CHANGESET LIST' | translate }}</h4>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr class="header-row">
+        <th (click)="sortBy('id')">
+          {{ 'ID' | translate }}
+          <span *ngIf="orderBy==='id'">
+            <span *ngIf="order==='asc'">v</span>
+            <span *ngIf="order==='desc'">^</span>
+          </span>
+        </th>
+        <th (click)="sortBy('osmId')">
+          {{ 'OSM ID' | translate }}
+          <span *ngIf="orderBy==='osmId'">
+            <span *ngIf="order==='asc'">v</span>
+            <span *ngIf="order==='desc'">^</span>
+          </span>
+        </th>
+        <th (click)="sortBy('closedAt')">
+          {{ 'CLOSED AT' | translate }}
+          <span *ngIf="orderBy==='closedAt'">
+            <span *ngIf="order==='asc'">v</span>
+            <span *ngIf="order==='desc'">^</span>
+          </span>
+        </th>
+        <th (click)="sortBy('username')">
+          {{ 'USERNAME' | translate }}
+          <span *ngIf="orderBy==='username'">
+            <span *ngIf="order==='asc'">v</span>
+            <span *ngIf="order==='desc'">^</span>
+          </span>
+        </th>
+        <th (click)="sortBy('numChanges')">
+          {{ 'CHANGES' | translate }}
+          <span *ngIf="orderBy==='numChanges'">
+            <span *ngIf="order==='asc'">v</span>
+            <span *ngIf="order==='desc'">^</span>
+          </span>
+        </th>
+        <th (click)="sortBy('numReviews')">
+          {{ 'REVIEWS' | translate }}
+          <span *ngIf="orderBy==='numReviews'">
+            <span *ngIf="order==='asc'">v</span>
+            <span *ngIf="order==='desc'">^</span>
+          </span>
+        </th>
+        <th (click)="sortBy('sumScore')">
+          {{ 'SCORE' | translate }}
+          <span *ngIf="orderBy==='sumScore'">
+            <span *ngIf="order==='asc'">v</span>
+            <span *ngIf="order==='desc'">^</span>
+          </span>
+        </th>
+        <th (click)="sortBy('status')">
+          {{ 'STATUS' | translate }}
+          <span *ngIf="orderBy==='status'">
+            <span *ngIf="order==='asc'">v</span>
+            <span *ngIf="order==='desc'">^</span>
+          </span>
+        </th>
+        <th></th>
+      </tr>
+      <tr class="filter-row">
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>
+          <div class="form-group">
+            <input type="text"
+                   class="form-control form-control-sm"
+                   id="username"
+                   placeholder="{{ 'USERNAME' | translate }}"
+                   (keyup)="applyChange()"
+                   [(ngModel)]="username" />
+          </div>
+        </th>
+        <th></th>
+        <th>
+          <div class="form-group">
+            <input type="number"
+                   class="form-control form-control-sm"
+                   id="num-reviews"
+                   placeholder="{{ 'REVIEWS' | translate }}"
+                   (keyup)="applyChange()"
+                   (change)="applyChange()"
+                   [(ngModel)]="numReviews" />
+          </div>
+        </th>
+        <th>
+          <div class="form-group">
+            <input type="number"
+                   class="form-control form-control-sm"
+                   id="average-score"
+                   placeholder="{{ 'SCORE' | translate }}"
+                   (keyup)="applyChange()"
+                   (change)="applyChange()"
+                   [(ngModel)]="sumScore" />
+          </div>
+        </th>
+        <th>
+          <div class="form-group">
+            <select class="form-control form-control-sm"
+                    id="status"
+                    #status
+                    (change)="setStatusId(status.value)"
+                    [(ngModel)]="statusId">
+              <option [value]="undefined">
+                {{ 'SELECT STATUS' | translate }}
+              </option>
+              <option *ngFor="let reviewStatusName of reviewStatus.names()"
+                      [value]="reviewStatus[reviewStatusName]">
+                {{ reviewStatusName }}
+              </option>
+            </select>
+          </div>
+        </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="changesets !== undefined && changesets.length === 0">
+        <td colspan="9">
+          {{ 'NO CHANGESETS' | translate }}
         </td>
       </tr>
-    </ng-container>
-  </tbody>
-</table>
+      <ng-container *ngFor="let changeset of changesets">
+        <tr [class.table-success]="changeset.currentUserReviewed === true">
+          <td>{{ changeset.id }}</td>
+          <td>
+            <a [routerLink]="[changeset.osmId, 'details']">
+              {{ changeset.osmId }}
+            </a>
+          </td>
+          <td>{{ changeset.closedAt | date:'d.M.y HH:mm:ss' }}</td>
+          <td>
+            <a href="javascript:void(0)"
+               (click)="username=changeset.username;applyChange();">
+              {{ changeset.username }}
+            </a>
+          </td>
+          <td>{{ changeset.numChanges }}</td>
+          <td>{{ changeset.numReviews }}</td>
+          <td>{{ changeset.sumScore }}</td>
+          <td>{{ reviewStatus[changeset.status] }}</td>
+          <td>
+            <a class="btn btn-secondary btn-sm"
+               role="button"
+               [routerLink]="[changeset.osmId, 'details']">
+              {{ 'DETAILS' | translate }}
+            </a>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
