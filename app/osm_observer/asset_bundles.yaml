@@ -3,9 +3,17 @@ libs-css:
     contents:
       - libs/bootstrap4/css/bootstrap.css
 
+main-css:
+  output: main.css
+  filters: sass
+  contents:
+    - sass/variables.sass
+    - sass/main.sass
+
 app-css:
     output: app.css
     contents:
+      - main-css
       - webapp/styles.bundle.css
 
 app-js:

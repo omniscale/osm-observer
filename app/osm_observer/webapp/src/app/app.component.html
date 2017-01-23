@@ -1,11 +1,40 @@
-<h1>
-  {{ title }}
-</h1>
 <message-viewer></message-viewer>
-<div *ngIf="authService.isLoggedIn()">
-  <a routerLink="/changesets">{{ 'CHANGESETS' | translate }}</a>
-  <a routerLink="/reviewBotConfigs">{{ 'REVIEW BOT CONFIGS' | translate }}</a>
-  <a routerLink="/coverages">{{ 'COVERAGES' | translate }}</a>
-  <button class="btn btn-default btn-sm" (click)="logout()">{{ 'LOGOUT' | translate }}</button>
+<header>
+
+<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+  <h1 class="navbar-brand mr-auto">{{ title }}</h1>
+  <button class="btn btn-outline-secondary btn-sm float-right pointer"
+          type="button"
+          *ngIf="authService.isLoggedIn()"
+          (click)="logout()">
+    {{ 'LOGOUT' | translate }}
+  </button>
+</nav>
+<nav class="nav">
+  <ul class="nav"
+      *ngIf="authService.isLoggedIn()">
+    <li class="nav-item">
+      <a class="nav-link rounded-0 active"
+         routerLink="/changesets">
+        {{ 'CHANGESETS' | translate }}
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link rounded-0"
+         routerLink="/reviewBotConfigs">
+        {{ 'REVIEW BOT CONFIGS' | translate }}
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link rounded-0"
+         routerLink="/coverages">
+        {{ 'COVERAGES' | translate }}
+      </a>
+    </li>
+  </ul>
+</nav>
+</header>
+<div class="container-fluid">
+  <router-outlet></router-outlet>
 </div>
-<router-outlet></router-outlet>
+

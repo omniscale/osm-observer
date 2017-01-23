@@ -25,10 +25,8 @@
     {% endblock %}
   </head>
   <body>
-    <div class="container">
-      {% block content %}
-      {% endblock %}
-    </div>
+    {% block content %}
+    {% endblock %}
 
     {% assets "app-js" %}
       <script type="text/javascript" src="{$ ASSET_URL $}"></script>
