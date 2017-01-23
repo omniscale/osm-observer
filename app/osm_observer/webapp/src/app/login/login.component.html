@@ -2,10 +2,9 @@
   <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-4">
       <h2>{{ 'LOGIN' | translate }}</h2>
-      <p>{{ message }}</p>
       <form name="login-form"
             novalidate
-            (submit)="login()"
+            (submit)="login(loginForm)"
             #loginForm="ngForm">
         <div class="form-group"
              [class.has-danger]="hasFormError(loginForm.controls.username)">
@@ -34,7 +33,7 @@
                  [(ngModel)]="model.password" />
         </div>
         <button class="btn btn-primary btn-sm"
-                (click)="login()">
+                type="submit">
           {{ 'LOGIN' | translate }}
         </button>
       </form>
