@@ -1,46 +1,51 @@
-<a routerLink="/reviewBotConfigs/add">{{ 'ADD REVIEW BOT CONFIG' | translate }}</a>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>{{ 'BOT NAME' | translate }}</th>
-      <th>{{ 'ACTIVE' | translate }}</th>
-      <th>{{ 'CONFIG' | translate }}</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let reviewBotConfig of reviewBotConfigs">
-      <td>{{ reviewBotConfig['botName'] }}</td>
-      <td>{{ reviewBotConfig['active'] }}</td>
-      <td [ngSwitch]="reviewBotConfig['botName']">
-        <dl *ngSwitchCase="'UsernameReviewBot'">
-          <dt>{{ 'USERNAME' | translate }}</dt>
-          <dd>{{ reviewBotConfig['config']['username'] }}</dd>
-          <dt>{{ 'SCORE' | translate }}</dt>
-          <dd>{{ reviewBotConfig['config']['score'] }}</dd>
-        </dl>
-        <dl *ngSwitchCase="'TagValueReviewBot'">
-          <dt>{{ 'TAG' | translate }}</dt>
-          <dd>{{ reviewBotConfig['config']['tag'] }}</dd>
-          <dt>{{ 'VALUE' | translate }}</dt>
-          <dd>{{ reviewBotConfig['config']['value'] }}</dd>
-          <dt>{{ 'SCORE' | translate }}</dt>
-          <dd>{{ reviewBotConfig['config']['score'] }}</dd>
-        </dl>
-      </td>
-      <td>
-        <a class="btn btn-secondary btn-sm"
-           role="button"
-           [routerLink]="['edit', reviewBotConfig.id]">
-          {{ 'EDIT' | translate }}
-        </a>
-        <a class="btn btn-danger btn-sm"
-           role="button"
-           (click)="deleteReviewBotConfig(reviewBotConfig.id)"
-           >
-          {{ 'DELETE' | translate }}
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="component-container">
+  <h4 class="mr-auto">{{ 'REVIEW BOT CONFIGURATIONS' | translate }}</h4>
+  <a routerLink="/reviewBotConfigs/add" class="btn btn-primary btn-sm float-right" role="button">
+    {{ 'ADD REVIEW BOT CONFIG' | translate }}
+  </a>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>{{ 'BOT NAME' | translate }}</th>
+        <th>{{ 'ACTIVE' | translate }}</th>
+        <th>{{ 'CONFIG' | translate }}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let reviewBotConfig of reviewBotConfigs">
+        <td>{{ reviewBotConfig['botName'] }}</td>
+        <td>{{ reviewBotConfig['active'] }}</td>
+        <td [ngSwitch]="reviewBotConfig['botName']">
+          <dl *ngSwitchCase="'UsernameReviewBot'">
+            <dt>{{ 'USERNAME' | translate }}</dt>
+            <dd>{{ reviewBotConfig['config']['username'] }}</dd>
+            <dt>{{ 'SCORE' | translate }}</dt>
+            <dd>{{ reviewBotConfig['config']['score'] }}</dd>
+          </dl>
+          <dl *ngSwitchCase="'TagValueReviewBot'">
+            <dt>{{ 'TAG' | translate }}</dt>
+            <dd>{{ reviewBotConfig['config']['tag'] }}</dd>
+            <dt>{{ 'VALUE' | translate }}</dt>
+            <dd>{{ reviewBotConfig['config']['value'] }}</dd>
+            <dt>{{ 'SCORE' | translate }}</dt>
+            <dd>{{ reviewBotConfig['config']['score'] }}</dd>
+          </dl>
+        </td>
+        <td>
+          <a class="btn btn-secondary btn-sm"
+             role="button"
+             [routerLink]="['edit', reviewBotConfig.id]">
+            {{ 'EDIT' | translate }}
+          </a>
+          <a class="btn btn-danger btn-sm"
+             role="button"
+             (click)="deleteReviewBotConfig(reviewBotConfig.id)"
+             >
+            {{ 'DELETE' | translate }}
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
