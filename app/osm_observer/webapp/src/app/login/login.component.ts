@@ -8,9 +8,12 @@ import { MessageService } from '../services/message.service';
 import { User } from '../types/user';
 
 @Component({
-  selector: 'app-login',
+  selector: '[login]',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.sass']
+  styleUrls: ['./login.component.sass'],
+  host: {
+    class: 'login-component'
+  }
 })
 export class LoginComponent implements OnInit {
 
