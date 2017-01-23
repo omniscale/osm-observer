@@ -14,20 +14,23 @@
   <ul class="nav"
       *ngIf="authService.isLoggedIn()">
     <li class="nav-item">
-      <a class="nav-link rounded-0 active"
-         routerLink="/changesets">
+      <a class="nav-link rounded-0"
+         routerLink="/changesets"
+         [routerLinkActive]="['active']">
         {{ 'CHANGESETS' | translate }}
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link rounded-0"
-         routerLink="/reviewBotConfigs">
+         routerLink="/reviewBotConfigs"
+         [routerLinkActive]="['active']">
         {{ 'REVIEW BOT CONFIGS' | translate }}
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link rounded-0"
-         routerLink="/coverages">
+         routerLink="/coverages"
+         [routerLinkActive]="['active']">
         {{ 'COVERAGES' | translate }}
       </a>
     </li>
