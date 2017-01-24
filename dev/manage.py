@@ -98,7 +98,7 @@ def build_webapp():
     "Build webapp"
     os.chdir('../app/osm_observer/webapp')
     call([
-        'ng', 'build', '--output-path', '../static/webapp'
+        'ng', 'build', '--prod', '--output-hashing', 'none', '--output-path', '../static/webapp'
     ])
 
 
