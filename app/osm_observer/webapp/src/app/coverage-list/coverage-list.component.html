@@ -1,11 +1,11 @@
-<div class="component-container">
+<div class="component-container w-50">
   <h4>{{ 'COVERAGE LIST' | translate }}</h4>
   <table class="table table-striped table-sm">
     <thead>
       <tr>
         <th>{{ 'ID' | translate }}</th>
-        <th>{{ 'USED' | translate }}</th>
         <th>{{ 'NAME' | translate }}</th>
+        <th>{{ 'USED' | translate }}</th>
       </tr>
     </thead>
     <tbody>
@@ -14,12 +14,12 @@
           {{ coverage.id }}
         </td>
         <td>
+          {{ coverage.name }}
+        </td>
+        <td>
           <input type="checkbox"
                  [checked]="coverage.active"
                  (change)="coverage.active = $event.target.checked" />
-        </td>
-        <td>
-          {{ coverage.name }}
         </td>
       </tr>
     </tbody>
