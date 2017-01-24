@@ -9,12 +9,21 @@ from osm_observer.extensions import db
 from osm_observer.views import api
 
 
+class MESSAGE_ID(object):
+    ALREADY_LOGGED_IN = 0
+    LOGGED_OUT = 1
+    LOGGED_IN = 2
+    LDAP_LOGIN_FAILED = 3
+    INVALID_CREDENTIALS = 4
+
+
 @api.route('/login', methods=['POST'])
 def login():
     if current_user.is_authenticated:
         return jsonify({
             'message': 'Already logged in',
-            'success': True
+            'success': True,
+            'messageId': MESSAGE_ID.ALREADY_LOGGED_IN
         })
 
     data = request.json
@@ -39,7 +48,8 @@ def logout():
     logout_user()
     response = jsonify({
         'message': 'Logged out successfully',
-        'success': True
+        'success': True,
+        'messageId': MESSAGE_ID.LOGGED_OUT
     })
     response.set_cookie('loggedIn', '', expires=0)
     return response
@@ -56,11 +66,13 @@ def ldap_login(username, password):
         login_user(user)
         return dict(
             message='Logged in successfully',
-            success=True
+            success=True,
+            messageId=MESSAGE_ID.LOGGED_IN
         )
     return dict(
         message='LDAP login faild',
-        success=False
+        success=False,
+        messageId=MESSAGE_ID.LDAP_LOGIN_FAILED
     )
 
 
@@ -72,10 +84,12 @@ def local_login(username, password):
         login_user(user)
         return dict(
             message='Logged in successfully',
-            success=True
+            success=True,
+            messageId=MESSAGE_ID.LOGGED_IN
         )
 
     return dict(
         message='Invalid username or password',
-        success=False
+        success=False,
+        messageId=MESSAGE_ID.INVALID_CREDENTIALS
     )

@@ -20,6 +20,8 @@ export class LoginComponent implements OnInit {
   loginSuccesssfulText: string;
   formInvalidText: string;
 
+  messages: string[] = []
+
   model: User;
 
   constructor(public authService: AuthService, public router: Router, private messageService: MessageService, private translate: TranslateService) {
@@ -36,9 +38,9 @@ export class LoginComponent implements OnInit {
                       if(authResponse.success) {
                         let redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/dashboard';
                         this.router.navigate([redirect]);
-                        this.messageService.add(this.loginSuccesssfulText, 'success');
+                        this.messageService.add(this.messages[authResponse.messageId], 'success');
                       } else {
-                        this.messageService.add(authResponse.message, 'error');
+                        this.messageService.add(this.messages[authResponse.messageId], 'error');
                       }
                     })
                     // TODO define onError actions
@@ -56,6 +58,23 @@ export class LoginComponent implements OnInit {
     });
     this.translate.get('FILL USERNAME AND PASSWORD').subscribe((res: string) => {
       this.formInvalidText = res;
+    });
+
+    // corresponding to views/user.py:MESSAGE_ID
+    this.translate.get('ALREADY LOGGED IN').subscribe((res: string) => {
+      this.messages[0] = res;
+    });
+    this.translate.get('LOGGED OUT').subscribe((res: string) => {
+      this.messages[1] = res;
+    });
+    this.translate.get('LOGGED IN').subscribe((res: string) => {
+      this.messages[2] = res;
+    });
+    this.translate.get('LDAP LOGIN FAILED').subscribe((res: string) => {
+      this.messages[3] = res;
+    });
+    this.translate.get('INVALID CREDENTIALS').subscribe((res: string) => {
+      this.messages[4] = res;
     });
   }
 
