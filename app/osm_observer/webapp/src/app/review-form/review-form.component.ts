@@ -15,7 +15,6 @@ export class ReviewFormComponent implements OnInit, OnChanges {
   @Input() id: number;
   reviewOKComment: string;
   reviewAddedText: string;
-  reviewUpdatedText: string
 
   model = new Review();
   reviewStatus = ReviewStatus;
@@ -26,7 +25,7 @@ export class ReviewFormComponent implements OnInit, OnChanges {
     this.reviewService.addReview(this.id, new Review(undefined, undefined, ReviewStatus.OK, this.reviewOKComment))
                       .then(v => {
                         this.model = new Review();
-                        this.messageService.add(this.reviewUpdatedText, 'success');
+                        this.messageService.add(this.reviewAddedText, 'success');
                       })
                       .catch(error => {});;
   }
@@ -55,9 +54,6 @@ export class ReviewFormComponent implements OnInit, OnChanges {
     });
     this.translate.get('REVIEW ADDED').subscribe((res: string) => {
       this.reviewAddedText = res;
-    });
-    this.translate.get('REVIEW UPDATED').subscribe((res: string) => {
-      this.reviewUpdatedText = res;
     });
   }
 }

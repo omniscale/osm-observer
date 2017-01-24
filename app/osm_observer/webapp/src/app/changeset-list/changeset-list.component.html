@@ -242,7 +242,7 @@
               </option>
               <option *ngFor="let reviewStatusName of reviewStatus.names()"
                       [value]="reviewStatus[reviewStatusName]">
-                {{ reviewStatusName }}
+                {{ reviewStatusName | translate }}
               </option>
             </select>
           </div>
@@ -274,7 +274,7 @@
           <td>{{ changeset.numChanges }}</td>
           <td>{{ changeset.numReviews }}</td>
           <td>{{ changeset.sumScore }}</td>
-          <td>{{ reviewStatus[changeset.status] }}</td>
+          <td>{{ reviewStatus[changeset.status] | translate }}</td>
           <td>
             <a class="btn btn-secondary btn-sm"
                role="button"

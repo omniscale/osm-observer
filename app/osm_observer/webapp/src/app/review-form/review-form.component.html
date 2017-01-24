@@ -21,7 +21,7 @@
         [class.form-control-danger]="hasFormError(reviewForm.controls.status)">
         <option *ngFor="let reviewStatusName of reviewStatus.names()"
                 [value]="reviewStatus[reviewStatusName]">
-          {{ reviewStatusName }}
+          {{ reviewStatusName | translate }}
         </option>
       </select>
     </div>

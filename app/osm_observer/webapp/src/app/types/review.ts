@@ -22,8 +22,8 @@ export class Creator {
 }
 
 export enum ReviewStatus {
-  Broken = 1,
-  Fixed = 50,
+  BROKEN = 1,
+  FIXED = 50,
   OK = 99
 }
 
