@@ -1,11 +1,11 @@
 <div class="row">
   <div class="col-md-12">
     <div class="component-container"
-         *ngIf="changesetDetails">
+         *ngIf="currentChangeset">
       <div class="row">
         <div class="col-md-2">
           <button class="btn btn-secondary btn-sm"
-                  (click)="prev(changesetDetails)"
+                  (click)="prev(currentChangeset)"
                   [disabled]="!prevChangeset">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
             {{ 'PREVIOUS' | translate }}
@@ -16,7 +16,7 @@
         </div>
         <div class="col-md-2 text-right">
           <button class="btn btn-secondary btn-sm"
-                  (click)="next(changesetDetails)"
+                  (click)="next(currentChangeset)"
                   [disabled]="!nextChangeset">
             {{ 'NEXT' | translate }}
             <i class="fa fa-arrow-right" aria-hidden="true"></i>
@@ -27,16 +27,16 @@
         <div class="col-md-2">
           <dl>
             <dt>{{ 'CLOSED AT' | translate }}</dt>
-            <dd>{{ changesetDetails.closedAt | date:'d.M.y HH:mm:ss'}}</dd>
+            <dd>{{ currentChangeset.closedAt | date:'d.M.y HH:mm:ss'}}</dd>
           </dl>
         </div>
         <div class="col-md-2">
           <dl>
             <dt>{{ 'OSM ID' | translate }}</dt>
             <dd>
-              <a href="http://www.openstreetmap.org/changeset/{{ changesetDetails.osmId }}"
+              <a href="http://www.openstreetmap.org/changeset/{{ currentChangeset.osmId }}"
                  target="_blank">
-                {{ changesetDetails.osmId }}
+                {{ currentChangeset.osmId }}
                 <i class="fa fa-external-link" aria-hidden="true"></i>
               </a>
             </dd>
@@ -46,9 +46,9 @@
           <dl>
             <dt>{{ 'USERNAME' | translate }}</dt>
             <dd>
-              <a href="http://www.openstreetmap.org/user/{{ changesetDetails.username }}"
+              <a href="http://www.openstreetmap.org/user/{{ currentChangeset.username }}"
                  target="_blank">
-                {{ changesetDetails.username }}
+                {{ currentChangeset.username }}
                 <i class="fa fa-external-link" aria-hidden="true"></i>
               </a>
             </dd>
@@ -57,19 +57,19 @@
         <div class="col-md-2">
           <dl>
             <dt>{{ 'CHANGES' | translate }}</dt>
-            <dd>{{ changesetDetails.numChanges }}</dd>
+            <dd>{{ currentChangeset.numChanges }}</dd>
           </dl>
         </div>
         <div class="col-md-2">
           <dl>
             <dt>{{ 'SCORE' | translate }}</dt>
-            <dd>{{ changesetDetails.sumScore }}</dd>
+            <dd>{{ currentChangeset.sumScore }}</dd>
           </dl>
         </div>
         <div class="col-md-2">
           <dl>
             <dt>{{ 'STATUS' | translate }}</dt>
-            <dd>{{ reviewStatus[changesetDetails.status] }}</dd>
+            <dd>{{ reviewStatus[currentChangeset.status] }}</dd>
           </dl>
         </div>
       </div>
@@ -79,19 +79,19 @@
 
 
 <div class="row"
-     *ngIf="changesetDetails">
+     *ngIf="currentChangeset">
   <div class="col-md-8">
-    <review-list [id]="changesetDetails.id"></review-list>
+    <review-list [id]="currentChangeset.id"></review-list>
   </div>
   <div class="col-md-4">
-    <review-form [id]="changesetDetails.id"></review-form>
+    <review-form [id]="currentChangeset.id"></review-form>
   </div>
 </div>
 
 <div class="row"
-     *ngIf="changesetDetails">
+     *ngIf="currentChangeset">
   <div class="col-md-3">
-    <changeset-comment-list [id]="changesetDetails.osmId"></changeset-comment-list>
+    <changeset-comment-list [id]="currentChangeset.osmId"></changeset-comment-list>
   </div>
   <div class="col-md-3">
     <div class="component-container">
@@ -104,7 +104,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let obj of changesetDetails.tags | keyValueList">
+          <tr *ngFor="let obj of currentChangeset.tags | keyValueList">
             <td>{{ obj.key }}</td>
             <td>{{ obj.value }}</td>
           </tr>
@@ -113,6 +113,6 @@
     </div>
   </div>
   <div class="col-md-6">
-    <changeset-changes-list [id]="changesetDetails.osmId"></changeset-changes-list>
+    <changeset-changes-list [id]="currentChangeset.osmId"></changeset-changes-list>
   </div>
 </div>

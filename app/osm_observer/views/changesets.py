@@ -6,7 +6,7 @@ from flask_login import login_required, current_user
 
 from osm_observer.views import api
 from osm_observer.lib.changes import (
-    query_changesets, query_changeset_details, query_changeset_comments,
+    query_changesets, query_changeset_comments,
     query_changeset_changes
 )
 from osm_observer.model import Coverage
@@ -71,13 +71,6 @@ def changesets_list():
     return jsonify(serialize_changesets(changesets))
 
 
-@api.route('/changesets/details/<int:changeset_id>')
-@login_required
-def changeset_details(changeset_id):
-    details = query_changeset_details(current_user.id, changeset_id)
-    return jsonify(serialize_changeset_details(details))
-
-
 @api.route('/changesets/comments/<int:changeset_id>')
 @login_required
 def changeset_comments(changeset_id):
@@ -90,23 +83,6 @@ def changeset_comments(changeset_id):
 def changeset_changes(changeset_id):
     changes = query_changeset_changes(changeset_id)
     return jsonify(serialize_changeset_changes(changes))
-
-
-def serialize_changeset_details(changeset):
-    data = serialize_changeset(changeset)
-    details = {
-        'nodesAdd': changeset['nodes_add'],
-        'nodesModify': changeset['nodes_modify'],
-        'nodesDelete': changeset['nodes_delete'],
-        'waysAdd': changeset['ways_add'],
-        'waysModify': changeset['ways_modify'],
-        'waysDelete': changeset['ways_delete'],
-        'relationsAdd': changeset['relations_add'],
-        'relationsModify': changeset['relations_modify'],
-        'relationsDelete': changeset['relations_delete'],
-    }
-    data.update(details)
-    return data
 
 
 def serialize_changeset(changeset):

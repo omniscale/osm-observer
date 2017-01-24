@@ -28,13 +28,9 @@ export class ChangesetDetailsComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute) { }
 
-  assignChangesetDetails(changesetDetails: ChangesetDetails) {
-    this.changesetDetails = changesetDetails;
-  }
-
-  getChangesetDetails(id: number): void {
-    this.changesetService.getChangesetDetails(id)
-                         .then(changesetDetails => this.assignChangesetDetails(changesetDetails))
+  getChangeset(id: number): void {
+    this.changesetService.getChangeset(id, true)
+                         .then(changeset => this.currentChangeset = changeset)
                          // TODO define onError actions
                          .catch(error => {});
   }
@@ -54,14 +50,13 @@ export class ChangesetDetailsComponent implements OnInit {
   ngOnInit() {
     this.reviewService.refreshReviews$
         .subscribe(e => {
-          this.getChangesetDetails(this.currentChangeset.osmId);
+          this.getChangeset(this.currentChangeset.osmId);
         });
     this.route.data
         .subscribe((data: {changeset: Changeset}) => {
           this.currentChangeset = data.changeset;
           this.prevChangeset = this.changesetService.getPrevChangeset(this.currentChangeset);
           this.nextChangeset = this.changesetService.getNextChangeset(this.currentChangeset);
-          this.getChangesetDetails(this.currentChangeset.osmId);
         });
   }
 }

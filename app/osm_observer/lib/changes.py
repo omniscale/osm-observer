@@ -1,4 +1,4 @@
-from sqlalchemy import case, true, literal, union_all
+from sqlalchemy import case, literal, union_all
 from sqlalchemy.sql import select, func
 
 from sqlalchemy.sql.expression import join, or_
@@ -84,65 +84,6 @@ def query_changesets(current_user_id, coverages=[], from_time=None,
         s = s.limit(limit)
     conn = db.session.connection()
     return conn.execute(s).fetchall()
-
-
-def query_changeset_details(current_user_id, changeset_id=None):
-    n = select([
-        func.coalesce(func.sum(case([(nodes.c['add']==true(), 1)], else_=0)), 0).label('nodes_add'),
-        func.coalesce(func.sum(case([(nodes.c.modify==true(), 1)], else_=0)), 0).label('nodes_modify'),
-        func.coalesce(func.sum(case([(nodes.c.delete==true(), 1)], else_=0)), 0).label('nodes_delete'),
-    ]).where(nodes.c.changeset==changeset_id).cte('nodes')
-
-    w = select([
-        func.coalesce(func.sum(case([(ways.c['add']==true(), 1)], else_=0)), 0).label('ways_add'),
-        func.coalesce(func.sum(case([(ways.c.modify==true(), 1)], else_=0)), 0).label('ways_modify'),
-        func.coalesce(func.sum(case([(ways.c.delete==true(), 1)], else_=0)), 0).label('ways_delete'),
-    ]).where(ways.c.changeset==changeset_id).cte('ways')
-
-    r = select([
-        func.coalesce(func.sum(case([(relations.c['add']==true(), 1)], else_=0)), 0).label('relations_add'),
-        func.coalesce(func.sum(case([(relations.c.modify==true(), 1)], else_=0)), 0).label('relations_modify'),
-        func.coalesce(func.sum(case([(relations.c.delete==true(), 1)], else_=0)), 0).label('relations_delete'),
-    ]).where(relations.c.changeset==changeset_id).cte('relations')
-
-    changeset_join = join(Changeset, changesets,
-                          Changeset.osm_id == changeset_id)
-
-    # subquery to get informations from reviews
-    # add more options e.g. sum score from reviews
-    review_select = select([
-        Review.changeset_id.label('changeset_id'),
-        func.count('*').label('num_reviews'),
-        func.coalesce(
-            func.sum(Review.score)
-        ).label('sum_score'),
-        func.max(Review._status).label('status'),
-        case(
-            [(func.sum(case(
-                [(Review.user_id == current_user_id, 1)], else_=0
-            )) > 0, True)], else_=False
-        ).label('current_user_reviewed')
-    ]).group_by(
-        Review.changeset_id).alias('reviews')
-
-    review_join = join(changeset_join, review_select,
-                       Changeset.id == review_select.c.changeset_id,
-                       isouter=True)
-
-    stmt = select([
-        Changeset.id.label('app_id'),
-        changesets,
-        review_select.c.num_reviews,
-        review_select.c.sum_score,
-        review_select.c.status,
-        review_select.c.current_user_reviewed,
-        n,
-        w,
-        r,
-    ]).select_from(review_join).where(changesets.c.id==changeset_id)
-
-    conn = db.session.connection()
-    return conn.execute(stmt).fetchone()
 
 
 def query_changeset_comments(changeset_id=None):

@@ -7,7 +7,6 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { BaseHttpService } from './base-http.service';
 import { Changeset } from '../types/changeset';
-import { ChangesetDetails } from '../types/changeset-details';
 import { ChangesetComment } from '../types/changeset-comment';
 import { ChangesetChange } from '../types/changeset-change';
 
@@ -15,10 +14,6 @@ import { ChangesetChange } from '../types/changeset-change';
 export class ChangesetService extends BaseHttpService {
 
   private changesetsUrl = '/api/changesets';
-
-  private changesetDetailsUrl(id: number): string {
-    return `/api/changesets/details/${id}`;
-  }
 
   private changesetCommentsUrl(id: number): string {
     return `/api/changesets/comments/${id}`;
@@ -71,10 +66,10 @@ export class ChangesetService extends BaseHttpService {
                });
   }
 
-  getChangeset(id: number): Promise<Changeset> {
+  getChangeset(id: number, forceReload?: boolean): Promise<Changeset> {
     // load changesets when not loaded already
     // e.g. when reloading changeset detail page
-    if(this.changesets === undefined) {
+    if(this.changesets === undefined || forceReload === true) {
       return this.getChangesets().then(v => {
         return this.getChangeset(id);
       })
@@ -90,16 +85,6 @@ export class ChangesetService extends BaseHttpService {
         reject();
       })
     }
-  }
-
-  getChangesetDetails(id: number): Promise<ChangesetDetails> {
-    let url = this.changesetDetailsUrl(id);
-    return this.http.get(url, this.getRequestOptions())
-               .toPromise()
-               .then(response => response.json() as ChangesetDetails)
-               .catch(error => {
-                 return this.handleError(error, 'getChangesetDetails', url, {id: id});
-               });
   }
 
   getChangesetComments(id: number): Promise<ChangesetComment[]> {
