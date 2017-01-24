@@ -19,11 +19,10 @@ export class MessageViewerComponent {
   }
 
   showMessage(message: Message): void {
-    if(message.type !== 'error') {
-      message.timeout = window.setTimeout(() => {
-        this.close(message)
-      }, 2000);
-    }
+    let time: number = message.type === 'error' ? 5000 : 2000;
+    message.timeout = window.setTimeout(() => {
+      this.close(message)
+    }, time);
     this.messages.push(message);
   }
 
