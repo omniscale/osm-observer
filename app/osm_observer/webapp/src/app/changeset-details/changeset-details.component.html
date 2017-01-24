@@ -1,74 +1,78 @@
-<div class="component-container"
-     *ngIf="changesetDetails">
-  <div class="row">
-    <div class="col-md-2">
-      <button class="btn btn-secondary btn-sm"
-              (click)="prev(changesetDetails)"
-              [disabled]="!prevChangeset">
-        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-        {{ 'PREVIOUS' | translate }}
-      </button>
-    </div>
-    <div class="col-md-8 text-center">
-      <h4 class="">{{ 'CHANGESET DETAILS' | translate }}</h4>
-    </div>
-    <div class="col-md-2 text-right">
-      <button class="btn btn-secondary btn-sm"
-              (click)="next(changesetDetails)"
-              [disabled]="!nextChangeset">
-        {{ 'NEXT' | translate }}
-        <i class="fa fa-arrow-right" aria-hidden="true"></i>
-      </button>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-2">
-      <dl>
-        <dt>{{ 'CLOSED AT' | translate }}</dt>
-        <dd>{{ changesetDetails.closedAt | date:'d.M.y HH:mm:ss'}}</dd>
-      </dl>
-    </div>
-    <div class="col-md-2">
-      <dl>
-        <dt>{{ 'OSM ID' | translate }}</dt>
-        <dd>
-          <a href="http://www.openstreetmap.org/changeset/{{ changesetDetails.osmId }}"
-             target="_blank">
-            {{ changesetDetails.osmId }}
-            <i class="fa fa-external-link" aria-hidden="true"></i>
-          </a>
-        </dd>
-      </dl>
-    </div>
-    <div class="col-md-2">
-      <dl>
-        <dt>{{ 'USERNAME' | translate }}</dt>
-        <dd>
-          <a href="http://www.openstreetmap.org/user/{{ changesetDetails.username }}"
-             target="_blank">
-            {{ changesetDetails.username }}
-            <i class="fa fa-external-link" aria-hidden="true"></i>
-          </a>
-        </dd>
-      </dl>
-    </div>
-    <div class="col-md-2">
-      <dl>
-        <dt>{{ 'CHANGES' | translate }}</dt>
-        <dd>{{ changesetDetails.numChanges }}</dd>
-      </dl>
-    </div>
-    <div class="col-md-2">
-      <dl>
-        <dt>{{ 'SCORE' | translate }}</dt>
-        <dd>{{ changesetDetails.sumScore }}</dd>
-      </dl>
-    </div>
-    <div class="col-md-2">
-      <dl>
-        <dt>{{ 'STATUS' | translate }}</dt>
-        <dd>{{ reviewStatus[changesetDetails.status] }}</dd>
-      </dl>
+<div class="row">
+  <div class="col-md-12">
+    <div class="component-container"
+         *ngIf="changesetDetails">
+      <div class="row">
+        <div class="col-md-2">
+          <button class="btn btn-secondary btn-sm"
+                  (click)="prev(changesetDetails)"
+                  [disabled]="!prevChangeset">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            {{ 'PREVIOUS' | translate }}
+          </button>
+        </div>
+        <div class="col-md-8 text-center">
+          <h4 class="">{{ 'CHANGESET DETAILS' | translate }}</h4>
+        </div>
+        <div class="col-md-2 text-right">
+          <button class="btn btn-secondary btn-sm"
+                  (click)="next(changesetDetails)"
+                  [disabled]="!nextChangeset">
+            {{ 'NEXT' | translate }}
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+          <dl>
+            <dt>{{ 'CLOSED AT' | translate }}</dt>
+            <dd>{{ changesetDetails.closedAt | date:'d.M.y HH:mm:ss'}}</dd>
+          </dl>
+        </div>
+        <div class="col-md-2">
+          <dl>
+            <dt>{{ 'OSM ID' | translate }}</dt>
+            <dd>
+              <a href="http://www.openstreetmap.org/changeset/{{ changesetDetails.osmId }}"
+                 target="_blank">
+                {{ changesetDetails.osmId }}
+                <i class="fa fa-external-link" aria-hidden="true"></i>
+              </a>
+            </dd>
+          </dl>
+        </div>
+        <div class="col-md-2">
+          <dl>
+            <dt>{{ 'USERNAME' | translate }}</dt>
+            <dd>
+              <a href="http://www.openstreetmap.org/user/{{ changesetDetails.username }}"
+                 target="_blank">
+                {{ changesetDetails.username }}
+                <i class="fa fa-external-link" aria-hidden="true"></i>
+              </a>
+            </dd>
+          </dl>
+        </div>
+        <div class="col-md-2">
+          <dl>
+            <dt>{{ 'CHANGES' | translate }}</dt>
+            <dd>{{ changesetDetails.numChanges }}</dd>
+          </dl>
+        </div>
+        <div class="col-md-2">
+          <dl>
+            <dt>{{ 'SCORE' | translate }}</dt>
+            <dd>{{ changesetDetails.sumScore }}</dd>
+          </dl>
+        </div>
+        <div class="col-md-2">
+          <dl>
+            <dt>{{ 'STATUS' | translate }}</dt>
+            <dd>{{ reviewStatus[changesetDetails.status] }}</dd>
+          </dl>
+        </div>
+      </div>
     </div>
   </div>
 </div>
