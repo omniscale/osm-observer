@@ -10,34 +10,26 @@
     {{ 'LOGOUT' | translate }}
   </button>
 </nav>
-<nav class="nav">
-  <ul class="nav"
-      *ngIf="authService.isLoggedIn()">
-    <li class="nav-item">
-      <a class="nav-link rounded-0"
-         routerLink="/changesets"
-         [routerLinkActive]="['active']">
-        <i class="fa fa-table" aria-hidden="true"></i>
-        {{ 'CHANGESETS' | translate }}
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link rounded-0"
-         routerLink="/reviewBotConfigs"
-         [routerLinkActive]="['active']">
-        <i class="fa fa-magic" aria-hidden="true"></i>
-        {{ 'REVIEW BOT CONFIGS' | translate }}
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link rounded-0"
-         routerLink="/coverages"
-         [routerLinkActive]="['active']">
-        <i class="fa fa-object-ungroup" aria-hidden="true"></i>
-        {{ 'COVERAGES' | translate }}
-      </a>
-    </li>
-  </ul>
+<nav class="nav"
+     *ngIf="authService.isLoggedIn()">
+  <a class="nav-link rounded-0"
+     routerLink="/changesets"
+     [routerLinkActive]="['active']">
+    <i class="fa fa-table" aria-hidden="true"></i>
+    {{ 'CHANGESETS' | translate }}
+  </a>
+  <a class="nav-link rounded-0"
+     routerLink="/reviewBotConfigs"
+     [routerLinkActive]="['active']">
+    <i class="fa fa-magic" aria-hidden="true"></i>
+    {{ 'REVIEW BOT CONFIGS' | translate }}
+  </a>
+  <a class="nav-link rounded-0"
+     routerLink="/coverages"
+     [routerLinkActive]="['active']">
+    <i class="fa fa-object-ungroup" aria-hidden="true"></i>
+    {{ 'COVERAGES' | translate }}
+  </a>
 </nav>
 </header>
 <div class="container-fluid">
