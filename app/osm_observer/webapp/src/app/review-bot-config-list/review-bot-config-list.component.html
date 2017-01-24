@@ -15,7 +15,16 @@
     <tbody>
       <tr *ngFor="let reviewBotConfig of reviewBotConfigs">
         <td>{{ reviewBotConfig['botName'] }}</td>
-        <td>{{ reviewBotConfig['active'] }}</td>
+        <td>
+          <i class="fa fa-check"
+             aria-hidden="true"
+             *ngIf="reviewBotConfig['active']">
+          </i>
+          <i class="fa fa-times"
+             aria-hidden="true"
+             *ngIf="!reviewBotConfig['active']">
+          </i>
+        </td>
         <td [ngSwitch]="reviewBotConfig['botName']">
           <dl *ngSwitchCase="'UsernameReviewBot'">
             <dt>{{ 'USERNAME' | translate }}</dt>
