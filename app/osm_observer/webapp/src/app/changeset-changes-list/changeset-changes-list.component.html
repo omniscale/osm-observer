@@ -1,85 +1,87 @@
-<div class="component-container">
+<div class="component-container restrict-height">
   <h4>{{ 'CHANGES' | translate }}</h4>
-  <table class="table table-sm">
-    <thead>
-      <tr>
-        <th>{{ 'NODES' | translate }}</th>
-        <th>{{ 'WAYS' | translate }}</th>
-        <th>{{ 'RELATIONS' | translate }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>
-          <div class="changes-count"
-               *ngIf="nodesChanges!==undefined">
-            <span *ngIf="nodesChanges.added > 0">{{ nodesChanges.added }} {{ 'ADDED' | translate }}</span>
-            <span *ngIf="nodesChanges.modified > 0">{{ nodesChanges.modified }} {{ 'MODIFIED' | translate }}</span>
-            <span *ngIf="nodesChanges.deleted > 0">{{ nodesChanges.deleted }} {{ 'DELETED' | translate }}</span>
-          </div>
-          <ul class="list-unstyled"
-              *ngIf="changesetNodeChanges?.length > 0">
-            <li *ngFor="let change of changesetNodeChanges">
-              <a href="http://www.openstreetmap.org/node/{{ change.id }}"
-                 target="_blank"
-                 class="changeset-change"
-                 [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-                {{ change.id }} (v{{ change.version }})
-                <i class="fa fa-external-link" aria-hidden="true"></i>
-              </a>
-            </li>
-          </ul>
-          <span *ngIf="changesetNodeChanges?.length === 0">
-            {{ 'NO CHANGED NODES' | translate }}
-          </span>
-        </td>
-        <td>
-          <div class="changes-count"
-               *ngIf="waysChanges!==undefined">
-            <span *ngIf="waysChanges.added > 0">{{ waysChanges.added }} {{ 'ADDED' | translate }}</span>
-            <span *ngIf="waysChanges.modified > 0">{{ waysChanges.modified }} {{ 'MODIFIED' | translate }}</span>
-            <span *ngIf="waysChanges.deleted > 0">{{ waysChanges.deleted }} {{ 'DELETED' | translate }}</span>
-          </div>
-          <ul class="list-unstyled"
-              *ngIf="changesetWayChanges?.length > 0">
-            <li *ngFor="let change of changesetWayChanges">
-              <a href="http://www.openstreetmap.org/way/{{ change.id }}"
-                 target="_blank"
-                 class="changeset-change"
-                 [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-                {{ change.id }} (v{{ change.version }})
-                <i class="fa fa-external-link" aria-hidden="true"></i>
-              </a>
-            </li>
-          </ul>
-          <span *ngIf="changesetWayChanges?.length === 0">
-            {{ 'NO CHANGED WAYS' | translate }}
-          </span>
-        </td>
-        <td>
-          <div class="changes-count"
-               *ngIf="relationsChanges!==undefined">
-            <span *ngIf="relationsChanges.added > 0">{{ relationsChanges.added }} {{ 'ADDED' | translate }}</span>
-            <span *ngIf="relationsChanges.modified > 0">{{ relationsChanges.modified }} {{ 'MODIFIED' | translate }}</span>
-            <span *ngIf="relationsChanges.deleted > 0">{{ relationsChanges.deleted }} {{ 'DELETED' | translate }}</span>
-          </div>
-          <ul class="list-unstyled"
-              *ngIf="changesetRelationChanges?.length > 0">
-            <li *ngFor="let change of changesetRelationChanges">
-              <a href="http://www.openstreetmap.org/relation/{{ change.id }}"
-                 target="_blank"
-                 class="changeset-change"
-                 [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-                {{ change.id }} (v{{ change.version }})
-                <i class="fa fa-external-link" aria-hidden="true"></i>
-              </a>
-            </li>
-          </ul>
-          <span *ngIf="changesetRelationChanges?.length === 0">
-            {{ 'NO CHANGED RELATIONS' | translate }}
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-container">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>{{ 'NODES' | translate }}</th>
+          <th>{{ 'WAYS' | translate }}</th>
+          <th>{{ 'RELATIONS' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="changes-count"
+                 *ngIf="nodesChanges!==undefined">
+              <span *ngIf="nodesChanges.added > 0">{{ nodesChanges.added }} {{ 'ADDED' | translate }}</span>
+              <span *ngIf="nodesChanges.modified > 0">{{ nodesChanges.modified }} {{ 'MODIFIED' | translate }}</span>
+              <span *ngIf="nodesChanges.deleted > 0">{{ nodesChanges.deleted }} {{ 'DELETED' | translate }}</span>
+            </div>
+            <ul class="list-unstyled"
+                *ngIf="changesetNodeChanges?.length > 0">
+              <li *ngFor="let change of changesetNodeChanges">
+                <a href="http://www.openstreetmap.org/node/{{ change.id }}"
+                   target="_blank"
+                   class="changeset-change"
+                   [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+                  {{ change.id }} (v{{ change.version }})
+                  <i class="fa fa-external-link" aria-hidden="true"></i>
+                </a>
+              </li>
+            </ul>
+            <span *ngIf="changesetNodeChanges?.length === 0">
+              {{ 'NO CHANGED NODES' | translate }}
+            </span>
+          </td>
+          <td>
+            <div class="changes-count"
+                 *ngIf="waysChanges!==undefined">
+              <span *ngIf="waysChanges.added > 0">{{ waysChanges.added }} {{ 'ADDED' | translate }}</span>
+              <span *ngIf="waysChanges.modified > 0">{{ waysChanges.modified }} {{ 'MODIFIED' | translate }}</span>
+              <span *ngIf="waysChanges.deleted > 0">{{ waysChanges.deleted }} {{ 'DELETED' | translate }}</span>
+            </div>
+            <ul class="list-unstyled"
+                *ngIf="changesetWayChanges?.length > 0">
+              <li *ngFor="let change of changesetWayChanges">
+                <a href="http://www.openstreetmap.org/way/{{ change.id }}"
+                   target="_blank"
+                   class="changeset-change"
+                   [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+                  {{ change.id }} (v{{ change.version }})
+                  <i class="fa fa-external-link" aria-hidden="true"></i>
+                </a>
+              </li>
+            </ul>
+            <span *ngIf="changesetWayChanges?.length === 0">
+              {{ 'NO CHANGED WAYS' | translate }}
+            </span>
+          </td>
+          <td>
+            <div class="changes-count"
+                 *ngIf="relationsChanges!==undefined">
+              <span *ngIf="relationsChanges.added > 0">{{ relationsChanges.added }} {{ 'ADDED' | translate }}</span>
+              <span *ngIf="relationsChanges.modified > 0">{{ relationsChanges.modified }} {{ 'MODIFIED' | translate }}</span>
+              <span *ngIf="relationsChanges.deleted > 0">{{ relationsChanges.deleted }} {{ 'DELETED' | translate }}</span>
+            </div>
+            <ul class="list-unstyled"
+                *ngIf="changesetRelationChanges?.length > 0">
+              <li *ngFor="let change of changesetRelationChanges">
+                <a href="http://www.openstreetmap.org/relation/{{ change.id }}"
+                   target="_blank"
+                   class="changeset-change"
+                   [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+                  {{ change.id }} (v{{ change.version }})
+                  <i class="fa fa-external-link" aria-hidden="true"></i>
+                </a>
+              </li>
+            </ul>
+            <span *ngIf="changesetRelationChanges?.length === 0">
+              {{ 'NO CHANGED RELATIONS' | translate }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
