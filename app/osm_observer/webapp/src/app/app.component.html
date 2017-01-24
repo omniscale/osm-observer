@@ -1,9 +1,9 @@
 <message-viewer></message-viewer>
 <header>
 
-<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+<nav class="navbar navbar-toggleable navbar-light bg-faded">
   <h1 class="navbar-brand mr-auto">{{ title }}</h1>
-  <button class="btn btn-outline-secondary btn-sm header-btn float-right"
+  <button class="btn btn-outline-secondary btn-sm header-btn"
           type="button"
           *ngIf="authService.isLoggedIn()"
           (click)="logout()">
