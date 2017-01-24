@@ -1,6 +1,6 @@
 <div class="component-container">
   <h4>{{ 'ADD REVIEW' | translate }}</h4>
-  <button class="btn btn-primary btn-sm float-right"
+  <button class="btn btn-success btn-sm float-right"
           (click)="reviewOK()">
     {{ 'CHANGESET OK' | translate }}
   </button>
@@ -13,7 +13,7 @@
         {{ 'STATUS' | translate }}
       </label>
       <select
-        class="form-control"
+        class="form-control form-control-sm"
         id="status"
         name="status"
         required
@@ -30,7 +30,7 @@
       <label for="comment">
         {{ 'COMMENT' | translate }}
       </label>
-      <textarea class="form-control"
+      <textarea class="form-control form-control-sm"
                 id="comment"
                 name="comment"
                 required

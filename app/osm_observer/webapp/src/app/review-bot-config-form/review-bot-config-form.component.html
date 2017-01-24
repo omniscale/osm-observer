@@ -11,7 +11,7 @@
              for="bot-name">
         {{ 'BOT NAME' | translate }}
       </label>
-      <select class="form-control"
+      <select class="form-control form-control-sm"
               id="bot-name"
               name="bot-name"
               required
@@ -46,7 +46,7 @@
           <input type="text"
                  id="username"
                  name="username"
-                 class="form-control"
+                 class="form-control form-control-sm"
                  required
                  [(ngModel)]="model.config.username" />
         </div>
@@ -61,7 +61,7 @@
           <input type="text"
                  id="tag"
                  name="tag"
-                 class="form-control"
+                 class="form-control form-control-sm"
                  required
                  [(ngModel)]="model.config.tag" />
         </div>
@@ -74,7 +74,7 @@
           <input type="text"
                  id="value"
                  name="value"
-                 class="form-control"
+                 class="form-control form-control-sm"
                  required
                  [(ngModel)]="model.config.value" />
         </div>
@@ -86,7 +86,7 @@
                for="comment">
           {{ 'COMMENT' | translate }}
         </label>
-        <textarea class="form-control"
+        <textarea class="form-control form-control-sm"
                   name="comment"
                   id="comment"
                   required
@@ -104,7 +104,7 @@
         <input type="number"
                id="score"
                name="score"
-               class="form-control"
+               class="form-control form-control-sm"
                min="-100"
                max="100"
                required
