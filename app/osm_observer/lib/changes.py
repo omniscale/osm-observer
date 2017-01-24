@@ -54,7 +54,7 @@ def query_changesets(current_user_id, coverages=[], from_time=None,
         return []
 
     if username is not None:
-        s = s.where(changesets.c.user_name==username)
+        s = s.where(changesets.c.user_name.like('%s%%' % username))
 
     if num_reviews is not None:
         if num_reviews == 0:
