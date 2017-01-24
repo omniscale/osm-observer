@@ -5,8 +5,16 @@
        [class.alert-success]="message.type === 'success'"
        [class.alert-danger]="message.type === 'error'"
        [class.alert-info]="message.type === 'info'">
-    <div class="closer"
-         (click)="close(message)">x</div>
+    <i class="fa fa-times closer pointer"
+       aria-hidden="true"
+       (click)="close(message)">
+    </i>
+    <i class="fa fa-exclamation-circle"
+       aria-hidden="true"
+       [class.fa-check-circle]="message.type === 'success'"
+       [class.fa-exclamation-circle]="message.type === 'error'"
+       [class.fa-info-circle]="message.type === 'info'">
+    </i>
     {{ message.message }}
   </div>
 </div>
