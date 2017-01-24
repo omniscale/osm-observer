@@ -21,16 +21,18 @@ export class Creator {
   type: string;
 }
 
-export enum ReviewStatus {
-  BROKEN = 1,
-  FIXED = 50,
-  OK = 99
-}
+export class ReviewStatus {
+  static BROKEN = 1;
+  static FIXED = 50;
+  static OK = 99;
 
-
-export namespace ReviewStatus {
-  export function names(): Array<string> {
-    var keys = Object.keys(ReviewStatus);
-    return keys.slice(keys.length / 2, keys.length -1);
+  static names(): Array<string> {
+    let keys:string[] = []
+    for(let key of Object.keys(ReviewStatus)) {
+      if(typeof(ReviewStatus[key]) !== 'function') {
+        keys.push(key);
+      }
+    }
+    return keys;
   }
 }
