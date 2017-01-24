@@ -113,13 +113,13 @@
       </div>
     </ng-container>
     <button type="submit"
-            class="btn btn-primary"
+            class="btn btn-primary btn-sm"
             [disabled]="!botConfigForm.form.valid">
       <span *ngIf="update">{{ 'UPDATE' | translate }}</span>
       <span *ngIf="!update">{{ 'ADD' | translate }}</span>
     </button>
     <button type="button"
-            class="btn btn-secondary"
+            class="btn btn-secondary btn-sm"
             (click)="onCancel()">
       {{ 'CANCEL' | translate }}
     </button>

@@ -1,32 +1,107 @@
+/* variables */
+$background-color: #eee
+
+$header-background-color: #1B315C
+$header-text-color: $background-color
+
+$component-background-color: #fff
+$component-header-color: #999
+
+$active-element-text-color: #fff
+
+$danger-color: #CC4E4A
+$danger-color-hover: #B84542
+
+$active-nav-background-color: #3D6F99
+$disabled-background-color: #7793AA
+
+$link-text-color: $active-nav-background-color
+$link-hover-text-color: $header-background-color
+
+
+/* general */
+
 html, body
   margin: 0
   padding: 0
   width: 100%
   height: 100%
-  background-color: #eee
+  background-color: $background-color
 
 .pointer
   cursor: pointer
 
+.btn
+  cursor: pointer
+  &:focus
+    box-shadow: none
+
+a
+  color: $link-text-color
+  &:hover
+    color: $link-hover-text-color
+
+.btn-primary
+  background-color: $active-nav-background-color
+  border-color: $active-nav-background-color
+  &:hover
+    background-color: $header-background-color
+    border-color: $header-background-color
+  &:disabled
+    background-color: $disabled-background-color
+    border-color: $disabled-background-color
+    &:hover
+      background-color: $disabled-background-color
+      border-color: $disabled-background-color
+
+.btn-danger, a.btn.btn-danger
+  color: $active-element-text-color
+  background-color: $danger-color
+  border-color: $danger-color
+  &:hover
+    color: $active-element-text-color
+    background-color: $danger-color-hover
+    border-color: $danger-color-hover
+
+.form-control
+  .has-danger
+    border-color: $danger-color
+  &:focus
+    border-color: $active-nav-background-color
+
+
+/* header */
 .navbar-light
-  background-color: #2A3142
+  background-color: $header-background-color
   .navbar-brand
-    color: #eee
+    color: $header-text-color
+    &:hover
+      color: $header-text-color
+
 nav
   &.nav
-    background-color: #fff
+    background-color: $component-background-color
     .nav-link
       &.active
-        background-color: #014c8c
-        color: #fff
+        background-color: $active-nav-background-color
+        color: $active-element-text-color
 
+.header-btn
+  color: $header-text-color
+  border-color: $header-text-color
+  &:hover
+    color: $header-background-color
+    background-color: $header-text-color
+    border-color: $header-text-color
+
+/* content */
 .component-container
   border-radius: 0.2rem
   margin: 1rem
   padding: 1rem
-  background-color: #fff
+  background-color: $component-background-color
   h4
-    color: #999
+    color: $component-header-color
     display: inline-block
 
 .row
@@ -60,9 +135,3 @@ table.table-striped
     tr
       td
         border-top: 0
-
-a.btn.btn-danger
-  color: #fff
-
-.btn:focus
-  box-shadow: none
