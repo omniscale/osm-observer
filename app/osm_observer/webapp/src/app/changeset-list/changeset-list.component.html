@@ -63,61 +63,133 @@
   <table class="table table-striped table-hover">
     <thead>
       <tr class="header-row">
-        <th (click)="sortBy('id')">
+        <th class="pointer"
+            (click)="sortBy('id')">
           {{ 'ID' | translate }}
-          <span *ngIf="orderBy==='id'">
-            <span *ngIf="order==='asc'">v</span>
-            <span *ngIf="order==='desc'">^</span>
-          </span>
+          <i class="fa fa-sort"
+             aria-hidden="true"
+             *ngIf="orderBy!=='id'">
+          </i>
+          <i class="fa fa-sort-asc"
+             aria-hidden="true"
+             *ngIf="orderBy==='id' && order==='asc'">
+          </i>
+          <i class="fa fa-sort-desc"
+             aria-hidden="true"
+             *ngIf="orderBy==='id' && order==='desc'">
+          </i>
         </th>
-        <th (click)="sortBy('osmId')">
+        <th class="pointer"
+            (click)="sortBy('osmId')">
           {{ 'OSM ID' | translate }}
-          <span *ngIf="orderBy==='osmId'">
-            <span *ngIf="order==='asc'">v</span>
-            <span *ngIf="order==='desc'">^</span>
-          </span>
+          <i class="fa fa-sort"
+             aria-hidden="true"
+             *ngIf="orderBy!=='osmId'">
+          </i>
+          <i class="fa fa-sort-asc"
+             aria-hidden="true"
+             *ngIf="orderBy==='osmId' && order==='asc'">
+          </i>
+          <i class="fa fa-sort-desc"
+             aria-hidden="true"
+             *ngIf="orderBy==='osmId' && order==='desc'">
+          </i>
         </th>
-        <th (click)="sortBy('closedAt')">
+        <th class="pointer"
+            (click)="sortBy('closedAt')">
           {{ 'CLOSED AT' | translate }}
-          <span *ngIf="orderBy==='closedAt'">
-            <span *ngIf="order==='asc'">v</span>
-            <span *ngIf="order==='desc'">^</span>
-          </span>
+          <i class="fa fa-sort"
+             aria-hidden="true"
+             *ngIf="orderBy!=='closedAt'">
+          </i>
+          <i class="fa fa-sort-asc"
+             aria-hidden="true"
+             *ngIf="orderBy==='closedAt' && order==='asc'">
+          </i>
+          <i class="fa fa-sort-desc"
+             aria-hidden="true"
+             *ngIf="orderBy==='closedAt' && order==='desc'">
+          </i>
         </th>
-        <th (click)="sortBy('username')">
+        <th class="pointer"
+            (click)="sortBy('username')">
           {{ 'USERNAME' | translate }}
-          <span *ngIf="orderBy==='username'">
-            <span *ngIf="order==='asc'">v</span>
-            <span *ngIf="order==='desc'">^</span>
-          </span>
+          <i class="fa fa-sort"
+             aria-hidden="true"
+             *ngIf="orderBy!=='username'">
+          </i>
+          <i class="fa fa-sort-asc"
+             aria-hidden="true"
+             *ngIf="orderBy==='username' && order==='asc'">
+          </i>
+          <i class="fa fa-sort-desc"
+             aria-hidden="true"
+             *ngIf="orderBy==='username' && order==='desc'">
+          </i>
         </th>
-        <th (click)="sortBy('numChanges')">
+        <th class="pointer"
+            (click)="sortBy('numChanges')">
           {{ 'CHANGES' | translate }}
-          <span *ngIf="orderBy==='numChanges'">
-            <span *ngIf="order==='asc'">v</span>
-            <span *ngIf="order==='desc'">^</span>
-          </span>
+          <i class="fa fa-sort"
+             aria-hidden="true"
+             *ngIf="orderBy!=='numChanges'">
+          </i>
+          <i class="fa fa-sort-asc"
+             aria-hidden="true"
+             *ngIf="orderBy==='numChanges' && order==='asc'">
+          </i>
+          <i class="fa fa-sort-desc"
+             aria-hidden="true"
+             *ngIf="orderBy==='numChanges' && order==='desc'">
+          </i>
         </th>
-        <th (click)="sortBy('numReviews')">
+        <th class="pointer"
+            (click)="sortBy('numReviews')">
           {{ 'REVIEWS' | translate }}
-          <span *ngIf="orderBy==='numReviews'">
-            <span *ngIf="order==='asc'">v</span>
-            <span *ngIf="order==='desc'">^</span>
-          </span>
+          <i class="fa fa-sort"
+             aria-hidden="true"
+             *ngIf="orderBy!=='numReviews'">
+          </i>
+          <i class="fa fa-sort-asc"
+             aria-hidden="true"
+             *ngIf="orderBy==='numReviews' && order==='asc'">
+          </i>
+          <i class="fa fa-sort-desc"
+             aria-hidden="true"
+             *ngIf="orderBy==='numReviews' && order==='desc'">
+          </i>
         </th>
-        <th (click)="sortBy('sumScore')">
+        <th class="pointer"
+            (click)="sortBy('sumScore')">
           {{ 'SCORE' | translate }}
-          <span *ngIf="orderBy==='sumScore'">
-            <span *ngIf="order==='asc'">v</span>
-            <span *ngIf="order==='desc'">^</span>
-          </span>
+          <i class="fa fa-sort"
+             aria-hidden="true"
+             *ngIf="orderBy!=='sumScore'">
+          </i>
+          <i class="fa fa-sort-asc"
+             aria-hidden="true"
+             *ngIf="orderBy==='sumScore' && order==='asc'">
+          </i>
+          <i class="fa fa-sort-desc"
+             aria-hidden="true"
+             *ngIf="orderBy==='sumScore' && order==='desc'">
+          </i>
         </th>
-        <th (click)="sortBy('status')">
+        <th class="pointer"
+            (click)="sortBy('status')">
           {{ 'STATUS' | translate }}
-          <span *ngIf="orderBy==='status'">
-            <span *ngIf="order==='asc'">v</span>
-            <span *ngIf="order==='desc'">^</span>
-          </span>
+          <i class="fa fa-sort"
+             aria-hidden="true"
+             *ngIf="orderBy!=='status'">
+          </i>
+          <i class="fa fa-sort-asc"
+             aria-hidden="true"
+             *ngIf="orderBy==='status' && order==='asc'">
+          </i>
+          <i class="fa fa-sort-desc"
+             aria-hidden="true"
+             *ngIf="orderBy==='status' && order==='desc'">
+          </i>
         </th>
         <th></th>
       </tr>
