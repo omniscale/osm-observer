@@ -11,6 +11,12 @@
     <tbody>
       <tr>
         <td>
+          <div class="changes-count"
+               *ngIf="nodesChanges!==undefined">
+            <span *ngIf="nodesChanges.added > 0">{{ nodesChanges.added }} {{ 'ADDED' | translate }}</span>
+            <span *ngIf="nodesChanges.modified > 0">{{ nodesChanges.modified }} {{ 'MODIFIED' | translate }}</span>
+            <span *ngIf="nodesChanges.deleted > 0">{{ nodesChanges.deleted }} {{ 'DELETED' | translate }}</span>
+          </div>
           <ul class="list-unstyled"
               *ngIf="changesetNodeChanges?.length > 0">
             <li *ngFor="let change of changesetNodeChanges">
@@ -28,6 +34,12 @@
           </span>
         </td>
         <td>
+          <div class="changes-count"
+               *ngIf="waysChanges!==undefined">
+            <span *ngIf="waysChanges.added > 0">{{ waysChanges.added }} {{ 'ADDED' | translate }}</span>
+            <span *ngIf="waysChanges.modified > 0">{{ waysChanges.modified }} {{ 'MODIFIED' | translate }}</span>
+            <span *ngIf="waysChanges.deleted > 0">{{ waysChanges.deleted }} {{ 'DELETED' | translate }}</span>
+          </div>
           <ul class="list-unstyled"
               *ngIf="changesetWayChanges?.length > 0">
             <li *ngFor="let change of changesetWayChanges">
@@ -45,6 +57,12 @@
           </span>
         </td>
         <td>
+          <div class="changes-count"
+               *ngIf="relationsChanges!==undefined">
+            <span *ngIf="relationsChanges.added > 0">{{ relationsChanges.added }} {{ 'ADDED' | translate }}</span>
+            <span *ngIf="relationsChanges.modified > 0">{{ relationsChanges.modified }} {{ 'MODIFIED' | translate }}</span>
+            <span *ngIf="relationsChanges.deleted > 0">{{ relationsChanges.deleted }} {{ 'DELETED' | translate }}</span>
+          </div>
           <ul class="list-unstyled"
               *ngIf="changesetRelationChanges?.length > 0">
             <li *ngFor="let change of changesetRelationChanges">

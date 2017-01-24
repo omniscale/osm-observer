@@ -90,10 +90,10 @@
 
 <div class="row"
      *ngIf="changesetDetails">
-  <div class="col-md-6">
+  <div class="col-md-3">
     <changeset-comment-list [id]="changesetDetails.osmId"></changeset-comment-list>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-3">
     <div class="component-container">
       <h4>{{ 'TAGS' | translate }}</h4>
       <table class="table table-striped table-sm">
@@ -107,45 +107,6 @@
           <tr *ngFor="let obj of changesetDetails.tags | keyValueList">
             <td>{{ obj.key }}</td>
             <td>{{ obj.value }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<div class="row"
-     *ngIf="changesetDetails">
-  <div class="col-md-6">
-    <div class="component-container">
-      <h4>{{ 'MODIFICATIONS' | translate }}</h4>
-      <table class="table table-sm">
-        <thead>
-          <tr>
-            <th></th>
-            <th>{{ 'ADDED' | translate }}</th>
-            <th>{{ 'MODIFIED' | translate }}</th>
-            <th>{{ 'DELETED' | translate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th>{{ 'NODES' | translate }}</th>
-            <td>{{ changesetDetails.nodesAdd }}</td>
-            <td>{{ changesetDetails.nodesModify }}</td>
-            <td>{{ changesetDetails.nodesDelete }}</td>
-          </tr>
-          <tr>
-            <th>{{ 'WAYS' | translate }}</th>
-            <td>{{ changesetDetails.waysAdd }}</td>
-            <td>{{ changesetDetails.waysModify }}</td>
-            <td>{{ changesetDetails.waysDelete }}</td>
-          </tr>
-          <tr>
-            <th>{{ 'RELATIONS' | translate }}</th>
-            <td>{{ changesetDetails.relationsAdd }}</td>
-            <td>{{ changesetDetails.relationsModify }}</td>
-            <td>{{ changesetDetails.relationsDelete }}</td>
           </tr>
         </tbody>
       </table>

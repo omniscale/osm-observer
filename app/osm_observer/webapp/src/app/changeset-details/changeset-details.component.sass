@@ -1,8 +1,12 @@
 .row
   .col-md-8,
   .col-md-6,
-  .col-md-4
+  .col-md-4,
+  .col-md-3
     &:first-child
       padding-right: 0
     &:last-child
+      padding-left: 0
+    &:not(:first-child):not(:last-child)
+      padding-right: 0
       padding-left: 0
