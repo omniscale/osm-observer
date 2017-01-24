@@ -45,14 +45,6 @@ def logout():
     return response
 
 
-@api.route('/is-logged-in')
-def is_logged_in():
-    return jsonify({
-        'message': 'login status',
-        'success': current_user.is_authenticated
-    })
-
-
 def ldap_login(username, password):
     if User.try_ldap_login(username, password):
         user = User.by_username(username)
