@@ -22,7 +22,7 @@ $success-hover-color: #3D993D
 $active-nav-background-color: $primary-color
 
 $link-text-color: $primary-color
-$link-hover-text-color: $primary-hover-color
+$link-hover-text-color: $header-background-color
 
 
 /* general */
@@ -100,9 +100,12 @@ nav
     padding: 0.5rem 1rem
     background-color: $component-background-color
     .nav-link
+      font-weight: bold
+      color: $link-hover-text-color
       &.active
-        background-color: $active-nav-background-color
-        color: $active-element-text-color
+        color: $link-text-color
+      &:hover
+        color: $link-text-color
 
 .header-btn
   color: $header-text-color
