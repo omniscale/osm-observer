@@ -12,6 +12,9 @@ $active-element-text-color: #fff
 $danger-color: #CC4E4A
 $danger-color-hover: #B84542
 
+$success-color: #4BAB4B
+$success-color-hover: #3D993D
+
 $active-nav-background-color: #3D6F99
 $disabled-background-color: #7793AA
 
@@ -62,6 +65,16 @@ a
     color: $active-element-text-color
     background-color: $danger-color-hover
     border-color: $danger-color-hover
+
+.btn-success
+  background-color: $success-color
+  border-color: $success-color
+  &:focus
+    background-color: $success-color
+    border-color: $success-color
+  &:hover
+    background-color: $success-color-hover
+    border-color: $success-color-hover
 
 .form-control
   .has-danger
