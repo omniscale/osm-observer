@@ -13,12 +13,15 @@ main-css:
 
 app-css:
     output: app.css
+    filters: cssmin
     contents:
+      - libs-css
       - main-css
       - webapp/styles.bundle.css
 
 app-js:
     output: app.js
+    filters: jsmin
     contents:
       - webapp/inline.bundle.js
       - webapp/vendor.bundle.js
