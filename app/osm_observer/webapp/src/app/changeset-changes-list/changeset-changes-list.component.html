@@ -25,7 +25,12 @@
                    target="_blank"
                    class="changeset-change"
                    [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-                  {{ change.id }} (v{{ change.version }})
+                  <span *ngIf="change.tags.name">
+                    {{ change.tags.name }} ({{ change.id }}, v{{ change.version }})
+                  </span>
+                  <span *ngIf="!change.tags.name">
+                    {{ change.id }} (v{{ change.version }})
+                  </span>
                   <i class="fa fa-external-link" aria-hidden="true"></i>
                 </a>
               </li>
@@ -48,7 +53,12 @@
                    target="_blank"
                    class="changeset-change"
                    [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-                  {{ change.id }} (v{{ change.version }})
+                  <span *ngIf="change.tags.name">
+                    {{ change.tags.name }} ({{ change.id }}, v{{ change.version }})
+                  </span>
+                  <span *ngIf="!change.tags.name">
+                    {{ change.id }} (v{{ change.version }})
+                  </span>
                   <i class="fa fa-external-link" aria-hidden="true"></i>
                 </a>
               </li>
@@ -71,7 +81,12 @@
                    target="_blank"
                    class="changeset-change"
                    [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-                  {{ change.id }} (v{{ change.version }})
+                  <span *ngIf="change.tags.name">
+                    {{ change.tags.name }} ({{ change.id }}, v{{ change.version }})
+                  </span>
+                  <span *ngIf="!change.tags.name">
+                    {{ change.id }} (v{{ change.version }})
+                  </span>
                   <i class="fa fa-external-link" aria-hidden="true"></i>
                 </a>
               </li>
