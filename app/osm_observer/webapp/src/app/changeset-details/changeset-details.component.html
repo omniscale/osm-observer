@@ -23,56 +23,44 @@
           </button>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-2">
-          <dl>
-            <dt>{{ 'CLOSED AT' | translate }}</dt>
-            <dd>{{ currentChangeset.closedAt | date:'d.M.y HH:mm:ss'}}</dd>
-          </dl>
-        </div>
-        <div class="col-md-2">
-          <dl>
-            <dt>{{ 'OSM ID' | translate }}</dt>
-            <dd>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>{{ 'CLOSED AT' | translate }}</th>
+            <th>{{ 'OSM ID' | translate }}</th>
+            <th>{{ 'USERNAME' | translate }}</th>
+            <th>{{ 'CREATED WITH' | translate }}</th>
+            <th>{{ 'COMMENT' | translate }}</th>
+            <th>{{ 'CHANGES' | translate }}</th>
+            <th>{{ 'SCORE' | translate }}</th>
+            <th>{{ 'STATUS' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ currentChangeset.closedAt | date:'d.M.y HH:mm:ss'}}</td>
+            <td>
               <a href="http://www.openstreetmap.org/changeset/{{ currentChangeset.osmId }}"
                  target="_blank">
                 {{ currentChangeset.osmId }}
                 <i class="fa fa-external-link" aria-hidden="true"></i>
               </a>
-            </dd>
-          </dl>
-        </div>
-        <div class="col-md-2">
-          <dl>
-            <dt>{{ 'USERNAME' | translate }}</dt>
-            <dd>
+            </td>
+            <td>
               <a href="http://www.openstreetmap.org/user/{{ currentChangeset.username }}"
                  target="_blank">
                 {{ currentChangeset.username }}
                 <i class="fa fa-external-link" aria-hidden="true"></i>
               </a>
-            </dd>
-          </dl>
-        </div>
-        <div class="col-md-2">
-          <dl>
-            <dt>{{ 'CHANGES' | translate }}</dt>
-            <dd>{{ currentChangeset.numChanges }}</dd>
-          </dl>
-        </div>
-        <div class="col-md-2">
-          <dl>
-            <dt>{{ 'SCORE' | translate }}</dt>
-            <dd>{{ currentChangeset.sumScore }}</dd>
-          </dl>
-        </div>
-        <div class="col-md-2">
-          <dl>
-            <dt>{{ 'STATUS' | translate }}</dt>
-            <dd>{{ reviewStatus[currentChangeset.status] }}</dd>
-          </dl>
-        </div>
-      </div>
+            </td>
+            <td>{{ currentChangeset.tags['created_by'] }}</td>
+            <td>{{ currentChangeset.tags['comment'] }}</td>
+            <td>{{ currentChangeset.numChanges }}</td>
+            <td>{{ currentChangeset.sumScore }}</td>
+            <td>{{ reviewStatus[currentChangeset.status] }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
@@ -104,10 +92,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let obj of currentChangeset.tags | keyValueList">
-            <td>{{ obj.key }}</td>
-            <td>{{ obj.value }}</td>
-          </tr>
+          <ng-container *ngFor="let obj of currentChangeset.tags | keyValueList">
+            <tr *ngIf="obj.key !== 'comment' && obj.key !== 'created_by'">
+              <td>{{ obj.key }}</td>
+              <td>{{ obj.value }}</td>
+            </tr>
+          </ng-container>
         </tbody>
       </table>
     </div>
