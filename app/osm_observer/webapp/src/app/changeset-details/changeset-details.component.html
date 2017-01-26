@@ -30,8 +30,6 @@
             <th>{{ 'OSM ID' | translate }}</th>
             <th>{{ 'USERNAME' | translate }}</th>
             <th>{{ 'CREATED WITH' | translate }}</th>
-            <th>{{ 'COMMENT' | translate }}</th>
-            <th>{{ 'CHANGES' | translate }}</th>
             <th>{{ 'SCORE' | translate }}</th>
             <th>{{ 'STATUS' | translate }}</th>
           </tr>
@@ -53,18 +51,30 @@
                 <i class="fa fa-external-link" aria-hidden="true"></i>
               </a>
             </td>
-            <td>{{ currentChangeset.tags['created_by'] }}</td>
-            <td>{{ currentChangeset.tags['comment'] }}</td>
             <td>{{ currentChangeset.numChanges }}</td>
             <td>{{ currentChangeset.sumScore }}</td>
             <td>{{ reviewStatus[currentChangeset.status] }}</td>
           </tr>
         </tbody>
       </table>
+      <strong>{{ 'TAGS' | translate }}</strong>
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th>{{ 'KEY' | translate }}</th>
+            <th>{{ 'VALUE' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let obj of currentChangeset.tags | keyValueList">
+            <td>{{ obj.key }}</td>
+            <td>{{ obj.value }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
-
 
 <div class="row"
      *ngIf="currentChangeset">
@@ -78,31 +88,14 @@
 
 <div class="row"
      *ngIf="currentChangeset">
-  <div class="col-md-3">
-    <changeset-comment-list [id]="currentChangeset.osmId"></changeset-comment-list>
+  <div class="col-md-12">
+      <changeset-comment-list [id]="currentChangeset.osmId"></changeset-comment-list>
   </div>
-  <div class="col-md-3">
-    <div class="component-container">
-      <h4>{{ 'TAGS' | translate }}</h4>
-      <table class="table table-striped table-sm">
-        <thead>
-          <tr>
-            <th>{{ 'KEY' | translate }}</th>
-            <th>{{ 'VALUE' | translate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <ng-container *ngFor="let obj of currentChangeset.tags | keyValueList">
-            <tr *ngIf="obj.key !== 'comment' && obj.key !== 'created_by'">
-              <td>{{ obj.key }}</td>
-              <td>{{ obj.value }}</td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="col-md-6">
+</div>
+
+<div class="row"
+     *ngIf="currentChangeset">
+  <div class="col-md-12">
     <changeset-changes-list [id]="currentChangeset.osmId"></changeset-changes-list>
   </div>
 </div>
