@@ -1,7 +1,7 @@
 <div class="component-container">
   <h4>{{ 'ADD REVIEW' | translate }}</h4>
   <button class="btn btn-success btn-sm float-right"
-          (click)="reviewOK()">
+          (click)="reviewOK()" [disabled]="reviewForm.form.touched">
     {{ 'CHANGESET OK' | translate }}
   </button>
   <form novalidate
@@ -42,6 +42,11 @@
             class="btn btn-sm btn-primary"
             [disabled]="!reviewForm.form.valid">
       {{ 'ADD' | translate }}
+    </button>
+    <button type="button"
+            class="btn btn-sm btn-secondary float-right"
+            (click)="resetForm()">
+      {{ 'RESET' | translate }}
     </button>
   </form>
 </div>

@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 import {TranslateService} from 'ng2-translate';
 
@@ -13,6 +14,9 @@ import { MessageService } from '../services/message.service';
 })
 export class ReviewFormComponent implements OnInit, OnChanges {
   @Input() id: number;
+
+  @ViewChild('reviewForm') public reviewForm: NgForm;
+
   reviewOKComment: string;
   reviewAddedText: string;
 
@@ -34,11 +38,16 @@ export class ReviewFormComponent implements OnInit, OnChanges {
     return field !== undefined && field.touched && field.invalid;
   }
 
+  resetForm() {
+    this.reviewForm.reset();
+  }
+
   onSubmit() {
     this.reviewService.addReview(this.id, this.model)
                       .then(v => {
                         this.model = new Review();
                         this.messageService.add(this.reviewAddedText, 'success');
+                        this.reviewForm.reset();
                       })
                       .catch(error => {});
     return false;
