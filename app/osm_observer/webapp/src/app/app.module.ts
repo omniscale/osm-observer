@@ -33,7 +33,7 @@ import { MessageViewerComponent } from './message-viewer/message-viewer.componen
 
 
 export function createTranslateLoader(http: Http) {
-  return new TranslateStaticLoader(http, '/static/i18n', '.json');
+  return new TranslateStaticLoader(http, '/static/i18n', '.json' + '?' + Date.now());
 }
 
 @NgModule({
