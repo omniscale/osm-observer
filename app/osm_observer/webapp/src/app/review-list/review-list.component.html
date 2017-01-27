@@ -21,7 +21,7 @@
           [class.table-danger]="review.score < 0"
           [class.table-success]="review.score > 0">
         <td>{{ review.score }}</td>
-        <td>{{ review.status }}</td>
+        <td>{{ reviewStatus.byId(review.status) | translate }}</td>
         <td>{{ review.creator.name }}</td>
         <td>{{ review.timeCreated | date:'d.M.y HH:mm:ss' }}</td>
         <td>{{ review.comment }}</td>

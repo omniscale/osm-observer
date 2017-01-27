@@ -65,7 +65,7 @@ class Review(db.Model):
         data = {
             'id': self.id,
             'score': self.score,
-            'status': self.status,
+            'status': self._status,
             'comment': self.comment,
             'timeCreated': self.time_created.timestamp() * 1000
         }

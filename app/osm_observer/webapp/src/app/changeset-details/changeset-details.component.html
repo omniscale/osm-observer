@@ -53,7 +53,7 @@
             </td>
             <td>{{ currentChangeset.numChanges }}</td>
             <td>{{ currentChangeset.sumScore }}</td>
-            <td>{{ reviewStatus[currentChangeset.status] }}</td>
+            <td>{{ reviewStatus.byId(currentChangeset.status) | translate }}</td>
           </tr>
         </tbody>
       </table>

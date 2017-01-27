@@ -35,4 +35,13 @@ export class ReviewStatus {
     }
     return keys;
   }
+
+  static byId(id: number): string {
+    for(let key of ReviewStatus.names()) {
+      if(ReviewStatus[key] === id) {
+        return key;
+      }
+    }
+    return undefined;
+  }
 }

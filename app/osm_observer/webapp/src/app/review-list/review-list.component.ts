@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
-import { Review } from '../types/review';
+import { Review, ReviewStatus } from '../types/review';
 import { ReviewService } from '../services/review.service';
 
 @Component({
@@ -13,6 +13,7 @@ export class ReviewListComponent implements OnChanges {
   id: number;
 
   reviews: Review[];
+  reviewStatus = ReviewStatus;
 
   constructor(private reviewService: ReviewService) {
     reviewService.refreshReviews$.subscribe(e => this.getReviews());

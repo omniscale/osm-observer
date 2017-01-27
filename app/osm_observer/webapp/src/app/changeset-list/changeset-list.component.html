@@ -274,7 +274,7 @@
           <td>{{ changeset.numChanges }}</td>
           <td>{{ changeset.numReviews }}</td>
           <td>{{ changeset.sumScore }}</td>
-          <td>{{ reviewStatus[changeset.status] | translate }}</td>
+          <td>{{ reviewStatus.byId(changeset.status) | translate }}</td>
           <td>
             <a class="btn btn-secondary btn-sm"
                role="button"
