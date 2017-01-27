@@ -3,7 +3,7 @@ import datetime
 from osm_observer.extensions import db
 from osm_observer.model import User, ReviewBotConfig
 
-__all__ = ['Review']
+__all__ = ['Review', 'REVIEW_STATUS']
 
 
 class REVIEW_STATUS(object):

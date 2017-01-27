@@ -3,7 +3,7 @@ from sqlalchemy.sql import select, func
 
 from sqlalchemy.sql.expression import join, or_
 
-from osm_observer.model import Changeset, Review
+from osm_observer.model import Changeset, Review, REVIEW_STATUS
 from osm_observer.model import changesets, nodes, ways, relations, comments
 from osm_observer.extensions import db
 
@@ -67,6 +67,11 @@ def query_changesets(current_user_id, coverages=[], from_time=None,
 
     if status_id is not None:
         s = s.where(review_select.c.status == status_id)
+    else:
+        s = s.where(or_(
+            review_select.c.status == None,
+            review_select.c.status != REVIEW_STATUS.OK
+        ))
 
     if current_user_reviewed is not None:
         s = s.where(review_select.c.current_user_reviewed == current_user_reviewed)
