@@ -2,7 +2,7 @@
   <h4>{{ 'ADD REVIEW' | translate }}</h4>
   <button class="btn btn-success btn-sm float-right"
           (click)="reviewOK()" [disabled]="reviewForm.form.touched">
-    {{ 'CHANGESET OK' | translate }}
+    {{ 'OK & NEXT' | translate }}
   </button>
   <form novalidate
         #reviewForm="ngForm"
@@ -41,7 +41,7 @@
     <button type="submit"
             class="btn btn-sm btn-primary"
             [disabled]="!reviewForm.form.valid">
-      {{ 'ADD' | translate }}
+      {{ 'SUBMIT & NEXT' | translate }}
     </button>
     <button type="button"
             class="btn btn-sm btn-secondary float-right"
