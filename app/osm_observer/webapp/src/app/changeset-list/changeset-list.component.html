@@ -257,7 +257,7 @@
         </td>
       </tr>
       <ng-container *ngFor="let changeset of changesets">
-        <tr [class.table-success]="changeset.currentUserReviewed === true">
+        <tr [class.table-danger]="changeset.status === reviewStatus.BROKEN">
           <td>{{ changeset.id }}</td>
           <td>
             <a [routerLink]="[changeset.osmId, 'details']">
