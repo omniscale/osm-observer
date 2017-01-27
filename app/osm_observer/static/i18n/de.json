@@ -3,6 +3,7 @@
 	"BROKEN": "Kaputt",
 	"OK": "OK",
 	"FIXED": "Verbessert",
+	"END OF LIST REACHED": "Ende der Liste erreicht",
 	"CHANGES SAVED": "Änderungen gespeichert",
 	"CHANGES DISCARDED": "Änderungen verworfen",
 	"LOGIN SUCCESSFUL": "Erfolgreich angemeldet",
