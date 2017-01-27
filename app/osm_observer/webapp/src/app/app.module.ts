@@ -6,6 +6,7 @@ import { HttpModule, Http } from '@angular/http';
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
 import { CustomFormsModule }                                       from 'ng2-validation'
 import { CookieService } from 'angular2-cookie/services/cookies.service';
+import { PopoverModule } from "ngx-popover";
 
 import { AppComponent }     from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -19,6 +20,8 @@ import { ReviewBotConfigListComponent }  from './review-bot-config-list/review-b
 import { ReviewBotConfigFormComponent }  from './review-bot-config-form/review-bot-config-form.component';
 import { ChangesetCommentListComponent } from './changeset-comment-list/changeset-comment-list.component';
 import { ChangesetChangesListComponent } from './changeset-changes-list/changeset-changes-list.component';
+import { LoginComponent }                from './login/login.component';
+import { MessageViewerComponent }        from './message-viewer/message-viewer.component';
 
 import { CoverageService }        from './services/coverage.service';
 import { ChangesetService }       from './services/changeset.service';
@@ -28,8 +31,7 @@ import { ChangesetDetailResolver } from './services/changeset-detail-resolver.se
 import { MessageService } from './services/message.service';
 
 import { KeyValueListPipe } from './pipes/key-value-list.pipe';
-import { LoginComponent } from './login/login.component';
-import { MessageViewerComponent } from './message-viewer/message-viewer.component';
+import { HasKeysPipe } from './pipes/has-keys.pipe';
 
 
 export function createTranslateLoader(http: Http) {
@@ -47,6 +49,7 @@ export function createTranslateLoader(http: Http) {
     ReviewBotConfigListComponent,
     ReviewBotConfigFormComponent,
     KeyValueListPipe,
+    HasKeysPipe,
     ChangesetCommentListComponent,
     ChangesetChangesListComponent,
     LoginComponent,
@@ -58,6 +61,7 @@ export function createTranslateLoader(http: Http) {
     HttpModule,
     CustomFormsModule,
     AppRoutingModule,
+    PopoverModule,
     TranslateModule.forRoot({
       provide: TranslateLoader,
       useFactory: (createTranslateLoader),

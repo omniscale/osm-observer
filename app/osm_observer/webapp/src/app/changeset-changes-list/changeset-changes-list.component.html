@@ -21,16 +21,44 @@
             <ul class="list-unstyled"
                 *ngIf="changesetNodeChanges?.length > 0">
               <li *ngFor="let change of changesetNodeChanges">
-                <a href="http://www.openstreetmap.org/node/{{ change.id }}"
-                   target="_blank"
-                   class="changeset-change"
-                   [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-                  <span *ngIf="change.tags.name">
+                <popover-content #myPopover>
+                  <table class="table table-sm table-borderless">
+                    <thead>
+                      <tr>
+                        <th>{{ 'KEY' | translate }}</th>
+                        <th>{{ 'VALUE' | translate }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let t of change.tags | keyValueList">
+                        <td>{{ t.key }}</td>
+                        <td>{{ t.value }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </popover-content>
+                <span class="changeset-change"
+                      popoverPlacement="top-right"
+                      popoverTitle="{{ change.id }} (v{{ change.version }})"
+                      [popover]="myPopover"
+                      [popoverOnHover]="true"
+                      [popoverDisabled]="!(change.tags | hasKeys)">
+                  <i class="fa fa-tags"
+                     aria-hidden="true"
+                     *ngIf="(change.tags | hasKeys)"></i>
+                  <span class="change-title"
+                        *ngIf="change.tags.name"
+                        [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
                     {{ change.tags.name }} ({{ change.id }}, v{{ change.version }})
                   </span>
-                  <span *ngIf="!change.tags.name">
+                  <span class="change-title"
+                        *ngIf="!change.tags.name"
+                        [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
                     {{ change.id }} (v{{ change.version }})
                   </span>
+                </span>
+                <a href="http://www.openstreetmap.org/node/{{ change.id }}"
+                   target="_blank">
                   <i class="fa fa-external-link" aria-hidden="true"></i>
                 </a>
               </li>
@@ -49,16 +77,45 @@
             <ul class="list-unstyled"
                 *ngIf="changesetWayChanges?.length > 0">
               <li *ngFor="let change of changesetWayChanges">
-                <a href="http://www.openstreetmap.org/way/{{ change.id }}"
-                   target="_blank"
-                   class="changeset-change"
-                   [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-                  <span *ngIf="change.tags.name">
+                <popover-content #myPopover>
+                  <table class="table table-sm table-borderless">
+                    <thead>
+                      <tr>
+                        <th>{{ 'KEY' | translate }}</th>
+                        <th>{{ 'VALUE' | translate }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let t of change.tags | keyValueList">
+                        <td>{{ t.key }}</td>
+                        <td>{{ t.value }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </popover-content>
+
+                <span class="changeset-change"
+                      popoverPlacement="top-right"
+                      popoverTitle="{{ change.id }} (v{{ change.version }})"
+                      [popover]="myPopover"
+                      [popoverOnHover]="true"
+                      [popoverDisabled]="!(change.tags | hasKeys)">
+                  <i class="fa fa-tags"
+                     aria-hidden="true"
+                     *ngIf="(change.tags | hasKeys)"></i>
+                  <span class="change-title"
+                        *ngIf="change.tags.name"
+                        [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
                     {{ change.tags.name }} ({{ change.id }}, v{{ change.version }})
                   </span>
-                  <span *ngIf="!change.tags.name">
+                  <span class="change-title"
+                        *ngIf="!change.tags.name"
+                        [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
                     {{ change.id }} (v{{ change.version }})
                   </span>
+                </span>
+                <a href="http://www.openstreetmap.org/way/{{ change.id }}"
+                   target="_blank">
                   <i class="fa fa-external-link" aria-hidden="true"></i>
                 </a>
               </li>
@@ -77,16 +134,45 @@
             <ul class="list-unstyled"
                 *ngIf="changesetRelationChanges?.length > 0">
               <li *ngFor="let change of changesetRelationChanges">
-                <a href="http://www.openstreetmap.org/relation/{{ change.id }}"
-                   target="_blank"
-                   class="changeset-change"
-                   [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-                  <span *ngIf="change.tags.name">
+                <popover-content #myPopover>
+                  <table class="table table-sm table-borderless">
+                    <thead>
+                      <tr>
+                        <th>{{ 'KEY' | translate }}</th>
+                        <th>{{ 'VALUE' | translate }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let t of change.tags | keyValueList">
+                        <td>{{ t.key }}</td>
+                        <td>{{ t.value }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </popover-content>
+
+                <span class="changeset-change"
+                      popoverPlacement="top-right"
+                      popoverTitle="{{ change.id }} (v{{ change.version }})"
+                      [popover]="myPopover"
+                      [popoverOnHover]="true"
+                      [popoverDisabled]="!(change.tags | hasKeys)">
+                  <i class="fa fa-tags"
+                     aria-hidden="true"
+                     *ngIf="(change.tags | hasKeys)"></i>
+                  <span class="change-title"
+                        *ngIf="change.tags.name"
+                        [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
                     {{ change.tags.name }} ({{ change.id }}, v{{ change.version }})
                   </span>
-                  <span *ngIf="!change.tags.name">
+                  <span class="change-title"
+                        *ngIf="!change.tags.name"
+                        [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
                     {{ change.id }} (v{{ change.version }})
                   </span>
+                </span>
+                <a href="http://www.openstreetmap.org/relation/{{ change.id }}"
+                   target="_blank">
                   <i class="fa fa-external-link" aria-hidden="true"></i>
                 </a>
               </li>
