@@ -24,7 +24,7 @@ class Coverage(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    geometry = db.Column(Geometry(geometry_type='Polygon', srid=4326), nullable=False)
+    geometry = db.Column(Geometry(geometry_type='Geometry', srid=4326), nullable=False)
 
     _geojson = column_property(
         ST_AsGeoJSON(geometry)
