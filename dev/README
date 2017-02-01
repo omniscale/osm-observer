@@ -88,3 +88,16 @@ Translation
 
 ..note::
     Each language must be defined in webapp/package.json in script section
+
+
+Import coverages from geojson
+-----------------------------
+
+Parameters
+    geojson_file
+        File to import. Can be a normal or gziped geojson file.
+    name_prop
+        Property of geojson coverage is named from
+
+::
+    python manage.py coverages_from_geojson --geojson_file nrw.geojson.gz --name_prop GEN

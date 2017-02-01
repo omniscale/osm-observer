@@ -1,8 +1,11 @@
 import os
+import gzip
+import json
 
 from osm_observer import create_app
 from osm_observer.extensions import db
 from osm_observer.lib.review_bots import UsernameReviewBot, TagValueReviewBot
+from osm_observer.model import Coverage
 
 from flask_script import Manager, Server, prompt_bool
 from subprocess import call
@@ -114,6 +117,36 @@ def update_ng_translation(path='../static/i18n/de.json'):
         call([
             'npm', 'run', 'extract-%s' % lang
         ])
+
+
+@manager.command
+def coverages_from_geojson(geojson_file=None, name_prop=None):
+    if geojson_file is None:
+        print('no file given to')
+        exit(0)
+    if name_prop is None:
+        print('no name prop given')
+        exit(0)
+    if not os.path.exists(geojson_file):
+        print('given file does not exist')
+        exit(0)
+
+    try:
+        with gzip.open(geojson_file, 'rt') as f:
+            geojson = json.loads(f.read())
+    except OSError:
+        with open(geojson_file, 'rt') as f:
+            geojson = json.loads(f.read())
+
+    for feature in geojson['features']:
+        name = feature['properties'][name_prop]
+        if Coverage.query.filter(Coverage.name == name).count() > 0:
+            print('%s already exists' % name)
+            continue
+        coverage = Coverage([], name, feature)
+        db.session.add(coverage)
+        print('Added %s' % name)
+    db.session.commit()
 
 
 manager.add_command("runserver", Server(threaded=True))
