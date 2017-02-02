@@ -139,7 +139,11 @@ def coverages_from_geojson(geojson_file=None, name_prop=None):
             geojson = json.loads(f.read())
 
     for feature in geojson['features']:
-        name = feature['properties'][name_prop]
+        try:
+            name = feature['properties'][name_prop]
+        except KeyError:
+            print('feature has no property %s' % name_prop)
+            continue
         if Coverage.query.filter(Coverage.name == name).count() > 0:
             print('%s already exists' % name)
             continue
