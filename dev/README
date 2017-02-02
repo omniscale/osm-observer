@@ -7,7 +7,7 @@ Database
     echo 'create extension postgis' | psql -d osm_observer
     echo 'create extension hstore' | psql -d osm_observer
 
-    psql -d osm_observer -c "CREATE SCHEMA app; ALTER SCHEMA app OWNER TO os;"
+    psql -d osm_observer -c "CREATE SCHEMA changes_app; ALTER SCHEMA changes_app OWNER TO os;"
     psql -d osm_observer -c "CREATE SCHEMA changes; ALTER SCHEMA changes OWNER TO os;"
 
 
@@ -19,7 +19,7 @@ Testing Database
     echo 'create extension postgis' | psql -d osm_observer_testing
     echo 'create extension hstore' | psql -d osm_observer_testing
 
-    psql -d osm_observer_testing -c "CREATE SCHEMA app; ALTER SCHEMA app OWNER TO os;"
+    psql -d osm_observer_testing -c "CREATE SCHEMA changes_app; ALTER SCHEMA changes_app OWNER TO os;"
     psql -d osm_observer -c "CREATE SCHEMA changes; ALTER SCHEMA changes OWNER TO os;"
 
 

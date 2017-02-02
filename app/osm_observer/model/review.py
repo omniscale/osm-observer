@@ -15,7 +15,7 @@ class REVIEW_STATUS(object):
 class Review(db.Model):
     __tablename__ = 'reviews'
     __table_args__ = {
-        'schema': 'app'
+        'schema': 'changes_app'
     }
 
     id = db.Column(db.Integer, primary_key=True)
@@ -28,19 +28,19 @@ class Review(db.Model):
     )
     changeset_id = db.Column(
         db.Integer,
-        db.ForeignKey('app.changesets.id'),
+        db.ForeignKey('changes_app.changesets.id'),
         nullable=True
     )
 
     user_id = db.Column(
         db.Integer,
-        db.ForeignKey('app.users.id'),
+        db.ForeignKey('changes_app.users.id'),
         nullable=True
     )
 
     review_bot_config_id = db.Column(
         db.Integer,
-        db.ForeignKey('app.review_bot_configs.id'),
+        db.ForeignKey('changes_app.review_bot_configs.id'),
         nullable=True
     )
 

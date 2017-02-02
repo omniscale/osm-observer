@@ -10,16 +10,16 @@ __all__ = ['Coverage']
 
 user_coverage = db.Table(
     'users_coverages', db.metadata,
-    db.Column('user_id', db.Integer, db.ForeignKey('app.users.id')),
-    db.Column('coverage_id', db.Integer, db.ForeignKey('app.coverages.id')),
-    schema='app'
+    db.Column('user_id', db.Integer, db.ForeignKey('changes_app.users.id')),
+    db.Column('coverage_id', db.Integer, db.ForeignKey('changes_app.coverages.id')),
+    schema='changes_app'
 )
 
 
 class Coverage(db.Model):
     __tablename__ = 'coverages'
     __table_args__ = {
-        'schema': 'app'
+        'schema': 'changes_app'
     }
 
     id = db.Column(db.Integer, primary_key=True)

@@ -32,7 +32,7 @@ class DummyUser(UserMixin):
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     __table_args__ = {
-        'schema': 'app'
+        'schema': 'changes_app'
     }
 
     id = db.Column(db.Integer, primary_key=True)

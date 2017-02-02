@@ -7,7 +7,7 @@ __all__ = ['Changeset']
 class Changeset(db.Model):
     __tablename__ = 'changesets'
     __table_args__ = {
-        'schema': 'app'
+        'schema': 'changes_app'
     }
 
     id = db.Column(db.Integer, primary_key=True)

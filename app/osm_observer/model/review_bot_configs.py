@@ -6,7 +6,7 @@ __all__ = ['ReviewBotConfig']
 class ReviewBotConfig(db.Model):
     __tablename__ = 'review_bot_configs'
     __table_args__ = {
-        'schema': 'app'
+        'schema': 'changes_app'
     }
 
     id = db.Column(db.Integer, primary_key=True)
