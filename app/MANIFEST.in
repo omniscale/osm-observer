@@ -5,3 +5,6 @@ recursive-exclude osm_observer *.pyc *.pyd .DS_Store *.rej *.orig *.lck .empty
 
 prune osm_observer/static/libs
 prune osm_observer/static/.webassets-cache
+prune osm_observer/webapp
+
+graft osm_observer/alembic/versions
