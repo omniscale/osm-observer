@@ -3,12 +3,16 @@ from itertools import chain
 from osm_observer import model
 
 
-def all():
+def create_users():
     users = [
         model.User('admin', 'secure'),
         model.User('user', 'secure'),
     ]
+    return users
 
+
+def create_coverages():
+    users = create_users()
     coverages = [
         model.Coverage(
             users=[users[0]],
@@ -144,6 +148,10 @@ def all():
         ),
     ]
 
+    return chain(users, coverages)
+
+
+def create_review_bot_configs():
     review_bot_configs = [
         model.ReviewBotConfig('UsernameReviewBot', True, dict(
             username='wheelmap_android',
@@ -170,4 +178,11 @@ def all():
         ))
     ]
 
-    return chain(users, coverages, review_bot_configs)
+    return review_bot_configs
+
+
+def all():
+    return chain(
+        # create coverages also creates users
+        create_coverages(),
+        create_review_bot_configs())

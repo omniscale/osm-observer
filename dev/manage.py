@@ -17,7 +17,7 @@ manager = Manager(create_app)
 # SQLAlchemy commands
 #############################
 @manager.command
-def create_db(alembic_ini='alembic.ini'):
+def create_db(alembic_ini='alembic.ini', users_only=False):
     "Creates database tables"
     db.create_all()
 
@@ -27,7 +27,10 @@ def create_db(alembic_ini='alembic.ini'):
     command.stamp(alembic_cfg, "head")
 
     from osm_observer.model import fixtures
-    db.session.add_all(fixtures.all())
+    if users_only:
+        db.session.add_all(fixtures.create_users())
+    else:
+        db.session.add_all(fixtures.all())
     db.session.commit()
     print("--- database with admin user was created ---")
 
