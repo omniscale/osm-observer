@@ -101,3 +101,12 @@ Parameters
 
 ::
     python manage.py coverages_from_geojson --geojson_file nrw.geojson.gz --name_prop GEN
+
+
+Build package
+-------------
+
+::
+    python manage.py build_webapp
+    cd ../app
+    python setup.py sdist
