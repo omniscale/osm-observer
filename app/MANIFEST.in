@@ -8,3 +8,4 @@ prune osm_observer/static/.webassets-cache
 prune osm_observer/webapp
 
 graft osm_observer/alembic/versions
+graft osm_observer/static/libs/font-awesome/fonts
