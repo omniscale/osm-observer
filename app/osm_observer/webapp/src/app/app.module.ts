@@ -2,6 +2,7 @@ import { BrowserModule }    from '@angular/platform-browser';
 import { NgModule }         from '@angular/core';
 import { FormsModule }      from '@angular/forms';
 import { HttpModule, Http } from '@angular/http';
+import { Location }         from '@angular/common'
 
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
 import { CustomFormsModule }                                       from 'ng2-validation'
@@ -34,8 +35,8 @@ import { KeyValueListPipe } from './pipes/key-value-list.pipe';
 import { HasKeysPipe } from './pipes/has-keys.pipe';
 
 
-export function createTranslateLoader(http: Http) {
-  return new TranslateStaticLoader(http, 'static/i18n', '.json' + '?' + Date.now());
+export function createTranslateLoader(http: Http, location: Location) {
+  return new TranslateStaticLoader(http, location.prepareExternalUrl('/static/i18n'), '.json' + '?' + Date.now());
 }
 
 @NgModule({
@@ -65,7 +66,7 @@ export function createTranslateLoader(http: Http) {
     TranslateModule.forRoot({
       provide: TranslateLoader,
       useFactory: (createTranslateLoader),
-      deps: [Http]
+      deps: [Http, Location]
     })
   ],
   providers: [

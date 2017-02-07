@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 import 'rxjs/add/operator/toPromise';
 import { Subject }    from 'rxjs/Subject';
@@ -13,16 +14,16 @@ import { Review } from '../types/review';
 export class ReviewService extends BaseHttpService {
 
   private reviewsUrl(id: number): string {
-    return `api/reviews/${id}`;
+    return this.location.prepareExternalUrl(`api/reviews/${id}`);
   }
   private addReviewUrl(id: number): string {
-    return `api/reviews/${id}/add`;
+    return this.location.prepareExternalUrl(`api/reviews/${id}/add`);
   }
 
   private refreshReviewsSource = new Subject<boolean>();
   refreshReviews$ = this.refreshReviewsSource.asObservable();
 
-  constructor(router: Router, private http: Http, cookieService: CookieService) {
+  constructor(router: Router, private http: Http, cookieService: CookieService, private location: Location) {
     super(router, cookieService);
   }
 

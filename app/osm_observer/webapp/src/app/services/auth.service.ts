@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
@@ -10,21 +11,25 @@ import { AuthResponse } from '../types/auth-response';
 
 @Injectable()
 export class AuthService extends BaseHttpService {
-  private loginUrl = 'api/login';
-  private logoutUrl = 'api/logout';
+  private loginUrl(): string {
+    return this.location.prepareExternalUrl('api/login');
+  }
+  private logoutUrl(): string {
+    return this.location.prepareExternalUrl('api/logout');
+  }
 
   redirectUrl: string;
 
-  constructor(router: Router, private http: Http, cookieService: CookieService) {
+  constructor(router: Router, private http: Http, cookieService: CookieService, private location: Location) {
     super(router, cookieService);
   }
 
   login(user: User): Promise<AuthResponse> {
-    return this.http.post(this.loginUrl, user, this.getRequestOptions())
+    return this.http.post(this.loginUrl(), user, this.getRequestOptions())
                     .toPromise()
                     .then(response => response.json() as AuthResponse)
                     .catch(error => {
-                      return this.handleError(error, 'login', this.loginUrl, user);
+                      return this.handleError(error, 'login', this.loginUrl(), user);
                     });
   }
 
@@ -37,13 +42,13 @@ export class AuthService extends BaseHttpService {
   }
 
   logout(): Promise<AuthResponse> {
-    return this.http.get(this.logoutUrl, this.getRequestOptions())
+    return this.http.get(this.logoutUrl(), this.getRequestOptions())
                     .toPromise()
                     .then(response => {
                       return response.json() as AuthResponse;
                     })
                     .catch(error => {
-                      return this.handleError(error, 'logout', this.logoutUrl);
+                      return this.handleError(error, 'logout', this.logoutUrl());
                     });
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common'
 
 import 'rxjs/add/operator/toPromise';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
@@ -11,28 +12,32 @@ import { ReviewBotConfig } from '../types/review-bot-config';
 @Injectable()
 export class ReviewBotConfigService extends BaseHttpService {
 
-  private reviewBotConfigsUrl = 'api/review-bot-configs';
-  private addReviewBotConfigUrl = 'api/review-bot-configs/add';
+  private reviewBotConfigsUrl(): string {
+    return this.location.prepareExternalUrl('api/review-bot-configs');
+  }
+  private addReviewBotConfigUrl(): string {
+    return this.location.prepareExternalUrl('/api/review-bot-configs/add');
+  }
   private reviewBotConfigUrl(id: number): string {
-    return `api/review-bot-configs/${id}`;
+    return this.location.prepareExternalUrl(`api/review-bot-configs/${id}`);
   };
   private updateReviewBotConfigUrl(id: number): string {
-    return `api/review-bot-configs/${id}/update`;
+    return this.location.prepareExternalUrl(`api/review-bot-configs/${id}/update`);
   }
   private deleteReviewBotConfigUrl(id: number): string {
-    return `api/review-bot-configs/${id}/delete`;
+    return this.location.prepareExternalUrl(`api/review-bot-configs/${id}/delete`);
   }
 
-  constructor(router: Router, private http: Http, cookieService: CookieService) {
+  constructor(router: Router, private http: Http, cookieService: CookieService, private location: Location) {
     super(router, cookieService);
   }
 
   getReviewBotConfigs(): Promise<ReviewBotConfig[]> {
-    return this.http.get(this.reviewBotConfigsUrl, this.getRequestOptions())
+    return this.http.get(this.reviewBotConfigsUrl(), this.getRequestOptions())
                     .toPromise()
                     .then(response => response.json() as ReviewBotConfig[])
                     .catch(error => {
-                      return this.handleError(error, 'getReviewBotConfigs', this.reviewBotConfigsUrl);
+                      return this.handleError(error, 'getReviewBotConfigs', this.reviewBotConfigsUrl());
                     });
   }
 
@@ -47,11 +52,11 @@ export class ReviewBotConfigService extends BaseHttpService {
   }
 
   addReviewBotConfig(reviewBotConfig: ReviewBotConfig): Promise<ReviewBotConfig> {
-    return this.http.post(this.addReviewBotConfigUrl, reviewBotConfig, this.getRequestOptions())
+    return this.http.post(this.addReviewBotConfigUrl(), reviewBotConfig, this.getRequestOptions())
                     .toPromise()
                     .then(response => response.json() as ReviewBotConfig)
                     .catch(error => {
-                      return this.handleError(error, 'addReviewBotConfig', this.addReviewBotConfigUrl, reviewBotConfig);
+                      return this.handleError(error, 'addReviewBotConfig', this.addReviewBotConfigUrl(), reviewBotConfig);
                     });
   }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, URLSearchParams } from '@angular/http';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 import 'rxjs/add/operator/toPromise';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
@@ -13,20 +14,23 @@ import { ChangesetChange } from '../types/changeset-change';
 @Injectable()
 export class ChangesetService extends BaseHttpService {
 
-  private changesetsUrl = 'api/changesets';
+  private changesetsUrl(): string {
+    return this.location.prepareExternalUrl('/api/changesets');
+  }
 
   private changesetCommentsUrl(id: number): string {
-    return `api/changesets/comments/${id}`;
+    return this.location.prepareExternalUrl(`/api/changesets/comments/${id}`);
   }
 
   private changesetChangesUrl(id: number): string {
-    return `api/changesets/changes/${id}`;
+    return this.location.prepareExternalUrl(`/api/changesets/changes/${id}`);
   }
 
   private changesets: Changeset[];
 
-  constructor(router: Router, private http: Http, cookieService: CookieService) {
+  constructor(router: Router, private http: Http, cookieService: CookieService, private location: Location) {
     super(router, cookieService);
+    location.prepareExternalUrl('api/changesets/comments/')
   }
 
   getChangesets(username?: string, timeRange?: string, sumScore?: number, numReviews?: number, coverageId?: number, statusId?: number, currentUserReviewed?: boolean): Promise<Changeset[]> {
@@ -55,14 +59,14 @@ export class ChangesetService extends BaseHttpService {
 
     let requestOptions = this.getRequestOptions(params);
 
-    return this.http.get(this.changesetsUrl, requestOptions)
+    return this.http.get(this.changesetsUrl(), requestOptions)
                .toPromise()
                .then(response => {
                  this.changesets = response.json() as Changeset[];
                  return this.changesets;
                })
                .catch(error => {
-                 return this.handleError(error, 'getChangesets', this.changesetsUrl, params.paramsMap);
+                 return this.handleError(error, 'getChangesets', this.changesetsUrl(), params.paramsMap);
                });
   }
 
