@@ -11,16 +11,16 @@ import { ReviewBotConfig } from '../types/review-bot-config';
 @Injectable()
 export class ReviewBotConfigService extends BaseHttpService {
 
-  private reviewBotConfigsUrl = '/api/review-bot-configs';
-  private addReviewBotConfigUrl = '/api/review-bot-configs/add';
+  private reviewBotConfigsUrl = 'api/review-bot-configs';
+  private addReviewBotConfigUrl = 'api/review-bot-configs/add';
   private reviewBotConfigUrl(id: number): string {
-    return `/api/review-bot-configs/${id}`;
+    return `api/review-bot-configs/${id}`;
   };
   private updateReviewBotConfigUrl(id: number): string {
-    return `/api/review-bot-configs/${id}/update`;
+    return `api/review-bot-configs/${id}/update`;
   }
   private deleteReviewBotConfigUrl(id: number): string {
-    return `/api/review-bot-configs/${id}/delete`;
+    return `api/review-bot-configs/${id}/delete`;
   }
 
   constructor(router: Router, private http: Http, cookieService: CookieService) {

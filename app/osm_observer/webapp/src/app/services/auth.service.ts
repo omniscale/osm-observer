@@ -10,8 +10,8 @@ import { AuthResponse } from '../types/auth-response';
 
 @Injectable()
 export class AuthService extends BaseHttpService {
-  private loginUrl = '/api/login';
-  private logoutUrl = '/api/logout';
+  private loginUrl = 'api/login';
+  private logoutUrl = 'api/logout';
 
   redirectUrl: string;
 

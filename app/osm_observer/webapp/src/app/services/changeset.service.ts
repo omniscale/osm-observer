@@ -13,14 +13,14 @@ import { ChangesetChange } from '../types/changeset-change';
 @Injectable()
 export class ChangesetService extends BaseHttpService {
 
-  private changesetsUrl = '/api/changesets';
+  private changesetsUrl = 'api/changesets';
 
   private changesetCommentsUrl(id: number): string {
-    return `/api/changesets/comments/${id}`;
+    return `api/changesets/comments/${id}`;
   }
 
   private changesetChangesUrl(id: number): string {
-    return `/api/changesets/changes/${id}`;
+    return `api/changesets/changes/${id}`;
   }
 
   private changesets: Changeset[];

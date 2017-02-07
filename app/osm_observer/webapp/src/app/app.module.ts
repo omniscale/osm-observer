@@ -35,7 +35,7 @@ import { HasKeysPipe } from './pipes/has-keys.pipe';
 
 
 export function createTranslateLoader(http: Http) {
-  return new TranslateStaticLoader(http, '/static/i18n', '.json' + '?' + Date.now());
+  return new TranslateStaticLoader(http, 'static/i18n', '.json' + '?' + Date.now());
 }
 
 @NgModule({

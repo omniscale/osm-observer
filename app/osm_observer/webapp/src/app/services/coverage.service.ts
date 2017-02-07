@@ -11,9 +11,9 @@ import { Coverage } from '../types/coverage';
 @Injectable()
 export class CoverageService extends BaseHttpService {
 
-  private coveragesUrl = '/api/coverages/all';
-  private activeCoveragesUrl = '/api/coverages/actives';
-  private setActiveCoveragesUrl = '/api/coverages/set-actives';
+  private coveragesUrl = 'api/coverages/all';
+  private activeCoveragesUrl = 'api/coverages/actives';
+  private setActiveCoveragesUrl = 'api/coverages/set-actives';
 
   constructor(router: Router, private http: Http, cookieService: CookieService) {
     super(router, cookieService);

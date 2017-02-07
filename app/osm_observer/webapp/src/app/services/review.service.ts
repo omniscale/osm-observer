@@ -13,10 +13,10 @@ import { Review } from '../types/review';
 export class ReviewService extends BaseHttpService {
 
   private reviewsUrl(id: number): string {
-    return `/api/reviews/${id}`;
+    return `api/reviews/${id}`;
   }
   private addReviewUrl(id: number): string {
-    return `/api/reviews/${id}/add`;
+    return `api/reviews/${id}/add`;
   }
 
   private refreshReviewsSource = new Subject<boolean>();
