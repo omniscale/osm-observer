@@ -1,7 +1,7 @@
 import os
 
 from flask import (
-    Blueprint, render_template, send_from_directory
+    Blueprint, render_template, send_from_directory, request
 )
 
 BASE_PATH = os.path.abspath(os.path.dirname(__file__))
@@ -18,7 +18,8 @@ frontend = Blueprint(
 @frontend.route('/')
 @frontend.route('/<path:path>')
 def index(path=None):
-    return render_template('frontend/index.html.j2')
+    base_href = request.environ.get('HTTP_X_SCRIPT_NAME', '/')
+    return render_template('frontend/index.html.j2', base_href=base_href)
 
 
 @frontend.route('/fonts/<path:filename>')
