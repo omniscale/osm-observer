@@ -22,7 +22,7 @@ from osm_observer import views
 
 
 def create_app(config=None):
-    app = Flask(__name__)
+    app = ReverseProxiedFlask(__name__)
 
     configure_jinja2(app)
     configure_app(app, config)
@@ -217,6 +217,47 @@ def configure_errorhandlers(app):
         return make_response(
             render_template('osm_observer/errors/500.html.j2', error=error),
             500)
+
+
+class ReverseProxiedFlask(Flask):
+    """
+    Wrap the application in this middleware and configure the
+    front-end server to add these headers, to let you quietly bind
+    this to a URL other than / and to an HTTP scheme that is
+    different than what is used locally.
+    In nginx:
+    location /prefix {
+        proxy_pass http://192.168.0.1:5001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Scheme $scheme;
+        proxy_set_header X-Script-Name /prefix;
+        }
+    :param app: the WSGI application
+    """
+    def __call__(self, environ, start_response):
+        script_name = environ.get('HTTP_X_SCRIPT_NAME', '')
+        if script_name and script_name != '/':
+            environ['SCRIPT_NAME'] = script_name
+            path_info = environ['PATH_INFO']
+            if path_info.startswith(script_name):
+                environ['PATH_INFO'] = path_info[len(script_name):]
+        server = environ.get(
+            'HTTP_X_FORWARDED_SERVER_CUSTOM',
+            environ.get(
+                'HTTP_X_FORWARDED_HOST',
+                environ.get('HTTP_X_FORWARDED_SERVER', '')))
+        if server:
+            environ['HTTP_HOST'] = server
+
+        scheme = environ.get(
+            'HTTP_X_FORWARDED_PROTO',
+            environ.get('HTTP_X_SCHEME', ''))
+
+        if scheme:
+            environ['wsgi.url_scheme'] = scheme
+
+        return Flask.__call__(self, environ, start_response)
 
 
 # def configure_changes_db(app):
