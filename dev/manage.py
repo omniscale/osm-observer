@@ -3,12 +3,13 @@ import gzip
 import json
 
 from osm_observer import create_app
-from osm_observer.extensions import db
+from osm_observer.extensions import db, assets
 from osm_observer.lib.review_bots import UsernameReviewBot, TagValueReviewBot
 from osm_observer.model import Coverage
 
 from flask_script import Manager, Server, prompt_bool
 from subprocess import call
+from flask_assets import ManageAssets
 
 manager = Manager(create_app)
 
@@ -155,6 +156,8 @@ def coverages_from_geojson(geojson_file=None, name_prop=None):
         print('Added %s' % name)
     db.session.commit()
 
+
+manager.add_command("assets", ManageAssets(assets))
 
 manager.add_command("runserver", Server(threaded=True))
 
