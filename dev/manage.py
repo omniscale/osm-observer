@@ -5,7 +5,7 @@ import json
 from osm_observer import create_app
 from osm_observer.extensions import db, assets
 from osm_observer.lib.review_bots import UsernameReviewBot, TagValueReviewBot
-from osm_observer.model import Coverage
+from osm_observer.model import Coverage, User
 
 from flask_script import Manager, Server, prompt_bool
 from subprocess import call
@@ -155,6 +155,16 @@ def coverages_from_geojson(geojson_file=None, name_prop=None):
         db.session.add(coverage)
         print('Added %s' % name)
     db.session.commit()
+
+
+@manager.command
+def create_user(username=None, password=None):
+    if None in [username, password]:
+        print('provide username and password')
+    user = User(username=username, password=password)
+    db.session.add(user)
+    db.session.commit()
+    print('user %s created' % username)
 
 
 manager.add_command("assets", ManageAssets(assets))
