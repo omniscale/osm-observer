@@ -2,6 +2,8 @@ import os
 import gzip
 import json
 
+from datetime import timedelta
+
 from osm_observer import create_app
 from osm_observer.extensions import db, assets
 from osm_observer.lib.review_bots import UsernameReviewBot, TagValueReviewBot
@@ -51,14 +53,17 @@ def recreate_db():
 
 
 @manager.command
-def insert_changesets(created_at=None):
+def insert_changesets():
     "Add Changeset IDs from imposm-changes to the app"
     from osm_observer.model import changesets, Changeset
     from sqlalchemy.sql import select
 
+    last_closed_changeset_time = Changeset.last_closed_changeset_time()
+
     s = select([changesets])
-    if created_at is not None:
-        s = s.where(changesets.c.created_at >= created_at)
+    if last_closed_changeset_time is not None:
+        buffer_time = timedelta(hours=24)
+        s = s.where(changesets.c.closed_at >= (last_closed_changeset_time - buffer_time))
 
     # import only closed changesets
     s = s.where(changesets.c.closed_at != None)
@@ -71,23 +76,24 @@ def insert_changesets(created_at=None):
         TagValueReviewBot(conn),
     ]
 
-    # todo refactor to speed up
     for changeset in queried_changesets:
         cs = Changeset.by_osm_id(changeset.id)
-        if not cs:
-            cs = Changeset(
-                osm_id=changeset.id,
-                created_at=changeset.created_at,
-                closed_at=changeset.closed_at,
-            )
+        if cs is not None:
+            continue
 
-            for bot in bots:
-                review = bot.review(changeset)
-                if review is not None:
-                    print (bot, 'reviewed', changeset.id, 'with score', review.score)
-                    cs.reviews.append(review)
+        cs = Changeset(
+            osm_id=changeset.id,
+            created_at=changeset.created_at,
+            closed_at=changeset.closed_at,
+        )
 
-            db.session.add(cs)
+        for bot in bots:
+            review = bot.review(changeset)
+            if review is not None:
+                print (bot, 'reviewed', changeset.id, 'with score', review.score)
+                cs.reviews.append(review)
+
+        db.session.add(cs)
     db.session.commit()
 
 

@@ -1,3 +1,5 @@
+from sqlalchemy import func
+
 from osm_observer.extensions import db
 from osm_observer.helpers import serialize_datetime
 
@@ -36,6 +38,11 @@ class Changeset(db.Model):
     def by_osm_id(cls, id):
         q = cls.query.filter(cls.osm_id == id)
         return q.first()
+
+    @classmethod
+    def last_closed_changeset_time(cls):
+        q = cls.query.with_entities(func.max(cls.closed_at))
+        return q.first()[0]
 
     def __repr__(self):
         return '<Changeset id="%s", osm_id=%s>' % (
