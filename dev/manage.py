@@ -160,11 +160,12 @@ def coverages_from_geojson(geojson_file=None, name_prop=None):
 @manager.command
 def create_user(username=None, password=None):
     if None in [username, password]:
-        print('provide username and password')
+        print('Username and Password are required')
+        exit(0)
     user = User(username=username, password=password)
     db.session.add(user)
     db.session.commit()
-    print('user %s created' % username)
+    print('User %s created' % username)
 
 
 manager.add_command("assets", ManageAssets(assets))
