@@ -11,7 +11,7 @@ class Changeset(db.Model):
     }
 
     id = db.Column(db.Integer, primary_key=True)
-    osm_id = db.Column(db.Integer, nullable=False)
+    osm_id = db.Column(db.Integer, nullable=False, index=True)
     created_at = db.Column(db.DateTime, nullable=False)
     closed_at = db.Column(db.DateTime, nullable=True)
 
