@@ -2,7 +2,10 @@ from osm_observer.extensions import db
 from geoalchemy2.types import Geometry
 from sqlalchemy.dialects.postgresql import HSTORE
 
-__all__ = ['changesets', 'nodes', 'ways', 'relations', 'comments', 'nds', 'members']
+__all__ = [
+    'changesets', 'nodes', 'ways', 'relations', 'comments', 'nds', 'members',
+    'current_status'
+]
 
 changesets = db.Table(
     'changesets', db.MetaData(),
@@ -97,4 +100,11 @@ members = db.Table(
     db.Column('member_node_id', db.BigInteger),
     db.Column('member_way_id', db.Integer),
     db.Column('member_relation_id', db.Integer)
+)
+
+current_status = db.Table(
+    'current_status', db.MetaData(),
+    db.Column('type', db.String),
+    db.Column('sequence', db.Integer),
+    db.Column('timestamp', db.DateTime)
 )
