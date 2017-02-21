@@ -17,7 +17,6 @@ export class ReviewFormComponent implements OnInit, OnChanges {
 
   @ViewChild('reviewForm') public reviewForm: NgForm;
 
-  reviewOKComment: string;
   reviewAddedText: string;
 
   model = new Review();
@@ -26,7 +25,7 @@ export class ReviewFormComponent implements OnInit, OnChanges {
   constructor(private reviewService: ReviewService, private translate: TranslateService, private messageService: MessageService) { }
 
   reviewOK() {
-    this.reviewService.addReview(this.id, new Review(undefined, undefined, ReviewStatus.OK, this.reviewOKComment))
+    this.reviewService.addReview(this.id, new Review(undefined, undefined, ReviewStatus.OK))
                       .then(v => {
                         this.model = new Review();
                         this.messageService.add(this.reviewAddedText, 'success');
@@ -58,9 +57,6 @@ export class ReviewFormComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.translate.get('OK').subscribe((res: string) => {
-      this.reviewOKComment = res;
-    });
     this.translate.get('REVIEW ADDED').subscribe((res: string) => {
       this.reviewAddedText = res;
     });

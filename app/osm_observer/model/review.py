@@ -21,7 +21,7 @@ class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     score = db.Column(db.Integer)
     _status = db.Column(db.Integer)
-    comment = db.Column(db.String, nullable=False)
+    comment = db.Column(db.String)
     time_created = db.Column(
         db.DateTime,
         default=datetime.datetime.utcnow

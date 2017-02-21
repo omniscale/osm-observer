@@ -110,3 +110,12 @@ Build package
     python manage.py build_webapp
     cd ../app
     python setup.py sdist
+
+
+Create migration script
+-----------------------
+
+To have an ascending revision number we have to pass --rev-id parameter to alembic
+
+::
+    alembic revision --rev-id [id] --autogenerate -m "[comment]"
