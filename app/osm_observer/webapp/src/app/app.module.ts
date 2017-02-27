@@ -23,6 +23,7 @@ import { ChangesetCommentListComponent } from './changeset-comment-list/changese
 import { ChangesetChangesListComponent } from './changeset-changes-list/changeset-changes-list.component';
 import { LoginComponent }                from './login/login.component';
 import { MessageViewerComponent }        from './message-viewer/message-viewer.component';
+import { JOSMLinkComponent }             from './josmlink/josmlink.component';
 
 import { CoverageService }        from './services/coverage.service';
 import { ChangesetService }       from './services/changeset.service';
@@ -54,7 +55,8 @@ export function createTranslateLoader(http: Http, location: Location) {
     ChangesetCommentListComponent,
     ChangesetChangesListComponent,
     LoginComponent,
-    MessageViewerComponent
+    MessageViewerComponent,
+    JOSMLinkComponent
   ],
   imports: [
     BrowserModule,

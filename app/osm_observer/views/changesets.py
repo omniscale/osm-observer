@@ -4,6 +4,8 @@ from flask import abort, jsonify, request, current_app
 
 from flask_login import login_required, current_user
 
+from geoalchemy2.shape import to_shape
+
 from osm_observer.views import api
 from osm_observer.lib.changes import (
     query_changesets, query_changeset_comments,
@@ -86,6 +88,7 @@ def changeset_changes(changeset_id):
 
 
 def serialize_changeset(changeset):
+    bbox_wkt = to_shape(changeset.bbox)
     return {
         'id': changeset.app_id,
         'osmId': changeset.id,
@@ -99,6 +102,7 @@ def serialize_changeset(changeset):
         'sumScore': changeset.sum_score,
         'status': changeset.status,
         'currentUserReviewed': changeset.current_user_reviewed,
+        'bbox': bbox_wkt.bounds
     }
 
 

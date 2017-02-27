@@ -32,6 +32,7 @@
             <th>{{ 'CHANGES' | translate }}</th>
             <th>{{ 'SCORE' | translate }}</th>
             <th>{{ 'STATUS' | translate }}</th>
+            <th>{{ 'ACTION' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -54,6 +55,7 @@
             <td>{{ currentChangeset.numChanges }}</td>
             <td>{{ currentChangeset.sumScore }}</td>
             <td>{{ reviewStatus.byId(currentChangeset.status) | translate }}</td>
+            <td><josmlink [id]="currentChangeset.osmId"></josmlink></td>
           </tr>
         </tbody>
       </table>
