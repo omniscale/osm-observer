@@ -35,9 +35,11 @@ export class ChangesetDetailsComponent implements OnInit {
 
   getChangeset(id: number): void {
     this.changesetService.getChangeset(id, true)
-                         .then(changeset => this.currentChangeset = changeset)
-                         // TODO define onError actions
-                         .catch(error => {});
+                         .subscribe(
+                           changeset => this.currentChangeset = changeset,
+                           // TODO define onError actions
+                           error => {}
+                         );
   }
 
   next() {

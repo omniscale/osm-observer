@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common'
 
-import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Rx';
+
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { BaseHttpService } from './base-http.service';
@@ -32,50 +33,45 @@ export class ReviewBotConfigService extends BaseHttpService {
     super(router, cookieService);
   }
 
-  getReviewBotConfigs(): Promise<ReviewBotConfig[]> {
+  getReviewBotConfigs(): Observable<ReviewBotConfig[]> {
     return this.http.get(this.reviewBotConfigsUrl(), this.getRequestOptions())
-                    .toPromise()
-                    .then(response => response.json() as ReviewBotConfig[])
-                    .catch(error => {
-                      return this.handleError(error, 'getReviewBotConfigs', this.reviewBotConfigsUrl());
-                    });
+                    .map((response:Response) => response.json() as ReviewBotConfig[])
+                    .catch((error:any) => Observable.throw(
+                      this.handleError(error, 'getReviewBotConfigs', this.reviewBotConfigsUrl())
+                    ));
   }
 
-  getReviewBotConfig(reviewBotId: number): Promise<ReviewBotConfig> {
+  getReviewBotConfig(reviewBotId: number): Observable<ReviewBotConfig> {
     let url = this.reviewBotConfigUrl(reviewBotId);
     return this.http.get(url, this.getRequestOptions())
-                    .toPromise()
-                    .then(response => response.json() as ReviewBotConfig)
-                    .catch(error => {
-                      return this.handleError(error, 'getReviewBotConfig', url, {id: reviewBotId});
-                    });
+                    .map((response:Response) => response.json() as ReviewBotConfig)
+                    .catch((error:any) => Observable.throw(
+                      this.handleError(error, 'getReviewBotConfig', url, {id: reviewBotId})
+                    ));
   }
 
-  addReviewBotConfig(reviewBotConfig: ReviewBotConfig): Promise<ReviewBotConfig> {
+  addReviewBotConfig(reviewBotConfig: ReviewBotConfig): Observable<ReviewBotConfig> {
     return this.http.post(this.addReviewBotConfigUrl(), reviewBotConfig, this.getRequestOptions())
-                    .toPromise()
-                    .then(response => response.json() as ReviewBotConfig)
-                    .catch(error => {
-                      return this.handleError(error, 'addReviewBotConfig', this.addReviewBotConfigUrl(), reviewBotConfig);
-                    });
+                    .map((response:Response) => response.json() as ReviewBotConfig)
+                    .catch((error:any) => Observable.throw(
+                      this.handleError(error, 'addReviewBotConfig', this.addReviewBotConfigUrl(), reviewBotConfig)
+                    ));
   }
 
-  updateReviewBotConfig(reviewBotConfig: ReviewBotConfig): Promise<ReviewBotConfig> {
+  updateReviewBotConfig(reviewBotConfig: ReviewBotConfig): Observable<ReviewBotConfig> {
     let url = this.updateReviewBotConfigUrl(reviewBotConfig.id);
     return this.http.post(url, reviewBotConfig, this.getRequestOptions())
-                    .toPromise()
-                    .then(response => response.json() as ReviewBotConfig)
-                    .catch(error => {
-                      return this.handleError(error, 'updateReviewBotConfig', url, reviewBotConfig);
-                    });
+                    .map((response:Response) => response.json() as ReviewBotConfig)
+                    .catch((error:any) => Observable.throw(
+                      this.handleError(error, 'updateReviewBotConfig', url, reviewBotConfig)
+                    ));
   }
 
-  deleteReviewBotConfig(id: number): Promise<any> {
+  deleteReviewBotConfig(id: number): Observable<any> {
     let url = this.deleteReviewBotConfigUrl(id);
     return this.http.get(url, this.getRequestOptions())
-                    .toPromise()
-                    .catch(error => {
-                      return this.handleError(error, 'deleteReviewBotConfig', url, {id: id});
-                    });
+                    .catch((error:any) => Observable.throw(
+                      this.handleError(error, 'deleteReviewBotConfig', url, {id: id})
+                    ));
   }
 }

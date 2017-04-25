@@ -27,9 +27,11 @@ export class JOSMLinkComponent implements OnInit {
       this.cannotOpenJosmText = res;
     });
     this.changesetService.getChangeset(this.id)
-                         .then(changeset => this.changeset = changeset)
-                         // TODO define onError actions
-                         .catch(error => {});
+                         .subscribe(
+                           changeset => this.changeset = changeset,
+                           // TODO define onError actions
+                           error => {}
+                         );
   }
 
   private buildJSOMUrl(protocol) {

@@ -25,19 +25,22 @@ export class ReviewBotConfigListComponent implements OnInit {
 
   getReviewBotConfigs(): void {
     this.reviewBotConfigService.getReviewBotConfigs()
-                         .then(reviewBotConfigs => this.assignReviewBotConfigs(reviewBotConfigs))
-                         // TODO define onError actions
-                         .catch((error) => {});
+                         .subscribe(
+                             reviewBotConfigs => this.assignReviewBotConfigs(reviewBotConfigs),
+                             // TODO define onError actions
+                             error => {}
+                         );
   }
 
   deleteReviewBotConfig(id: number): void {
     this.reviewBotConfigService.deleteReviewBotConfig(id)
-                               .then(v => {
-                                 this.messageService.add(this.botConfigRemovedText, 'success');
-                                 this.getReviewBotConfigs();
-                               })
-                               // TODO define onError actions
-                               .catch(error => {});
+                               .subscribe(
+                                 v => {
+                                   this.messageService.add(this.botConfigRemovedText, 'success');
+                                   this.getReviewBotConfigs();
+                                 },
+                                 error => {}
+                               );
   }
 
   ngOnInit() {

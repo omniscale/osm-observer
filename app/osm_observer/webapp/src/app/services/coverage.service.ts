@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
-import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Rx';
+
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { BaseHttpService } from './base-http.service';
@@ -26,30 +27,27 @@ export class CoverageService extends BaseHttpService {
     super(router, cookieService);
   }
 
-  getCoverages(): Promise<Coverage[]> {
+  getCoverages(): Observable<Coverage[]> {
     return this.http.get(this.coveragesUrl(), this.getRequestOptions())
-               .toPromise()
-               .then(response => response.json() as Coverage[])
-               .catch(error => {
-                 return this.handleError(error, 'getCoverages', this.coveragesUrl());
-               });
+               .map((response:Response) => response.json() as Coverage[])
+               .catch((error:any) => Observable.throw(
+                 this.handleError(error, 'getCoverages', this.coveragesUrl())
+               ));
   }
 
-  getActiveCoverages(): Promise<Coverage[]> {
+  getActiveCoverages(): Observable<Coverage[]> {
     return this.http.get(this.activeCoveragesUrl(), this.getRequestOptions())
-               .toPromise()
-               .then(response => response.json() as Coverage[])
-               .catch(error => {
-                 return this.handleError(error, 'getActiveCoverages', this.activeCoveragesUrl());
-               });
+               .map((response:Response) => response.json() as Coverage[])
+               .catch((error:any) => Observable.throw(
+                 this.handleError(error, 'getActiveCoverages', this.activeCoveragesUrl())
+               ));
   }
 
-  setActiveCoverages(coverageIds: number[]): Promise<any> {
+  setActiveCoverages(coverageIds: number[]): Observable<any> {
     let data = {'coverageIds': coverageIds}
     return this.http.post(this.setActiveCoveragesUrl(), data, this.getRequestOptions())
-                    .toPromise()
-                    .catch(error => {
-                      return this.handleError(error, 'setActiveCoverages', this.setActiveCoveragesUrl(), data);
-                    })
+                    .catch((error:any) => Observable.throw(
+                      this.handleError(error, 'setActiveCoverages', this.setActiveCoveragesUrl(), data)
+                    ));
   }
 }

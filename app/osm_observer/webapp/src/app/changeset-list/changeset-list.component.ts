@@ -63,16 +63,20 @@ export class ChangesetListComponent implements OnInit {
 
   getChangesets(): void {
     this.changesetService.getChangesets(this.username, this.timeRange, this.sumScore, this.numReviews, this.coverageId, this.statusId, this.currentUserReviewed)
-                         .then(changesets => this.assignChangesets(changesets))
-                         // TODO define onError actions
-                         .catch(error => {});
+                         .subscribe(
+                           changesets => this.assignChangesets(changesets),
+                           // TODO define onError actions
+                           error => {}
+                         );
   }
 
   getCoverages(): void {
     this.coverageService.getActiveCoverages()
-                        .then(coverages => this.assignCoverages(coverages))
-                        // TODO define onError actions
-                        .catch(error => {});
+                        .subscribe(
+                          coverages => this.assignCoverages(coverages),
+                          // TODO define onError actions
+                          error => {}
+                        );
   }
 
   updateRouteParams(): void {

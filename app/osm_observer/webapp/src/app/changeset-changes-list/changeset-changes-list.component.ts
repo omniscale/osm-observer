@@ -62,9 +62,11 @@ export class ChangesetChangesListComponent implements OnChanges {
 
   getChangesetChanges(): void {
     this.changesetService.getChangesetChanges(this.id)
-                         .then(changesetChanges => this.assignChangesetChanges(changesetChanges))
-                         // TODO define onError actions
-                         .catch(error => {});
+                         .subscribe(
+                           changesetChanges => this.assignChangesetChanges(changesetChanges),
+                           // TODO define onError actions
+                           error => {}
+                         );
   }
 
   ngOnChanges(changes: SimpleChanges) {

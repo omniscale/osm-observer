@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+
+import { Observable } from 'rxjs/Rx';
 
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
@@ -24,13 +26,12 @@ export class AuthService extends BaseHttpService {
     super(router, cookieService);
   }
 
-  login(user: User): Promise<AuthResponse> {
+  login(user: User): Observable<AuthResponse> {
     return this.http.post(this.loginUrl(), user, this.getRequestOptions())
-                    .toPromise()
-                    .then(response => response.json() as AuthResponse)
-                    .catch(error => {
-                      return this.handleError(error, 'login', this.loginUrl(), user);
-                    });
+                    .map((response:Response) => response.json() as AuthResponse)
+                    .catch((error:any) => Observable.throw(
+                      this.handleError(error, 'login', this.loginUrl(), user)
+                    ));
   }
 
   isLoggedIn(): boolean {
@@ -41,14 +42,12 @@ export class AuthService extends BaseHttpService {
     return false;
   }
 
-  logout(): Promise<AuthResponse> {
+  logout(): Observable<AuthResponse> {
+    console.log('logout called')
     return this.http.get(this.logoutUrl(), this.getRequestOptions())
-                    .toPromise()
-                    .then(response => {
-                      return response.json() as AuthResponse;
-                    })
-                    .catch(error => {
-                      return this.handleError(error, 'logout', this.logoutUrl());
-                    });
+                    .map((response:Response) => response.json() as AuthResponse)
+                    .catch((error:any) => Observable.throw(
+                      this.handleError(error, 'logout', this.logoutUrl())
+                    ));
   }
 }

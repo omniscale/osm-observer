@@ -26,11 +26,13 @@ export class ReviewFormComponent implements OnInit, OnChanges {
 
   reviewOK() {
     this.reviewService.addReview(this.id, new Review(undefined, undefined, ReviewStatus.OK))
-                      .then(v => {
-                        this.model = new Review();
-                        this.messageService.add(this.reviewAddedText, 'success');
-                      })
-                      .catch(error => {});;
+                      .subscribe(
+                        v => {
+                          this.model = new Review();
+                          this.messageService.add(this.reviewAddedText, 'success');
+                        },
+                        error => {}
+                      );
   }
 
   hasFormError(field) {
@@ -43,12 +45,14 @@ export class ReviewFormComponent implements OnInit, OnChanges {
 
   onSubmit() {
     this.reviewService.addReview(this.id, this.model)
-                      .then(v => {
-                        this.model = new Review();
-                        this.messageService.add(this.reviewAddedText, 'success');
-                        this.reviewForm.reset();
-                      })
-                      .catch(error => {});
+                      .subscribe(
+                        v => {
+                          this.model = new Review();
+                          this.messageService.add(this.reviewAddedText, 'success');
+                          this.reviewForm.reset();
+                        },
+                        error => {}
+                      );
     return false;
   };
 

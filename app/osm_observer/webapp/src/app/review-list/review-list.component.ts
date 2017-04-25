@@ -16,7 +16,8 @@ export class ReviewListComponent implements OnChanges {
   reviewStatus = ReviewStatus;
 
   constructor(private reviewService: ReviewService) {
-    reviewService.refreshReviews$.subscribe(e => this.getReviews());
+    reviewService.refreshReviews$.subscribe(
+      e => this.getReviews());
   }
 
   assignReviews(reviews: Review[]) {
@@ -25,9 +26,11 @@ export class ReviewListComponent implements OnChanges {
 
   getReviews(): void {
     this.reviewService.getReviews(this.id)
-                      .then(reviews => this.assignReviews(reviews))
-                      // TODO define onError actions
-                      .catch(error => {});
+                      .subscribe(
+                        reviews => this.assignReviews(reviews),
+                        // TODO define onError actions
+                        err => {}
+                      );
   }
 
   ngOnChanges(changes: SimpleChanges) {

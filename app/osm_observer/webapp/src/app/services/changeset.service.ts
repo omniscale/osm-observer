@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http, URLSearchParams } from '@angular/http';
+import { Http, URLSearchParams, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
-import 'rxjs/add/operator/toPromise';
+import { Observable, Observer } from 'rxjs/Rx';
+import { Subject }    from 'rxjs/Subject';
+
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { BaseHttpService } from './base-http.service';
@@ -26,6 +28,15 @@ export class ChangesetService extends BaseHttpService {
     return this.location.prepareExternalUrl(`/api/changesets/changes/${id}`);
   }
 
+  private changesetById(id: number): Changeset {
+    for(let changeset of this.changesets) {
+        if(changeset.osmId === id) {
+          return changeset;
+        }
+    }
+    return undefined;
+  }
+
   private changesets: Changeset[];
 
   constructor(router: Router, private http: Http, cookieService: CookieService, private location: Location) {
@@ -33,7 +44,7 @@ export class ChangesetService extends BaseHttpService {
     location.prepareExternalUrl('api/changesets/comments/')
   }
 
-  getChangesets(username?: string, timeRange?: string, sumScore?: number, numReviews?: number, coverageId?: number, statusId?: number, currentUserReviewed?: boolean): Promise<Changeset[]> {
+  getChangesets(username?: string, timeRange?: string, sumScore?: number, numReviews?: number, coverageId?: number, statusId?: number, currentUserReviewed?: boolean): Observable<Changeset[]> {
     let params = new URLSearchParams();
     if(username !== undefined && username !== null && username !== '') {
       params.set('username', username);
@@ -56,59 +67,51 @@ export class ChangesetService extends BaseHttpService {
     if((typeof(currentUserReviewed) === "boolean")) {
       params.set('currentUserReviewed', currentUserReviewed.toString());
     }
-
     let requestOptions = this.getRequestOptions(params);
-
     return this.http.get(this.changesetsUrl(), requestOptions)
-               .toPromise()
-               .then(response => {
-                 this.changesets = response.json() as Changeset[];
-                 return this.changesets;
-               })
-               .catch(error => {
-                 return this.handleError(error, 'getChangesets', this.changesetsUrl(), params.paramsMap);
-               });
+                    .map((response:Response) => {
+                       this.changesets = response.json() as Changeset[];
+                       return this.changesets;
+                     })
+                     .catch((error:any) => Observable.throw(
+                       this.handleError(error, 'getChangesets', this.changesetsUrl(), params.paramsMap)
+                     ));
   }
 
-  getChangeset(id: number, forceReload?: boolean): Promise<Changeset> {
+  getChangeset(id: number, forceReload?: boolean): Observable<Changeset> {
     // load changesets when not loaded already
     // e.g. when reloading changeset detail page
     if(this.changesets === undefined || forceReload === true) {
-      return this.getChangesets().then(v => {
-        return this.getChangeset(id);
-      })
+      return this.getChangesets()
+          .map(
+            v => {
+              return this.changesetById(id);
+            }
+          );
     } else {
-      for(let changeset of this.changesets) {
-        if(changeset.osmId === id) {
-          return new Promise((resolve, reject) => {
-            resolve(changeset);
-          });
-        }
-      }
-      return new Promise((resolve, reject) => {
-        reject();
-      })
+      return Observable.create((observer: Observer<Changeset>) => {
+        observer.next(this.changesetById(id));
+        observer.complete();
+      });
     }
   }
 
-  getChangesetComments(id: number): Promise<ChangesetComment[]> {
+  getChangesetComments(id: number): Observable<ChangesetComment[]> {
     let url = this.changesetCommentsUrl(id);
     return this.http.get(url, this.getRequestOptions())
-                    .toPromise()
-                    .then(response => response.json() as ChangesetComment[])
-                    .catch(error => {
-                      return this.handleError(error, 'getChangesetComments', url, {id: id});
-                    });
+                    .map((response:Response) => response.json() as ChangesetComment[])
+                    .catch((error:any) => Observable.throw(
+                      this.handleError(error, 'getChangesetComments', url, {id: id})
+                    ));
   }
 
-  getChangesetChanges(id: number): Promise<ChangesetChange[]> {
+  getChangesetChanges(id: number): Observable<ChangesetChange[]> {
     let url = this.changesetChangesUrl(id);
     return this.http.get(url, this.getRequestOptions())
-                    .toPromise()
-                    .then(response => response.json() as ChangesetChange[])
-                    .catch(error => {
-                      return this.handleError(error, 'getChangesetChanges', url, {id: id});
-                    });
+                    .map((response:Response) => response.json() as ChangesetChange[])
+                    .catch((error:any) => Observable.throw(
+                      this.handleError(error, 'getChangesetChanges', url, {id: id})
+                    ));
   }
 
   getChangesetIdx(current: Changeset): number {

@@ -22,9 +22,11 @@ export class ChangesetCommentListComponent implements OnChanges {
 
   getChangesetComments(): void {
     this.changesetService.getChangesetComments(this.id)
-                         .then(changesetComments => this.assignChangesetComments(changesetComments))
-                         // TODO define onError actions
-                         .catch(error => {});
+                         .subscribe(
+                           changesetComments => this.assignChangesetComments(changesetComments),
+                           // TODO define onError actions
+                           error => {}
+                         );
   }
 
   ngOnChanges(changes: SimpleChanges) {

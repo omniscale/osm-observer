@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
-import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Rx';
 import { Subject }    from 'rxjs/Subject';
+
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { BaseHttpService } from './base-http.service';
@@ -27,24 +28,20 @@ export class ReviewService extends BaseHttpService {
     super(router, cookieService);
   }
 
-  getReviews(changesetId: number): Promise<Review[]> {
+  getReviews(changesetId: number): Observable<Review[]> {
     let url = this.reviewsUrl(changesetId);
     return this.http.get(url, this.getRequestOptions())
-                    .toPromise()
-                    .then(response => response.json() as Review[])
-                    .catch(error => {
-                      return this.handleError(error, 'getReviews', url);
-                    });
+                    .map((response:Response) => response.json() as Review[])
+                    .catch((error:any) => Observable.throw(
+                      this.handleError(error, 'getReview', url)
+                    ));
   }
 
-  addReview(changesetId: number, review: Review): Promise<Review> {
+  addReview(changesetId: number, review: Review): Observable<Review> {
     let url = this.addReviewUrl(changesetId);
     return this.http.post(url, review, this.getRequestOptions())
-                    .toPromise()
-                    .then(response => this.handleAddReviewResponse(response))
-                    .catch(error => {
-                      return this.handleError(error, 'addReview', url, review);
-                    });
+                    .map((response:Response) => this.handleAddReviewResponse(response))
+                    .catch((error:any) => Observable.throw(this.handleError(error, 'addReview', url, review)));
   }
 
   private handleAddReviewResponse(response: any): Review {

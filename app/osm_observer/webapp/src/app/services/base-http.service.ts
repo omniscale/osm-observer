@@ -21,7 +21,7 @@ export class BaseHttpService {
     return requestOptions;
   }
 
-  handleError(error: Response, caller: string, url: string, opt?: any): Promise<any> {
+  handleError(error: Response, caller: string, url: string, opt?: any): any {
     if(error.status === 401 || error.status === 403) {
       this.cookieService.remove('loggedIn');
       this.router.navigate(['/login']);
@@ -34,6 +34,6 @@ export class BaseHttpService {
     } else {
       console.warn(msg, opt);
     }
-    return Promise.reject(error);
+    return error;
   }
 }

@@ -39,14 +39,16 @@ export class ReviewBotConfigFormComponent implements OnInit {
     let id = this.route.snapshot.params['id'];
     if(id !== undefined) {
       this.reviewBotConfigService.getReviewBotConfig(+id)
-                                 .then((reviewBotConfig: ReviewBotConfig) => {
+                                 .subscribe(
+                                   (reviewBotConfig: ReviewBotConfig) => {
                                     this.model = reviewBotConfig;
                                     this.update = true;
-                                  })
-                                 // TODO define onError actions
-                                 .catch(e => {
-                                   this.router.navigate(['/reviewBotConfigs']);
-                                 });
+                                   },
+                                   // TODO define onError actions
+                                   error => {
+                                     this.router.navigate(['/reviewBotConfigs']);
+                                   }
+                                 );
     }
   }
 
@@ -70,20 +72,24 @@ export class ReviewBotConfigFormComponent implements OnInit {
   onSubmit() {
     if(this.update) {
       this.reviewBotConfigService.updateReviewBotConfig(this.model)
-          .then(v => {
-            this.router.navigate(['/reviewBotConfigs']);
-            this.messageService.add(this.botConfigUpdatedText, 'success');
-          })
-          // TODO define onError actions
-          .catch(e => {});
+          .subscribe(
+            v => {
+              this.router.navigate(['/reviewBotConfigs']);
+              this.messageService.add(this.botConfigUpdatedText, 'success');
+            },
+            // TODO define onError actions
+            error => {}
+          );
     } else {
       this.reviewBotConfigService.addReviewBotConfig(this.model)
-          .then(v => {
-            this.router.navigate(['/reviewBotConfigs']);
-            this.messageService.add(this.botConfigAddedText, 'success');
-          })
-          // TODO define onError actions
-          .catch(e => {});
+          .subscribe(
+            v => {
+              this.router.navigate(['/reviewBotConfigs']);
+              this.messageService.add(this.botConfigAddedText, 'success');
+            },
+            // TODO define onError actions
+            e => {}
+          );
     }
     return false;
   }

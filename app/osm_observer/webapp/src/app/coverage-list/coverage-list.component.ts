@@ -26,9 +26,11 @@ export class CoverageListComponent implements OnInit {
 
   getCoverages(): void {
     this.coverageService.getCoverages()
-                        .then(coverages => this.assignCoverages(coverages))
-                        // TODO define onError actions
-                        .catch(error => {});
+                        .subscribe(
+                          coverages => this.assignCoverages(coverages),
+                          // TODO define onError actions
+                          error => {}
+                        );
   }
 
   applyChanges(): void {
@@ -39,12 +41,14 @@ export class CoverageListComponent implements OnInit {
       }
     }
     this.coverageService.setActiveCoverages(activeCoverageIds)
-                        .then(v => {
-                          this.messageService.add(this.changesSavedText, 'success');
-                          this.getCoverages();
-                        })
-                        // TODO define onError actions
-                        .catch(error => {});
+                        .subscribe(
+                          v => {
+                            this.messageService.add(this.changesSavedText, 'success');
+                            this.getCoverages();
+                          },
+                          // TODO define onError actions
+                          error => {}
+                        );
   }
 
   cancelChanges(): void {

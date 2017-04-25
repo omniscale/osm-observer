@@ -1,16 +1,16 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
-import { ChangesetDetailResolverService } from './changeset-detail-resolver.service';
+import { ChangesetDetailResolver } from './changeset-detail-resolver.service';
 
-describe('ChangesetDetailResolverService', () => {
+describe('ChangesetDetailResolver', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ChangesetDetailResolverService]
+      providers: [ChangesetDetailResolver]
     });
   });
 
-  it('should ...', inject([ChangesetDetailResolverService], (service: ChangesetDetailResolverService) => {
+  it('should ...', inject([ChangesetDetailResolver], (service: ChangesetDetailResolver) => {
     expect(service).toBeTruthy();
   }));
 });
