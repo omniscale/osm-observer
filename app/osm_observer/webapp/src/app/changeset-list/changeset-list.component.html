@@ -127,6 +127,7 @@
              *ngIf="orderBy==='username' && order==='desc'">
           </i>
         </th>
+        <th class="comment-column">{{ 'COMMENT' | translate }}</th>
         <th class="pointer"
             (click)="sortBy('numChanges')">
           {{ 'CHANGES' | translate }}
@@ -208,6 +209,7 @@
           </div>
         </th>
         <th></th>
+        <th class="comment-column"></th>
         <th>
           <div class="form-group">
             <input type="number"
@@ -271,6 +273,7 @@
               {{ changeset.username }}
             </a>
           </td>
+          <td class="comment-column">{{ changeset.tags.comment }}</td>
           <td>{{ changeset.numChanges }}</td>
           <td>{{ changeset.numReviews }}</td>
           <td>{{ changeset.sumScore }}</td>

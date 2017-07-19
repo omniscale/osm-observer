@@ -152,6 +152,12 @@ table.table
         th
           padding-top: 0
           padding-bottom: 0
+  thead, tbody
+    tr
+      th, td
+        &.comment-column
+          max-width: 30rem
+          word-break: break-word
 table.table
   &:last-child
     margin-bottom: 0
