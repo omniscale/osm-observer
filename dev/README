@@ -1,3 +1,14 @@
+Dependencies
+------------
+
+    - nodejs >= 6.10.2
+    - python >= 3.5.2
+    - virtualenvwrapper
+    - postgresql >= 9.5.6
+    - postgis >= 2.2.1
+    - go >= 1.8
+
+
 Database
 --------
 
