@@ -1,12 +1,16 @@
-#OSM-Observer
+OSM-Observer
+============
 
-## Features
+Features
+--------
 
-## Current status
+Current status
+--------------
 
 ###Missing
 
-##Installation
+Installation
+------------
 
 First step is to clone this repository and cd into it.
 
