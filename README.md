@@ -7,14 +7,14 @@ Features
 Current status
 --------------
 
-###Missing
+### Missing
 
 Installation
 ------------
 
 First step is to clone this repository and cd into it.
 
-###Dependencies
+### Dependencies
 
     - nodejs >= 6.10.2
     - python >= 3.5.2
@@ -23,7 +23,7 @@ First step is to clone this repository and cd into it.
     - postgis >= 2.2.1
     - go >= 1.8
 
-###Database setup
+### Database setup
 
 Create a database for Imposm-Changes and OSM-Observer:
 
@@ -44,11 +44,11 @@ Create database schema for OSM-Observer:
     psql -d osm_observer -c "CREATE SCHEMA changes_app; ALTER SCHEMA changes_app OWNER TO os;"
 
 
-###Imposm-Changes
+### Imposm-Changes
 
 See [Imposm-Changes repository ](https://github.com/omniscale/imposm-changes) for installation notes
 
-###OSM-Observer
+### OSM-Observer
 
 Create a virtual environment (replace path to python3 executable if it differs):
 
