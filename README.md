@@ -60,8 +60,7 @@ Install OSM-Observer app into virtual env:
 
 Create required database tables:
 
-    cd dev
-    python manage.py create_db
+    (cd dev && python manage.py create_db)
 
 Install [@angular/cli](https://github.com/angular/angular-cli)
 
@@ -74,8 +73,9 @@ Install necessary node packages
 
 Building WebApp
 
-    cd dev
-    python manage.py build_webapp
+    (cd dev && python manage.py build_webapp)
 
 
+Run OSM-Observer
 
+    (cd dev && python manage.py runserver)
