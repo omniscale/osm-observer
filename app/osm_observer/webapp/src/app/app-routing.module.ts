@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AuthService }             from './services/auth.service';
 import { AuthGuardService }        from './services/auth-guard.service';
+import { AnonymousGuardService}    from './services/anonymous-guard.service';
 import { ChangesetDetailResolver } from './services/changeset-detail-resolver.service';
 
 import { CoverageListComponent }        from './coverage-list/coverage-list.component';
@@ -15,6 +16,7 @@ import { LoginComponent }               from './login/login.component';
 const appRoutes: Routes = [
   {
     path: 'login',
+    canActivate: [AnonymousGuardService],
     component: LoginComponent
   },
   {
@@ -73,6 +75,7 @@ const appRoutes: Routes = [
   providers: [
     AuthService,
     AuthGuardService,
+    AnonymousGuardService,
     ChangesetDetailResolver
   ]
 })
