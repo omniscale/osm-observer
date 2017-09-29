@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
                     .subscribe(
                       authResponse => {
                         if(authResponse.success) {
-                          let redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/dashboard';
+                          let redirect = this.authService.redirectUrl && this.authService.redirectUrl !== '/login' ? this.authService.redirectUrl : '/dashboard';
                           this.router.navigate([redirect]);
                           this.messageService.add(this.messages[authResponse.messageId], 'success');
                         } else {
