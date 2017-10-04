@@ -34,6 +34,7 @@ import { MessageService } from './services/message.service';
 
 import { KeyValueListPipe } from './pipes/key-value-list.pipe';
 import { HasKeysPipe } from './pipes/has-keys.pipe';
+import { ReadyDirective } from './directives/ready.directive';
 
 
 export function createTranslateLoader(http: Http, location: Location) {
@@ -56,7 +57,8 @@ export function createTranslateLoader(http: Http, location: Location) {
     ChangesetChangesListComponent,
     LoginComponent,
     MessageViewerComponent,
-    JOSMLinkComponent
+    JOSMLinkComponent,
+    ReadyDirective
   ],
   imports: [
     BrowserModule,

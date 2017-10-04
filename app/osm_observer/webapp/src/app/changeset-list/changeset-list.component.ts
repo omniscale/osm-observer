@@ -36,6 +36,8 @@ export class ChangesetListComponent implements OnInit {
 
   reviewStatus = ReviewStatus;
 
+  loading: boolean = false;
+
   private timer;
 
   private subscription: Subscription;
@@ -62,12 +64,19 @@ export class ChangesetListComponent implements OnInit {
   }
 
   getChangesets(): void {
+    this.loading = true;
     this.changesetService.getChangesets(this.username, this.timeRange, this.sumScore, this.numReviews, this.coverageId, this.statusId, this.currentUserReviewed)
                          .subscribe(
                            changesets => this.assignChangesets(changesets),
                            // TODO define onError actions
                            error => {}
                          );
+  }
+
+  changesetsRendered(): void {
+    setTimeout(() => {
+      this.loading = false;
+    }, 0);
   }
 
   getCoverages(): void {

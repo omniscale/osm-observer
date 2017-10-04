@@ -85,5 +85,6 @@
 	"RESET": "Zurücksetzten",
 	"CREATED BY": "Erstellt von",
 	"CREATED AT": "Erstellt am",
-	"NO REVIEWS": "Keine Reviews"
+	"NO REVIEWS": "Keine Reviews",
+	"LOADING CHANGESETS": "Änderungssätze werden geladen..."
 }

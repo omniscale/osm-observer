@@ -258,7 +258,12 @@
           {{ 'NO CHANGESETS' | translate }}
         </td>
       </tr>
-      <ng-container *ngFor="let changeset of changesets">
+      <tr *ngIf="loading">
+        <td colspan="9" class="loading-data">
+          {{ 'LOADING CHANGESETS' | translate }}
+        </td>
+      </tr>
+      <ng-container *ngFor="let changeset of changesets; let last = last" [ready]="last" (onReady)="changesetsRendered()">
         <tr [class.table-danger]="changeset.status === reviewStatus.BROKEN">
           <td>{{ changeset.id }}</td>
           <td>
