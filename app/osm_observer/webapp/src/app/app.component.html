@@ -5,13 +5,13 @@
   <h1 class="navbar-brand mr-auto">{{ title }}</h1>
   <button class="btn btn-outline-secondary btn-sm header-btn"
           type="button"
-          *ngIf="authService.isLoggedIn()"
+          *ngIf="authService.isLoggedIn"
           (click)="logout()">
     {{ 'LOGOUT' | translate }}
   </button>
 </nav>
 <nav class="nav"
-     *ngIf="authService.isLoggedIn()">
+     *ngIf="authService.isLoggedIn">
   <a class="nav-link rounded-0"
      routerLink="/changesets"
      [routerLinkActive]="['active']">

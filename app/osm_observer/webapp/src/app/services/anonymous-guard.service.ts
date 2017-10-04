@@ -20,11 +20,11 @@ export class AnonymousGuardService implements CanActivate {
 
   checkLogin(url: string): boolean {
     this.authService.redirectUrl = url;
-    let loggedIn = this.authService.isLoggedIn();
-    if(loggedIn === true) {
+
+    if(this.authService.isLoggedIn === true) {
       this.router.navigate(['/']);
     }
-    return loggedIn;
+    return this.authService.isLoggedIn;
   }
 
 }

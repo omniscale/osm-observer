@@ -20,32 +20,36 @@ export class AuthService extends BaseHttpService {
     return this.location.prepareExternalUrl('api/logout');
   }
 
+  isLoggedIn: boolean;
   redirectUrl: string;
 
   constructor(router: Router, private http: Http, cookieService: CookieService, private location: Location) {
     super(router, cookieService);
+    this.isLoggedIn = this._isLoggedIn();
   }
 
   login(user: User): Observable<AuthResponse> {
     return this.http.post(this.loginUrl(), user, this.getRequestOptions())
-                    .map((response:Response) => response.json() as AuthResponse)
+                    .map((response:Response) => {
+                      this.isLoggedIn = this._isLoggedIn();
+                      return response.json() as AuthResponse
+                     })
                     .catch((error:any) => Observable.throw(
                       this.handleError(error, 'login', this.loginUrl(), user)
                     ));
   }
 
-  isLoggedIn(): boolean {
+  private _isLoggedIn(): boolean {
     let loggedIn = this.cookieService.get('loggedIn');
-    if(loggedIn === '1') {
-      return true;
-    }
-    return false;
+    return loggedIn === '1';
   }
 
   logout(): Observable<AuthResponse> {
-    console.log('logout called')
     return this.http.get(this.logoutUrl(), this.getRequestOptions())
-                    .map((response:Response) => response.json() as AuthResponse)
+                    .map((response:Response) => {
+                      this.isLoggedIn = this._isLoggedIn();
+                      return response.json() as AuthResponse
+                    })
                     .catch((error:any) => Observable.throw(
                       this.handleError(error, 'logout', this.logoutUrl())
                     ));
