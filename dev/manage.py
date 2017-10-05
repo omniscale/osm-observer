@@ -2,7 +2,7 @@ import os
 import gzip
 import json
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from osm_observer import create_app
 from osm_observer.extensions import db, assets
@@ -95,6 +95,32 @@ def insert_changesets():
 
         db.session.add(cs)
     db.session.commit()
+
+
+@manager.command
+def remove_outdated_changesets(days=720):
+    "Remove Changesets older than [days]"
+    from osm_observer.model import changesets
+    from sqlalchemy.sql import select, delete
+
+    days = int(days)
+
+    before = datetime.now() - timedelta(days=days)
+
+    conn = db.session.connection()
+
+    s = select([changesets])
+    s = s.where(changesets.c.closed_at < before)
+
+    r = len(conn.execute(s).fetchall())
+
+    q = delete(changesets)
+    q = q.where(changesets.c.closed_at < before)
+
+    conn.execute(q)
+    db.session.commit()
+
+    print('%s changesets older than %s deleted' % (r, days))
 
 
 @manager.command
