@@ -69,7 +69,7 @@ class User(db.Model, UserMixin):
                                     user=username,
                                     password=password,
                                     auto_bind=True)
-        except ldap3.core.exceptions.LDAPSocketOpenError:
+        except ldap3.core.exceptions.LDAPException:
             return False
         if not conn.bind():
             return False
