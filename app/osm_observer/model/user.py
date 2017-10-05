@@ -64,9 +64,13 @@ class User(db.Model, UserMixin):
 
     @staticmethod
     def try_ldap_login(username, password):
+        dn = '%s=%s,%s' % (
+            current_app.config.get('LDAP_USER_LOGIN_ATTR'),
+            username,
+            current_app.config.get('LDAP_BASE_DN'))
         try:
             conn = ldap3.Connection(current_app.config['LDAP_PROVIDER_URL'],
-                                    user=username,
+                                    user=dn,
                                     password=password,
                                     auto_bind=True)
         except ldap3.core.exceptions.LDAPException:

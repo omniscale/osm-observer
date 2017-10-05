@@ -40,6 +40,8 @@ class DefaultConfig(object):
 
     LDAP_ENABLED = False
     LDAP_PROVIDER_URL = ''
+    LDAP_BASE_DN = ''
+    LDAP_USER_LOGIN_ATTR = ''
 
     CHANGES_DB_SCHEMA = 'changes'
     OPENSTREETMAP_CHANGESET_URL = 'http://www.openstreetmap.org/changeset/'
