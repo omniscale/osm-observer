@@ -73,7 +73,7 @@ class User(db.Model, UserMixin):
             return False
         if not conn.bind():
             return False
-        conn.close()
+        conn.unbind()
         return True
 
     def update_password(self, password):
