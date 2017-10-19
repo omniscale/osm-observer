@@ -74,6 +74,8 @@ Building WebApp
 
 ::
     python manage.py build_webapp
+    python manage.py assets clean
+    python manage.py assets build
 
 
 Development
