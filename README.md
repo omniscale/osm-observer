@@ -77,7 +77,7 @@ Install necessary node packages
 
 Building WebApp
 
-    (cd dev && python manage.py build_webapp)
+    (cd dev && python manage.py build_webapp && python manage.py assets clean && python manage.py assets build)
 
 
 Run OSM-Observer
