@@ -92,8 +92,8 @@ def serialize_changeset(changeset):
     return {
         'id': changeset.app_id,
         'osmId': changeset.id,
-        'createdAt': changeset.created_at,
-        'closedAt': changeset.closed_at,
+        'createdAt': str(changeset.created_at),
+        'closedAt': str(changeset.closed_at),
         'username': changeset.user_name,
         'numChanges': changeset.num_changes,
         'userId': changeset.user_id,
@@ -121,7 +121,7 @@ def serialize_changeset_comments(comments):
             'idx': comment.idx,
             'userName': comment.user_name,
             'userId': comment.user_id,
-            'timestamp': comment.timestamp,
+            'timestamp': str(comment.timestamp),
             'text': comment.text
         })
     return data
@@ -139,7 +139,7 @@ def serialize_changeset_changes(changes):
             'deleted': change.delete,
             'userName': change.user_name,
             'userId': change.user_id,
-            'timestamp': change.timestamp,
+            'timestamp': str(change.timestamp),
             'version': change.version,
             'tags': change.tags,
         })
