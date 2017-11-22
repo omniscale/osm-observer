@@ -23,8 +23,8 @@ class Review(db.Model):
     _status = db.Column(db.Integer)
     comment = db.Column(db.String)
     time_created = db.Column(
-        db.DateTime,
-        default=datetime.datetime.utcnow
+        db.DateTime(timezone=True),
+        default=datetime.datetime.now
     )
     changeset_id = db.Column(
         db.Integer,

@@ -11,8 +11,8 @@ changesets = db.Table(
     'changesets', db.MetaData(),
     db.Column('id', db.Integer, primary_key=True),
     db.Column('bbox', Geometry(geometry_type='Polygon', srid=4326)),
-    db.Column('created_at', db.DateTime),
-    db.Column('closed_at', db.DateTime),
+    db.Column('created_at', db.DateTime(timezone=True)),
+    db.Column('closed_at', db.DateTime(timezone=True)),
     db.Column('num_changes', db.Integer),
     db.Column('open', db.Boolean),
     db.Column('user_name', db.String),
@@ -31,7 +31,7 @@ nodes = db.Table(
     db.Column('geometry', Geometry(geometry_type='Point', srid=4326)),
     db.Column('user_name', db.String),
     db.Column('user_id', db.Integer),
-    db.Column('timestamp', db.DateTime),
+    db.Column('timestamp', db.DateTime(timezone=True)),
     db.Column('version', db.Integer, primary_key=True),
     db.Column('tags', HSTORE),
     db.Column('changeset', db.Integer),
@@ -47,7 +47,7 @@ ways = db.Table(
     db.Column('delete', db.Boolean),
     db.Column('user_name', db.String),
     db.Column('user_id', db.Integer),
-    db.Column('timestamp', db.DateTime),
+    db.Column('timestamp', db.DateTime(timezone=True)),
     db.Column('version', db.Integer, primary_key=True),
     db.Column('tags', HSTORE),
     db.Column('changeset', db.Integer),
@@ -63,7 +63,7 @@ relations = db.Table(
     db.Column('delete', db.Boolean),
     db.Column('user_name', db.String),
     db.Column('user_id', db.Integer),
-    db.Column('timestamp', db.DateTime),
+    db.Column('timestamp', db.DateTime(timezone=True)),
     db.Column('version', db.Integer, primary_key=True),
     db.Column('tags', HSTORE),
     db.Column('changeset', db.Integer),
@@ -76,7 +76,7 @@ comments = db.Table(
     db.Column('idx', db.Integer, primary_key=True),
     db.Column('user_name', db.String),
     db.Column('user_id', db.Integer),
-    db.Column('timestamp', db.DateTime),
+    db.Column('timestamp', db.DateTime(timezone=True)),
     db.Column('text', db.String),
     schema='changes',
 )
@@ -106,5 +106,5 @@ current_status = db.Table(
     'current_status', db.MetaData(),
     db.Column('type', db.String),
     db.Column('sequence', db.Integer),
-    db.Column('timestamp', db.DateTime)
+    db.Column('timestamp', db.DateTime(timezone=True))
 )
