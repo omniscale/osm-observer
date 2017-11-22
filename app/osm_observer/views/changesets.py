@@ -1,3 +1,4 @@
+import time
 from datetime import date, timedelta
 
 from flask import abort, jsonify, request, current_app
@@ -87,13 +88,19 @@ def changeset_changes(changeset_id):
     return jsonify(serialize_changeset_changes(changes))
 
 
+def gmt_timestr(dt):
+    # as workaround for https://github.com/pallets/flask/issues/2392
+    # we convert datetime to gmt str before jsonify does it
+    return time.strftime('%Y-%m-%dT%H:%m:%S+00:00', dt.utctimetuple())
+
+
 def serialize_changeset(changeset):
     bbox_wkt = to_shape(changeset.bbox)
-    return {
+    r = {
         'id': changeset.app_id,
         'osmId': changeset.id,
-        'createdAt': str(changeset.created_at),
-        'closedAt': str(changeset.closed_at),
+        'createdAt': gmt_timestr(changeset.created_at),
+        'closedAt': gmt_timestr(changeset.closed_at),
         'username': changeset.user_name,
         'numChanges': changeset.num_changes,
         'userId': changeset.user_id,
@@ -104,6 +111,7 @@ def serialize_changeset(changeset):
         'currentUserReviewed': changeset.current_user_reviewed,
         'bbox': bbox_wkt.bounds
     }
+    return r
 
 
 def serialize_changesets(changesets):
@@ -121,7 +129,7 @@ def serialize_changeset_comments(comments):
             'idx': comment.idx,
             'userName': comment.user_name,
             'userId': comment.user_id,
-            'timestamp': str(comment.timestamp),
+            'timestamp': comment.timestamp,
             'text': comment.text
         })
     return data
@@ -139,7 +147,7 @@ def serialize_changeset_changes(changes):
             'deleted': change.delete,
             'userName': change.user_name,
             'userId': change.user_id,
-            'timestamp': str(change.timestamp),
+            'timestamp': change.timestamp,
             'version': change.version,
             'tags': change.tags,
         })
