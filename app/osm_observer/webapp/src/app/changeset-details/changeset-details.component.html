@@ -37,7 +37,7 @@
         </thead>
         <tbody>
           <tr>
-            <td>{{ currentChangeset.closedAt | date:'d.M.y HH:mm:ss'}}</td>
+            <td>{{ currentChangeset.closedAt | date:'d.M.y HH:mm:ss Z' }}</td>
             <td>
               <a href="http://www.openstreetmap.org/changeset/{{ currentChangeset.osmId }}"
                  target="_blank">

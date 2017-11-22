@@ -23,7 +23,7 @@
         <td>{{ review.score }}</td>
         <td>{{ reviewStatus.byId(review.status) | translate }}</td>
         <td>{{ review.creator.name }}</td>
-        <td>{{ review.timeCreated | date:'d.M.y HH:mm:ss' }}</td>
+        <td>{{ review.timeCreated | date:'d.M.y HH:mm:ss Z' }}</td>
         <td>{{ review.comment }}</td>
       </tr>
     </tbody>
