@@ -200,6 +200,23 @@ def create_user(username=None, password=None):
     print('User %s created' % username)
 
 
+@manager.command
+def remove_user(username=None):
+    if username is None:
+        print('Username is required')
+        exit(0)
+
+    user = User.by_username(username)
+
+    if user is None:
+        print('User %s not found' % username)
+        exit(0)
+
+    if prompt_bool("Are you sure ? User %s will be deleted!" % username):
+        db.session.delete(user)
+        db.session.commit()
+        print('User %s removed' % username)
+
 manager.add_command("assets", ManageAssets(assets))
 
 manager.add_command("runserver", Server(threaded=True))
