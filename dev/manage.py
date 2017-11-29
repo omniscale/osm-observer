@@ -239,6 +239,29 @@ def change_username(username=None, new_username=None):
     db.session.commit()
     print('User renamed to %s' % new_username)
 
+
+@manager.command
+def change_user_password(username=None, new_password=None):
+    if None in [username, new_password]:
+        print('Username and new_password are required')
+        exit(0)
+
+    user = User.by_username(username)
+
+    if user is None:
+        print('User %s not found' % username)
+        exit(0)
+
+    try:
+        user.update_password(new_password)
+    except ValueError as ex:
+        print(ex)
+        exit(0)
+
+    db.session.commit()
+    print('Password changed')
+
+
 manager.add_command("assets", ManageAssets(assets))
 
 manager.add_command("runserver", Server(threaded=True))
