@@ -69,6 +69,9 @@ export class ChangesetListComponent implements OnInit {
   }
 
   getChangesets(): void {
+    if(this.coverages.length === 0) {
+      return;
+    }
     this.loading = true;
     this.changesetService.getChangesets(this.username, this.timeRange, this.sumScore, this.numReviews, this.coverageId, this.statusId, this.currentUserReviewed)
                          .subscribe(

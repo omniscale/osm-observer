@@ -86,5 +86,6 @@
 	"CREATED BY": "Erstellt von",
 	"CREATED AT": "Erstellt am",
 	"NO REVIEWS": "Keine Reviews",
-	"LOADING CHANGESETS": "Änderungssätze werden geladen..."
+	"LOADING CHANGESETS": "Änderungssätze werden geladen...",
+	"NO COVERAGES ASSIGNED": "Keine Bereiche ausgewählt"
 }

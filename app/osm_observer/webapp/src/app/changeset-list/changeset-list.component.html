@@ -263,6 +263,11 @@
           {{ 'LOADING CHANGESETS' | translate }}
         </td>
       </tr>
+      <tr *ngIf="coverages !== undefined && coverages.length === 0">
+        <td colspan="9" class="loading-data">
+          {{ 'NO COVERAGES ASSIGNED' | translate }}
+        </td>
+      </tr>
       <ng-container *ngFor="let changeset of changesets; let last = last" [ready]="last" (onReady)="changesetsRendered()">
         <tr [class.table-danger]="changeset.status === reviewStatus.BROKEN">
           <td>{{ changeset.id }}</td>
