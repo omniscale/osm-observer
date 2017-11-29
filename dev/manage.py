@@ -217,6 +217,28 @@ def remove_user(username=None):
         db.session.commit()
         print('User %s removed' % username)
 
+
+@manager.command
+def change_username(username=None, new_username=None):
+    if None in [username, new_username]:
+        print('Username and new_username are required')
+        exit(0)
+
+    user = User.by_username(username)
+
+    if user is None:
+        print('User %s not found' % username)
+        exit(0)
+
+    if User.by_username(new_username) is not None:
+        print('User %s already exists' % new_username)
+        exit(0)
+
+    user.username = new_username
+
+    db.session.commit()
+    print('User renamed to %s' % new_username)
+
 manager.add_command("assets", ManageAssets(assets))
 
 manager.add_command("runserver", Server(threaded=True))
