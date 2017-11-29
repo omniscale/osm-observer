@@ -53,6 +53,11 @@ export class ChangesetListComponent implements OnInit {
     this.orderBy = 'closedAt';
     this.order = 'desc';
     this.changesets = changesets;
+    // when no changesets returned, ng-for onReady is not triggered,
+    // so loading is not set to false in that case
+    if(this.changesets.length === 0) {
+      this.loading = false;
+    }
   }
 
   assignCoverages(coverages: Coverage[]) {
