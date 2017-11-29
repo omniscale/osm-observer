@@ -69,7 +69,7 @@ export class ChangesetListComponent implements OnInit {
   }
 
   getChangesets(): void {
-    if(this.coverages.length === 0) {
+    if(this.coverages !== undefined && this.coverages.length === 0) {
       return;
     }
     this.loading = true;
