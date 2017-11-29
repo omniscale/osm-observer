@@ -132,3 +132,19 @@ To have an ascending revision number we have to pass --rev-id parameter to alemb
 
 ::
     alembic revision --rev-id [id] --autogenerate -m "[comment]"
+
+
+User management
+---------------
+
+Create user::
+    python manage.py create_user --username=[username] --password=[password]
+
+Remove user::
+    python manage.py remove_user --username=[username]
+
+Change username::
+    python manage.py change_username --username=[username] --new_username=[new_username]
+
+Change user password::
+    python manage.py change_user_password --username=[username] --new_password=[new_password]
