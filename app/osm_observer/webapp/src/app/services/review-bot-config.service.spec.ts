@@ -1,16 +1,16 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
-import { ReviewBotService } from './review-bot.service';
+import { ReviewBotConfigService } from './review-bot-config.service';
 
-describe('ReviewBotService', () => {
+describe('ReviewBotConfigService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ReviewBotService]
+      providers: [ReviewBotConfigService]
     });
   });
 
-  it('should ...', inject([ReviewBotService], (service: ReviewBotService) => {
+  it('should ...', inject([ReviewBotConfigService], (service: ReviewBotConfigService) => {
     expect(service).toBeTruthy();
   }));
 });
