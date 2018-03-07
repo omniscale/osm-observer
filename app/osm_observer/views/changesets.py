@@ -88,19 +88,13 @@ def changeset_changes(changeset_id):
     return jsonify(serialize_changeset_changes(changes))
 
 
-def gmt_timestr(dt):
-    # as workaround for https://github.com/pallets/flask/issues/2392
-    # we convert datetime to gmt str before jsonify does it
-    return time.strftime('%Y-%m-%dT%H:%m:%S+00:00', dt.utctimetuple())
-
-
 def serialize_changeset(changeset):
     bbox_wkt = to_shape(changeset.bbox)
     r = {
         'id': changeset.app_id,
         'osmId': changeset.id,
-        'createdAt': gmt_timestr(changeset.created_at),
-        'closedAt': gmt_timestr(changeset.closed_at),
+        'createdAt': changeset.created_at.strftime("%d.%m.%Y %H:%M:%S"),
+        'closedAt': changeset.closed_at.strftime("%d.%m.%Y %H:%M:%S"),
         'username': changeset.user_name,
         'numChanges': changeset.num_changes,
         'userId': changeset.user_id,

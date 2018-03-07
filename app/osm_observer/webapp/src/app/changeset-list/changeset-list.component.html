@@ -276,7 +276,7 @@
               {{ changeset.osmId }}
             </a>
           </td>
-          <td>{{ changeset.closedAt | date:'d.M.y HH:mm:ss' }}</td>
+          <td>{{ changeset.closedAt }}</td>
           <td>
             <a href="javascript:void(0)"
                (click)="username=changeset.username;applyChange();">

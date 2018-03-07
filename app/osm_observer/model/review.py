@@ -67,7 +67,7 @@ class Review(db.Model):
             'score': self.score,
             'status': self._status,
             'comment': self.comment,
-            'timeCreated': self.time_created.timestamp() * 1000
+            'timeCreated': self.time_created.strftime("%d.%m.%Y %H:%M:%S")
         }
         if self.creator is not None:
             if isinstance(self.creator, User):
