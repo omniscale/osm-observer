@@ -10,6 +10,9 @@ export class BaseHttpService {
   getRequestOptions(params?: URLSearchParams): RequestOptions {
     let requestOptions = new RequestOptions({
       headers: new Headers({
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
       })
