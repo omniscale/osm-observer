@@ -52,9 +52,9 @@ CREATE TABLE osm_changes_test.current_status (
 CREATE TABLE osm_changes_test.members (
     relation_id integer NOT NULL,
     relation_version integer NOT NULL,
+    idx integer NOT NULL,
     type character varying,
     role character varying,
-    idx integer NOT NULL,
     member_node_id bigint,
     member_way_id integer,
     member_relation_id integer
@@ -89,7 +89,6 @@ CREATE TABLE osm_changes_test.relations (
     modify boolean,
     delete boolean,
     changeset integer,
-    geometry public.geometry(Point,4326),
     user_name character varying,
     user_id integer,
     "timestamp" timestamp with time zone,

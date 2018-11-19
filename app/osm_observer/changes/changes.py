@@ -30,7 +30,8 @@ from collect_relations r inner join (
     array_agg(member_node_id) as node_ids, array_agg(member_node_version) as node_versions,
     array_agg(member_way_id) as way_ids, array_agg(member_way_version) as way_versions,
     array_agg(member_relation_id) as relation_ids, array_agg(member_relation_version) as relation_versions
-    from collect_members
+    from (select * from collect_members order by relation_id, relation_version, idx) as
+    sub
     group by relation_id, relation_version
 ) m on m.relation_id = r.id and m.relation_version = r.version
 inner join relations rr on rr.id = r.id and rr.version = r.version
@@ -101,7 +102,15 @@ def collect_changeset(conn, cid):
     relations = {}
 
     res = conn.execute(SQL_COLLECT_CHANGESET, {'cid': cid}, multi=True)
-    # print(res)
+
+#     print()
+#     res = conn.execute(
+# '''
+# select * from collect_relations;
+# ''')
+#     for row in res:
+#         print(row)
+
     res = conn.execute(SQL_NODES)
     for row in res:
         key = tokey(row.id, row.version)
@@ -260,50 +269,59 @@ select r.id, r.version, false as changed, c.changeset-1 as max_changeset from re
 
 insert into collect_members
 select
-    distinct on (r.id, r.version, m.idx, w.id)
-    r.id, r.version, m.idx, m.role, null, null, w.id, w.version, null, null, r.max_changeset
-from
-    ways w
-    inner join members m on m.member_way_id = w.id
-    inner join collect_relations r on m.relation_id = r.id and m.relation_version = r.version
-where w.changeset <= r.max_changeset
-order by r.id, r.version, m.idx, w.id, w.changeset desc;
-
-insert into collect_members
-select
-    distinct on (r.id, r.version, m.idx, n.id)
-    r.id, r.version, m.idx, m.role, null, null, null, null, n.id, n.version, r.max_changeset
+    distinct on (r.id, r.version, m.idx, m.member_node_id)
+    r.id, r.version, m.idx, m.role, null, null, null, null, m.member_node_id,
+    coalesce(n.version, 0), r.max_changeset
 from
     nodes n
-    inner join members m on m.member_node_id = n.id
+    right join members m on m.member_node_id = n.id
     inner join collect_relations r on m.relation_id = r.id and m.relation_version = r.version
-where n.changeset <= r.max_changeset
-order by r.id, r.version, m.idx, n.id, n.changeset desc;
+where coalesce(n.changeset, 0) <= r.max_changeset and m.member_node_id is not null
+order by r.id, r.version, m.idx, m.member_node_id, n.changeset desc;
 
 insert into collect_members
 select
-    distinct on (r.id, r.version, m.idx, rr.id)
-    r.id, r.version, m.idx, m.role, rr.id, rr.version, null, null, null, null, r.max_changeset
+    distinct on (r.id, r.version, m.idx, m.member_way_id)
+    r.id, r.version, m.idx, m.role, null, null, m.member_way_id, coalesce(w.version,
+    0), null, null, r.max_changeset
+from
+    ways w
+    right join members m on m.member_way_id = w.id
+    inner join collect_relations r on m.relation_id = r.id and m.relation_version = r.version
+where coalesce(w.changeset, 0) <= r.max_changeset and m.member_way_id is not null
+order by r.id, r.version, m.idx, m.member_way_id, w.changeset desc;
+
+insert into collect_members
+select
+    distinct on (r.id, r.version, m.idx, m.member_relation_id)
+    r.id, r.version, m.idx, m.role, m.member_relation_id, coalesce(rr.version, 0), null, null, null, null, r.max_changeset
 from
     relations rr
-    inner join members m on m.member_relation_id = rr.id
+    right join members m on m.member_relation_id = rr.id
     inner join collect_relations r on m.relation_id = r.id and m.relation_version = r.version
-where rr.changeset <= r.max_changeset
-order by r.id, r.version, m.idx, rr.id, rr.changeset desc;
+where coalesce(rr.changeset, 0) <= r.max_changeset and m.member_relation_id is not null
+order by r.id, r.version, m.idx, m.member_relation_id, rr.changeset desc;
 
+
+insert into collect_nodes
+select m.member_node_id, m.member_node_version, false as changed from collect_members m where m.member_node_id is not null;
 
 insert into collect_ways
 select m.member_way_id, m.member_way_version, false as changed, max_changeset from collect_members m where m.member_way_id is not null;
 
-insert into collect_nodes
-select m.member_way_id, m.member_way_version, false as changed from collect_members m where m.member_node_id is not null;
+insert into collect_relations
+select m.member_relation_id, m.member_relation_version, false as changed, max_changeset from collect_members m where m.member_relation_id is not null;
 
 
 -- nds referenced by changed ways (and previous versions)
 insert into collect_nds
-select distinct on (w.id, w.version, nds.idx, n.id) w.id as way_id, w.version as way_version, nds.idx, n.id as node_id, n.version as node_version
-from nodes n inner join nds on n.id = nds.node_id inner join collect_ways w on nds.way_id = w.id and nds.way_version = w.version
-where n.changeset <= w.max_changeset order by w.id, w.version, nds.idx, n.id, n.changeset DESC;
+select distinct on (w.id, w.version, nds.idx, nds.node_id) w.id as way_id, w.version as
+way_version, nds.idx, nds.node_id as node_id, coalesce(n.version, 0) as node_version
+from collect_ways w
+    inner join nds on nds.way_id = w.id and nds.way_version = w.version
+    left join nodes n on n.id = nds.node_id        -- left join to also collect missing nodes
+where coalesce(n.changeset, 0) <= w.max_changeset  -- coalesce to include missing nodes
+order by w.id, w.version, nds.idx, nds.node_id, n.changeset DESC;
 
 -- nodes referenced by changed ways (and previous versions)
 insert into collect_nodes
