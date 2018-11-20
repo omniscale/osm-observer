@@ -3,6 +3,7 @@ from __future__ import (absolute_import, division,
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text, select
 
+from datetime import datetime, timedelta
 
 SQL_CHANGESET_NODES_INTERSECTS = text(
 '''
@@ -79,7 +80,7 @@ crelations as (
     select r.id, cid, r.tags, true as direct from cchangesets c inner join relations r on c.cid = r.changeset
 ),
 cchangesets as (
-    select id as cid from changesets order by id desc limit 150
+    select id as cid from changesets where closed_at >= :time_from and closed_at <= :time_till order by id desc limit 150
 )
 select cid, id, 'node' as type, tags, true as direct from cnodes where tags != ''::hstore
 union all
@@ -102,7 +103,7 @@ cways as (
     select w.id, cid, w.tags, true as direct, w.changeset from cchangesets c inner join ways w on c.cid = w.changeset
     union all
     (
-        select id, cid, tags, false as direct, wcid as changeset from (
+        select id, cid, tags, false as direct, ncid as changeset from (
             -- reduce multiple joined ways with distinct on to only return the most recent (see order by)
             select distinct on (n.cid, w.id, n.id)
                 n.cid, w.id, w.tags,
@@ -125,7 +126,7 @@ crelations as (
     union all
     -- select r.id, cid, r.tags, false as direct from cways w inner join members m on m.member_way_id = w.id inner join relations r on m.relation_id = r.id and r.version = m.relation_version where r.changeset != cid
     (
-        select id, cid, tags, false as direct, rcid as changeset from (
+        select id, cid, tags, false as direct, wcid as changeset from (
             select distinct on (w.cid, r.id, w.id)
                 r.id, cid, r.tags,
                 r.version, m.relation_version,
@@ -140,7 +141,7 @@ crelations as (
     )
     union all
     (
-        select id, cid, tags, false as direct, rcid as changeset from (
+        select id, cid, tags, false as direct, ncid as changeset from (
             select distinct on (n.cid, r.id, n.id)
                 r.id, cid, r.tags,
                 r.version, m.relation_version,
@@ -155,7 +156,7 @@ crelations as (
     )
     union all
     (
-        select id, cid, tags, false as direct, rcid as changeset from (
+        select id, cid, tags, false as direct, crcid as changeset from (
             select distinct on (cr.cid, r.id, cr.id)
                 r.id, cid, r.tags,
                 r.version, m.relation_version,
@@ -170,7 +171,7 @@ crelations as (
     )
 ),
 cchangesets as (
-    select id as cid from changesets order by id desc limit 50
+    select id as cid from changesets where closed_at >= :time_from and closed_at <= :time_till order by id desc
 )
 select cid, id, 'relation' as type, tags, direct from crelations where tags != ''::hstore
 union all
@@ -181,19 +182,32 @@ select cid, id, 'node' as type, tags, direct from cnodes where tags != ''::hstor
 '''
 )
 
-def collect_changesets(conn, coverages=None):
+def collect_changesets(conn, coverages=None, time_from=None, time_till=None):
     if not coverages:
         raise NotImplementedError()
 
     changesets = set()
 
-    res = conn.execute(SQL_CHANGESET_NODES_INTERSECTS, {'coverage_ids': tuple(coverages)})
+    if not time_from:
+        time_from = datetime.now()- timedelta(days=99*365)
+    if not time_till:
+        time_till = datetime.now()
+
+
+    res = conn.execute(
+        SQL_CHANGESET_NODES_INTERSECTS,
+        {
+            'coverage_ids': tuple(coverages),
+            'time_from': time_from,
+            'time_till': time_till,
+        }
+    )
     for row in res:
         changesets.add(row.cid)
 
     return changesets
 
-def collect_changesets_tags(conn, filter=None, recursive=False):
+def collect_changesets_tags(conn, filter=None, recursive=False, time_from=None, time_till=None):
     if not filter:
         raise NotImplementedError()
 
@@ -227,6 +241,11 @@ def collect_changesets_tags(conn, filter=None, recursive=False):
 #         print(row)
 #     # return
 
+    if not time_from:
+        time_from = datetime.now() - timedelta(days=99*365)
+    if not time_till:
+        time_till = datetime.now()
+
     changesets = set()
     # stmt = select([text('distinct cid')])
     stmt = select([text('cid'), text('id'), text('type'), text('direct'), text('tags')])
@@ -238,9 +257,16 @@ def collect_changesets_tags(conn, filter=None, recursive=False):
         stmt = stmt.select_from(SQL_CHANGESET_TAGS_FILTER)
 
     print()
-    res = conn.execute(stmt)
+    res = conn.execute(
+        stmt,
+        {
+            'time_from': time_from,
+            'time_till': time_till,
+        }
+    )
+
     for row in res:
-        print(row)
+        # print(row)
         changesets.add(row.cid)
 
     return changesets
@@ -251,13 +277,20 @@ def main():
     dbschema = 'changes,public'
     engine = create_engine(
         "postgresql+psycopg2://localhost/osm_observer",
-        connect_args={'options': '-csearch_path={}'.format(dbschema)})
+        connect_args={'options': '-csearch_path={} -cenable_seqscan=false -cwork_mem=4MB'.format(dbschema)},
+        # echo=True,
+    )
 
     conn = engine.connect()
 
-    result = collect_changesets_tags(conn, sys.argv[1], recursive=True)
-    import json
-    print(json.dumps(result))
+    days_delta = timedelta(int(sys.argv[2]))
+    time_from = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - days_delta
+    time_till = datetime.now().replace(hour=23, minute=59, second=59, microsecond=0) - days_delta
+
+    result = collect_changesets_tags(conn, sys.argv[1], recursive=True, time_from=time_from, time_till=time_till)
+    print(result)
+    # import json
+    # print(json.dumps(result))
 
     # res = conn.execute(text('select * from members where relation_id = 2069510 and relation_version = 73'))
     # for row in res:
