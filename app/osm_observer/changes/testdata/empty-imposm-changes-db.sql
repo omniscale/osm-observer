@@ -19,6 +19,12 @@ CREATE SCHEMA osm_changes_test;
 -- SET search_path osm_changes_test,public;
 
 
+CREATE TABLE osm_changes_test.coverages (
+    id integer NOT NULL,
+    name text,
+    geometry public.geometry(Geometry,4326)
+);
+
 CREATE TABLE osm_changes_test.changesets (
     id integer NOT NULL,
     created_at timestamp with time zone,
