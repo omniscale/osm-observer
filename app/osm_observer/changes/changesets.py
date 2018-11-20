@@ -74,77 +74,109 @@ cnodes as (
 ),
 cways as (
     select w.id, cid, w.tags, true as direct from cchangesets c inner join ways w on c.cid = w.changeset
-    union all
-    (
-        select id, cid, tags, false as direct from (
-            -- reduce multiple joined ways with distinct on to only return the most recent (see order by)
-            select distinct on (n.cid, w.id, n.id)
-                n.cid, w.id, w.tags,
-            -- w.tags,
-            w.version, nds.way_version
-            from cnodes n
-            inner join nds on nds.node_id = n.id
-            -- join nds/ways but also include ways that are newer so that we can check if our node is still present in the latest way version
-            inner join ways w on nds.way_id = w.id and w.version >= nds.way_version
-            where w.changeset < n.cid  -- exclude ways newer than node
-            order by n.cid, w.id, n.id, w.changeset desc
-        ) as sub where version = way_version -- only include way node was joined with most recent version of way
-    )
 ),
 crelations as (
     select r.id, cid, r.tags, true as direct from cchangesets c inner join relations r on c.cid = r.changeset
-    union all
-    -- select r.id, cid, r.tags, false as direct from cways w inner join members m on m.member_way_id = w.id inner join relations r on m.relation_id = r.id and r.version = m.relation_version where r.changeset != cid
-    (
-        select id, cid, tags, false as direct from (
-            select distinct on (w.cid, r.id, w.id)
-                r.id, cid, r.tags,
-                r.version, m.relation_version
-            from cways w
-                inner join members m on m.member_way_id = w.id
-                inner join relations r on m.relation_id = r.id and r.version >= m.relation_version
-            where r.changeset < w.cid
-            order by w.cid, r.id, w.id, r.changeset desc
-        ) as sub where version = relation_version
-    )
-    union all
-    (
-        select id, cid, tags, false as direct from (
-            select distinct on (n.cid, r.id, n.id)
-                r.id, cid, r.tags,
-                r.version, m.relation_version
-            from cnodes n
-                inner join members m on m.member_node_id = n.id
-                inner join relations r on m.relation_id = r.id and r.version >= m.relation_version
-            where r.changeset < n.cid
-            order by n.cid, r.id, n.id, r.changeset desc
-        ) as sub where version = relation_version
-    )
-    union all
-    (
-        select id, cid, tags, false as direct from (
-            select distinct on (cr.cid, r.id, cr.id)
-                r.id, cid, r.tags,
-                r.version, m.relation_version
-            from crelations cr
-                inner join members m on m.member_relation_id = cr.id
-                inner join relations r on m.relation_id = r.id and r.version >= m.relation_version
-            where r.changeset < cr.cid
-            order by cr.cid, r.id, cr.id, r.changeset desc
-        ) as sub where version = relation_version
-    )
 ),
 cchangesets as (
     select id as cid from changesets order by id desc limit 150
-    -- select id as cid from changesets where st_intersects(bbox, st_makeenvelope(8.405914,52.982963,9.066467,53.257409,4326)) order by id desc limit 50
-    -- select distinct changeset as cid from relations order by changeset desc limit 20
-    -- select cid from (values (63590586)) as v (cid)
 )
 select cid, id, 'node' as type, tags, true as direct from cnodes where tags != ''::hstore
 union all
 select cid, id, 'way' as type, tags, direct from cways where tags != ''::hstore
 union all
 select cid, id, 'relation' as type, tags, direct from crelations where tags != ''::hstore
+) as sub
+'''
+)
+
+SQL_CHANGESET_TAGS_FILTER_RECURSIVE = text(
+'''
+-- all changesets that include tags
+(
+with recursive
+cnodes as (
+    select n.id, cid, n.tags, true as direct, n.changeset from cchangesets c inner join nodes n on c.cid = n.changeset
+),
+cways as (
+    select w.id, cid, w.tags, true as direct, w.changeset from cchangesets c inner join ways w on c.cid = w.changeset
+    union all
+    (
+        select id, cid, tags, false as direct, wcid as changeset from (
+            -- reduce multiple joined ways with distinct on to only return the most recent (see order by)
+            select distinct on (n.cid, w.id, n.id)
+                n.cid, w.id, w.tags,
+                w.version, nds.way_version,
+                w.changeset as wcid, n.changeset as ncid
+            from cnodes n
+            inner join nds on nds.node_id = n.id
+            -- join nds/ways but also include ways that are newer so that we can check if our node is still present in the latest way version
+            inner join ways w on nds.way_id = w.id and w.version >= nds.way_version
+            where w.changeset <= n.cid  -- exclude ways newer than node
+            order by n.cid, w.id, n.id, w.changeset desc
+        ) as sub
+        -- Only include if node was joined with most recent version of way,
+        -- but not the same changeset (already included).
+        where version = way_version and wcid != ncid
+    )
+),
+crelations as (
+    select r.id, cid, r.tags, true as direct, r.changeset from cchangesets c inner join relations r on c.cid = r.changeset
+    union all
+    -- select r.id, cid, r.tags, false as direct from cways w inner join members m on m.member_way_id = w.id inner join relations r on m.relation_id = r.id and r.version = m.relation_version where r.changeset != cid
+    (
+        select id, cid, tags, false as direct, rcid as changeset from (
+            select distinct on (w.cid, r.id, w.id)
+                r.id, cid, r.tags,
+                r.version, m.relation_version,
+                w.changeset as wcid, r.changeset as rcid
+            from cways w
+                inner join members m on m.member_way_id = w.id
+                inner join relations r on m.relation_id = r.id and r.version >= m.relation_version
+            where r.changeset <= w.cid
+            order by w.cid, r.id, w.id, r.changeset desc
+        ) as sub
+        where version = relation_version and wcid != rcid
+    )
+    union all
+    (
+        select id, cid, tags, false as direct, rcid as changeset from (
+            select distinct on (n.cid, r.id, n.id)
+                r.id, cid, r.tags,
+                r.version, m.relation_version,
+                n.changeset as ncid, r.changeset as rcid
+            from cnodes n
+                inner join members m on m.member_node_id = n.id
+                inner join relations r on m.relation_id = r.id and r.version >= m.relation_version
+            where r.changeset <= n.cid
+            order by n.cid, r.id, n.id, r.changeset desc
+        ) as sub
+        where version = relation_version and ncid != rcid
+    )
+    union all
+    (
+        select id, cid, tags, false as direct, rcid as changeset from (
+            select distinct on (cr.cid, r.id, cr.id)
+                r.id, cid, r.tags,
+                r.version, m.relation_version,
+                cr.changeset as crcid, r.changeset as rcid
+            from crelations cr
+                inner join members m on m.member_relation_id = cr.id
+                inner join relations r on m.relation_id = r.id and r.version >= m.relation_version
+            where r.changeset <= cr.cid
+            order by cr.cid, r.id, cr.id, r.changeset desc
+        ) as sub
+        where version = relation_version and crcid != rcid
+    )
+),
+cchangesets as (
+    select id as cid from changesets order by id desc limit 50
+)
+select cid, id, 'relation' as type, tags, direct from crelations where tags != ''::hstore
+union all
+select cid, id, 'way' as type, tags, direct from cways where tags != ''::hstore
+union all
+select cid, id, 'node' as type, tags, direct from cnodes where tags != ''::hstore
 ) as sub
 '''
 )
@@ -161,44 +193,49 @@ def collect_changesets(conn, coverages=None):
 
     return changesets
 
-def collect_changesets_tags(conn, filter=None):
+def collect_changesets_tags(conn, filter=None, recursive=False):
     if not filter:
         raise NotImplementedError()
 
-    res = conn.execute(text(
-'''
-with recursive cnodes as (
-    select n.id, cid, n.tags from cchangesets c inner join nodes n on c.cid = n.changeset
-),
-cchangesets as (
-    select id as cid from changesets order by id desc limit 150
-)
--- select * from cnodes;
-
-(select id, cid, tags, false as direct from (
-        select distinct on (n.cid, w.id, n.id)
-            n.cid, w.id, w.tags,
-        -- w.tags,
-        w.version, nds.way_version
-        from cnodes n
-        inner join nds on nds.node_id = n.id
-        inner join ways w on nds.way_id = w.id and w.version >= nds.way_version
-        -- join nds/ways contains no check for way_version, we need to join with all versions to check if latest contains our node
-        where w.changeset < n.cid
-        order by n.cid, w.id, n.id, w.changeset desc
-    ) as sub
-        where version = way_version
-);
-'''))
-    print()
-    for row in res:
-        print(row)
-    # return
+#     res = conn.execute(text(
+# '''
+# with recursive cnodes as (
+#     select n.id, cid, n.tags from cchangesets c inner join nodes n on c.cid = n.changeset
+# ),
+# cchangesets as (
+#     select id as cid from changesets order by id desc limit 150
+# )
+# -- select * from cnodes;
+#
+# (select id, cid, tags, false as direct from (
+#         select distinct on (n.cid, w.id, n.id)
+#             n.cid, w.id, w.tags,
+#         -- w.tags,
+#         w.version, nds.way_version
+#         from cnodes n
+#         inner join nds on nds.node_id = n.id
+#         inner join ways w on nds.way_id = w.id and w.version >= nds.way_version
+#         -- join nds/ways contains no check for way_version, we need to join with all versions to check if latest contains our node
+#         where w.changeset < n.cid
+#         order by n.cid, w.id, n.id, w.changeset desc
+#     ) as sub
+#         where version = way_version
+# );
+# '''))
+#     print()
+#     for row in res:
+#         print(row)
+#     # return
 
     changesets = set()
-    stmt = select([text('distinct cid')])
-    stmt = select([text('cid'), text('id'), text('type'), text('tags')])
-    stmt = stmt.where(text(filter)).select_from(SQL_CHANGESET_TAGS_FILTER)
+    # stmt = select([text('distinct cid')])
+    stmt = select([text('cid'), text('id'), text('type'), text('direct'), text('tags')])
+    stmt = stmt.where(text(filter))
+
+    if recursive:
+        stmt = stmt.select_from(SQL_CHANGESET_TAGS_FILTER_RECURSIVE)
+    else:
+        stmt = stmt.select_from(SQL_CHANGESET_TAGS_FILTER)
 
     print()
     res = conn.execute(stmt)
@@ -209,6 +246,8 @@ cchangesets as (
     return changesets
 
 def main():
+    import sys
+
     dbschema = 'changes,public'
     engine = create_engine(
         "postgresql+psycopg2://localhost/osm_observer",
@@ -216,7 +255,7 @@ def main():
 
     conn = engine.connect()
 
-    result = collect_changesets(conn, 64483586)
+    result = collect_changesets_tags(conn, sys.argv[1], recursive=True)
     import json
     print(json.dumps(result))
 
