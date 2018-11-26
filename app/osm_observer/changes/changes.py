@@ -51,6 +51,22 @@ inner join ways ww on ww.id = w.id and ww.version = w.version
 order by w.id, w.version, w.changed DESC;
 ''')
 
+SQL_CHANGESET = text(
+'''
+select id,
+    to_char(created_at, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as created_at,
+    to_char(closed_at, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as closed_at,
+    num_changes, open, user_name, user_id, tags,
+    st_xmin(bbox) as minx, st_ymin(bbox) as miny, st_xmax(bbox) as maxx, st_ymax(bbox) as maxy
+from changesets where id = :cid
+''')
+
+SQL_COMMENTS = text(
+'''
+select user_name, user_id, to_char(timestamp, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as timestamp, text
+from comments where changeset_id = :cid order by idx
+''')
+
 def tokey(id, version):
     return str(id) + '-' + str(version)
 
@@ -108,6 +124,7 @@ def collect_changeset(conn, cid):
 #     for row in res:
 #         print(row)
 
+    minx, miny, maxx, maxy = 180.1, 90.1, -90.1, -180.1
     res = conn.execute(SQL_NODES)
     for row in res:
         key = tokey(row.id, row.version)
@@ -116,6 +133,15 @@ def collect_changeset(conn, cid):
         nodes[key] = elem
         if row.changed:
             changed_node_ids.add(key)
+
+        if row.long > maxx:
+            maxx = row.long
+        if row.long < minx:
+            minx = row.long
+        if row.lat > maxy:
+            maxy = row.lat
+        if row.lat < miny:
+            miny = row.lat
 
     res = conn.execute(SQL_WAYS)
     for row in res:
@@ -158,8 +184,36 @@ def collect_changeset(conn, cid):
     for key in changed_relation_ids:
         changed_relations.append(create_changed_elem_dict(key, relations))
 
+    res = conn.execute(SQL_CHANGESET, {'cid': cid})
+    row = res.fetchone()
+    changeset = {
+        'userName': row.user_name,
+        'userID': row.user_name,
+        'createdAt': row.created_at,
+        'closedAt': row.closed_at,
+        'numChanges': row.num_changes,
+        'tags': row.tags,
+        'open': row.open,
+        'dataBBOX': [minx, miny, maxx, maxy],
+        'changesetBBOX': [row.minx, row.miny, row.maxx, row.maxy],
+    }
+
+    res = conn.execute(SQL_COMMENTS, {'cid': cid})
+    comments = []
+    for row in res:
+        comments.append({
+            'userName': row.user_name,
+            'userID': row.user_name,
+            'timestamp': row.timestamp,
+            'text': row.text,
+        })
+
+    changeset['comments'] = comments
+
+
 
     result = {
+        'changeset': changeset,
         'changes': {
             'relations': changed_relations,
             'nodes': changed_nodes,
@@ -181,8 +235,12 @@ def main():
         connect_args={'options': '-csearch_path={}'.format(dbschema)})
 
     conn = engine.connect()
-
-    result = collect_changeset(conn, 64483586)
+    import sys
+    cid = 64595722 # cs with comments
+    cid = 64483586 # larger changeset
+    if len(sys.argv) > 1:
+        cid = int(sys.argv[1])
+    result = collect_changeset(conn, cid)
     import json
     print(json.dumps(result))
 
