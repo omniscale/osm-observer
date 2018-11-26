@@ -9,8 +9,6 @@ import { ChangesetDetailResolver } from './services/changeset-detail-resolver.se
 import { CoverageListComponent }        from './coverage-list/coverage-list.component';
 import { ChangesetListComponent }       from './changeset-list/changeset-list.component';
 import { ChangesetDetailsComponent }    from './changeset-details/changeset-details.component';
-import { ReviewBotConfigListComponent } from './review-bot-config-list/review-bot-config-list.component';
-import { ReviewBotConfigFormComponent } from './review-bot-config-form/review-bot-config-form.component';
 import { LoginComponent }               from './login/login.component';
 
 const appRoutes: Routes = [
@@ -33,24 +31,6 @@ const appRoutes: Routes = [
         resolve: {
           changeset: ChangesetDetailResolver
         }
-      }
-    ]
-  },
-  {
-    path: 'reviewBotConfigs',
-    canActivate: [AuthGuardService],
-    children: [
-      {
-        path: '',
-        component: ReviewBotConfigListComponent
-      },
-      {
-        path: 'add',
-        component: ReviewBotConfigFormComponent
-      },
-      {
-        path: 'edit/:id',
-        component: ReviewBotConfigFormComponent
       }
     ]
   },

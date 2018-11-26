@@ -1,7 +1,7 @@
 import datetime
 
 from osm_observer.extensions import db
-from osm_observer.model import User, ReviewBotConfig
+from osm_observer.model import User
 
 __all__ = ['Review', 'REVIEW_STATUS']
 
@@ -38,12 +38,6 @@ class Review(db.Model):
         nullable=True
     )
 
-    review_bot_config_id = db.Column(
-        db.Integer,
-        db.ForeignKey('changes_app.review_bot_configs.id'),
-        nullable=True
-    )
-
     _review_status = {
         1: 'Broken',
         50: 'Fixed',
@@ -51,14 +45,12 @@ class Review(db.Model):
     }
 
     def __init__(self, changeset_id=None, score=0,
-                 status=None, comment=None, user_id=None,
-                 review_bot_config_id=None):
+                 status=None, comment=None, user_id=None):
         self.changeset_id = changeset_id
         self.score = score
         self.status = status
         self.comment = comment
         self.user_id = user_id
-        self.review_bot_config_id = review_bot_config_id
 
     @property
     def serialize(self):
@@ -76,12 +68,6 @@ class Review(db.Model):
                     'name': self.creator.username,
                     'type': 'user'
                 }
-            elif isinstance(self.creator, ReviewBotConfig):
-                data['creator'] = {
-                    'id': self.creator.id,
-                    'name': self.creator.bot_name,
-                    'type': 'bot'
-                }
         return data
 
     @property
@@ -94,8 +80,6 @@ class Review(db.Model):
     def creator(self):
         if self.user is not None:
             return self.user
-        if self.review_bot_config is not None:
-            return self.review_bot_config
         return None
 
     @status.setter

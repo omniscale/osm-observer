@@ -150,39 +150,8 @@ def create_coverages():
 
     return chain(users, coverages)
 
-
-def create_review_bot_configs():
-    review_bot_configs = [
-        model.ReviewBotConfig('UsernameReviewBot', True, dict(
-            username='wheelmap_android',
-            score=20,
-            comment="Trustable",
-        )),
-        model.ReviewBotConfig('UsernameReviewBot', True, dict(
-            username='Bman',
-            score=-20,
-            comment="Corrupt",
-        )),
-        model.ReviewBotConfig('TagValueReviewBot', True, dict(
-            tag='created_by',
-            value='JOSM/1.5',
-            score=10,
-            comment="Good editor",
-        )),
-        model.ReviewBotConfig('TagValueReviewBot', True, dict(
-            tag='created_by',
-            value='MAPS.ME',
-            score=-10,
-            comment="Bad editor",
-
-        ))
-    ]
-
-    return review_bot_configs
-
-
 def all():
     return chain(
         # create coverages also creates users
-        create_coverages(),
-        create_review_bot_configs())
+        create_coverages()
+    )

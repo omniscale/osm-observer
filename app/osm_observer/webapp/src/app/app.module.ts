@@ -17,8 +17,6 @@ import { ChangesetListComponent }        from './changeset-list/changeset-list.c
 import { ChangesetDetailsComponent }     from './changeset-details/changeset-details.component';
 import { ReviewListComponent }           from './review-list/review-list.component';
 import { ReviewFormComponent }           from './review-form/review-form.component';
-import { ReviewBotConfigListComponent }  from './review-bot-config-list/review-bot-config-list.component';
-import { ReviewBotConfigFormComponent }  from './review-bot-config-form/review-bot-config-form.component';
 import { ChangesetCommentListComponent } from './changeset-comment-list/changeset-comment-list.component';
 import { ChangesetChangesListComponent } from './changeset-changes-list/changeset-changes-list.component';
 import { LoginComponent }                from './login/login.component';
@@ -28,7 +26,6 @@ import { JOSMLinkComponent }             from './josmlink/josmlink.component';
 import { CoverageService }        from './services/coverage.service';
 import { ChangesetService }       from './services/changeset.service';
 import { ReviewService }          from './services/review.service';
-import { ReviewBotConfigService } from './services/review-bot-config.service';
 import { ChangesetDetailResolver } from './services/changeset-detail-resolver.service';
 import { MessageService } from './services/message.service';
 
@@ -49,8 +46,6 @@ export function createTranslateLoader(http: Http, location: Location) {
     ChangesetDetailsComponent,
     ReviewListComponent,
     ReviewFormComponent,
-    ReviewBotConfigListComponent,
-    ReviewBotConfigFormComponent,
     KeyValueListPipe,
     HasKeysPipe,
     ChangesetCommentListComponent,
@@ -78,7 +73,6 @@ export function createTranslateLoader(http: Http, location: Location) {
     CoverageService,
     ChangesetService,
     ReviewService,
-    ReviewBotConfigService,
     ChangesetDetailResolver,
     MessageService
   ],

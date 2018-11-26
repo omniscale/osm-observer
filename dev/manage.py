@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 
 from osm_observer import create_app
 from osm_observer.extensions import db, assets
-from osm_observer.lib.review_bots import UsernameReviewBot, TagValueReviewBot
 from osm_observer.model import Coverage, User
 
 from flask_script import Manager, Server, prompt_bool
@@ -71,10 +70,6 @@ def insert_changesets():
     conn = db.session.connection()
     queried_changesets = conn.execute(s).fetchall()
 
-    bots = [
-        UsernameReviewBot(conn),
-        TagValueReviewBot(conn),
-    ]
 
     for changeset in queried_changesets:
         cs = Changeset.by_osm_id(changeset.id)
@@ -86,12 +81,6 @@ def insert_changesets():
             created_at=changeset.created_at,
             closed_at=changeset.closed_at,
         )
-
-        for bot in bots:
-            review = bot.review(changeset)
-            if review is not None:
-                print (bot, 'reviewed', changeset.id, 'with score', review.score)
-                cs.reviews.append(review)
 
         db.session.add(cs)
     db.session.commit()
