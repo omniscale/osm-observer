@@ -62,8 +62,8 @@ def create_elem_dict(row):
     elem = {
         'id': row.id,
         'version': row.version,
-        'user_id': row.user_id,
-        'user_name': row.user_name,
+        'userId': row.user_id,
+        'userName': row.user_name,
         'timestamp': row.timestamp,
         'tags': row.tags,
     }
@@ -82,7 +82,7 @@ def create_changed_elem_dict(key, elements):
         'added': new.get('added', False),
         'deleted': new.get('deleted', False),
         'modified': 'added' not in new and 'deleted' not in new,
-        'prev_key': tokey(id, version-1) if version != 1 else None,
+        'prevKey': tokey(id, version-1) if version != 1 else None,
         'key': tokey(id, version),
     }
     return elem
