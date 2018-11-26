@@ -1,33 +1,22 @@
 export class ChangesetChange {
-  type: string;
   id: number;
   added: boolean;
   modified: boolean;
   deleted: boolean;
-  userName: string;
-  userId: number;
-  timestamp: Date;
+  key: string;
+  prev_key: string;
   version: number;
-  tags: Tags;
 
   constructor(
-    type: string, id: number, added: boolean, modified: boolean, deleted: boolean,
-    userName: string, userId: number, timestamp: Date, version: number,
-    tags: Tags
+    id: number, added: boolean, modified: boolean, deleted: boolean,
+    key: string, prev_key: string, version: number
   ) {
-    this.type = type;
     this.id = id;
     this.added = added;
     this.modified = modified;
     this.deleted = deleted;
-    this.userName = userName;
-    this.userId = userId;
-    this.timestamp = new Date(timestamp);
     this.version = version;
-    this.tags = tags;
+    this.key = key;
+    this.prev_key = prev_key;
   }
-}
-
-export class Tags {
-  [propName: string]: any;
 }

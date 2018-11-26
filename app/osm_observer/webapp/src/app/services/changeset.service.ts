@@ -105,15 +105,6 @@ export class ChangesetService extends BaseHttpService {
                     ));
   }
 
-  getChangesetChanges(id: number): Observable<ChangesetChange[]> {
-    let url = this.changesetChangesUrl(id);
-    return this.http.get(url, this.getRequestOptions())
-                    .map((response:Response) => response.json() as ChangesetChange[])
-                    .catch((error:any) => Observable.throw(
-                      this.handleError(error, 'getChangesetChanges', url, {id: id})
-                    ));
-  }
-
   getChangesetIdx(current: Changeset): number {
     if(this.changesets === undefined) {
       return;

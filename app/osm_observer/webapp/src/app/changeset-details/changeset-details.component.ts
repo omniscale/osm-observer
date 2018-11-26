@@ -4,8 +4,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {TranslateService} from 'ng2-translate';
 
 import { Changeset } from '../types/changeset';
+import { ChangesetDetails } from '../types/changeset-details';
 import { ReviewStatus } from '../types/review';
+import { ChangesetDetailsService } from '../services/changeset-details.service';
 import { ChangesetService } from '../services/changeset.service';
+
 import { ReviewService } from '../services/review.service';
 import { MessageService } from '../services/message.service';
 
@@ -20,13 +23,15 @@ export class ChangesetDetailsComponent implements OnInit {
   prevChangeset: Changeset;
   currentChangeset: Changeset;
   nextChangeset: Changeset;
+  currentChangesetDetails: ChangesetDetails;
 
   reviewStatus = ReviewStatus;
 
   private endOfListReachedText: string;
 
-
-  constructor(private changesetService: ChangesetService,
+  constructor(
+              private changesetService: ChangesetService,
+              private changesetDetailsService: ChangesetDetailsService,
               private reviewService: ReviewService,
               private router: Router,
               private route: ActivatedRoute,
@@ -34,10 +39,9 @@ export class ChangesetDetailsComponent implements OnInit {
               private translate: TranslateService) { }
 
   getChangeset(id: number): void {
-    this.changesetService.getChangeset(id, true)
+    this.changesetDetailsService.getChangesetDetails(id)
                          .subscribe(
-                           changeset => this.currentChangeset = changeset,
-                           // TODO define onError actions
+                           changeset => this.currentChangesetDetails = changeset,
                            error => {}
                          );
   }

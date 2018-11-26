@@ -3,17 +3,17 @@ import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@a
 
 import { Observable } from 'rxjs/Rx';
 
-import { ChangesetService } from './changeset.service';
-import { Changeset } from '../types/changeset';
+import { ChangesetDetailsService } from './changeset-details.service';
+import { ChangesetDetails } from '../types/changeset-details';
 
 @Injectable()
-export class ChangesetDetailResolver implements Resolve<Changeset> {
+export class ChangesetDetailResolver implements Resolve<ChangesetDetails> {
 
-  constructor(private changesetService: ChangesetService, private router: Router) { }
+  constructor(private changesetDetailsService: ChangesetDetailsService, private router: Router) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Changeset> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ChangesetDetails> {
     let id = parseInt(route.params['id']);
-    return this.changesetService.getChangeset(id)
+    return this.changesetDetailsService.getChangesetDetails(id)
                                 .map(changeset => {
                                   if(changeset) {
                                     return changeset;

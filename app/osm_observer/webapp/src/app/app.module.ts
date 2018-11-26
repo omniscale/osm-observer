@@ -25,6 +25,7 @@ import { JOSMLinkComponent }             from './josmlink/josmlink.component';
 
 import { CoverageService }        from './services/coverage.service';
 import { ChangesetService }       from './services/changeset.service';
+import { ChangesetDetailsService }       from './services/changeset-details.service';
 import { ReviewService }          from './services/review.service';
 import { ChangesetDetailResolver } from './services/changeset-detail-resolver.service';
 import { MessageService } from './services/message.service';
@@ -72,6 +73,7 @@ export function createTranslateLoader(http: Http, location: Location) {
     CookieService,
     CoverageService,
     ChangesetService,
+    ChangesetDetailsService,
     ReviewService,
     ChangesetDetailResolver,
     MessageService

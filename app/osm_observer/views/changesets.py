@@ -6,6 +6,7 @@ from flask import abort, jsonify, request, current_app
 from flask_login import login_required, current_user
 
 from geoalchemy2.shape import to_shape
+from osm_observer.changes.changes import collect_changeset
 
 from osm_observer.views import api
 from osm_observer.lib.changes import (
@@ -13,6 +14,7 @@ from osm_observer.lib.changes import (
     query_changeset_changes
 )
 from osm_observer.model import Coverage
+from sqlalchemy import create_engine
 
 
 @api.route('/changesets')
@@ -82,10 +84,17 @@ def changeset_comments(changeset_id):
 
 
 @api.route('/changesets/changes/<int:changeset_id>')
-@login_required
 def changeset_changes(changeset_id):
-    changes = query_changeset_changes(changeset_id)
-    return jsonify(serialize_changeset_changes(changes))
+    # TODO move engine
+    dbschema = 'changes,public'
+    engine = create_engine(
+        "postgres://os:os@localhost:5432/osm_observer",
+        connect_args={'options': '-csearch_path={}'.format(dbschema)})
+
+    conn = engine.connect()
+
+    result = collect_changeset(conn, changeset_id)
+    return jsonify(result)
 
 
 def serialize_changeset(changeset):
@@ -128,21 +137,3 @@ def serialize_changeset_comments(comments):
         })
     return data
 
-
-def serialize_changeset_changes(changes):
-    data = []
-    for change in changes:
-        data.append({
-            'type': change.type,
-            'id': change.id,
-            'added': change.add,
-            'modified': change.modify,
-            # changed to deleted cause delete is js keyword
-            'deleted': change.delete,
-            'userName': change.user_name,
-            'userId': change.user_id,
-            'timestamp': change.timestamp,
-            'version': change.version,
-            'tags': change.tags,
-        })
-    return data
