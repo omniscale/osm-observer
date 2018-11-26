@@ -35,8 +35,6 @@ def login():
     else:
         json_response = local_login(data['username'], data['password'])
 
-    print(json_response)
-
     response = jsonify(json_response)
 
     if json_response['success'] is True:
