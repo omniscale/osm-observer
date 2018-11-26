@@ -4,9 +4,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.sql import text
 
 
-from osm_observer.lib.diffs import compare_dicts
-
-
 SQL_NODES = text('''
 select distinct on (n.id, n.version)
     st_x(n.geometry) as long, st_y(n.geometry) as lat,
