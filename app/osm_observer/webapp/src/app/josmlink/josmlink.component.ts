@@ -13,8 +13,7 @@ import { Changeset } from '../types/changeset';
 })
 export class JOSMLinkComponent implements OnInit {
 
-  @Input() id: number;
-  changeset: Changeset;
+  @Input() changeset: Changeset;
   private element: Node;
   private cannotOpenJosmText: string;
 
@@ -26,12 +25,6 @@ export class JOSMLinkComponent implements OnInit {
     this.translate.get('CANNOT OPEN JOSM').subscribe((res: string) => {
       this.cannotOpenJosmText = res;
     });
-    this.changesetService.getChangeset(this.id)
-                         .subscribe(
-                           changeset => this.changeset = changeset,
-                           // TODO define onError actions
-                           error => {}
-                         );
   }
 
   private buildJSOMUrl(protocol) {
@@ -39,10 +32,10 @@ export class JOSMLinkComponent implements OnInit {
       'https://127.0.0.1.8112/load_and_zoom?' :
       'http://127.0.0.1:8111/load_and_zoom?';
     let params = [
-      'left=' + this.changeset.bbox[0],
-      'bottom=' + this.changeset.bbox[1],
-      'right=' + this.changeset.bbox[2],
-      'top=' + this.changeset.bbox[3]
+      'left=' + this.changeset.dataBBOX[0],
+      'right=' + this.changeset.dataBBOX[2],
+      'top=' + this.changeset.dataBBOX[3],
+      'bottom=' + this.changeset.dataBBOX[1]
     ]
 
     url += params.join('&');
@@ -52,7 +45,6 @@ export class JOSMLinkComponent implements OnInit {
   public openJSOM() {
     let loaded = false;
     let url = this.buildJSOMUrl(window.location.protocol);
-
     let iframe = this.renderer.createElement(this.element, 'iframe');
     this.renderer.setElementAttribute(iframe, 'src', url);
     this.renderer.setElementStyle(iframe, 'display', 'none');

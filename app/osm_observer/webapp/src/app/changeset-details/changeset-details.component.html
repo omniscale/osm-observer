@@ -30,7 +30,6 @@
             <th>{{ 'OSM ID' | translate }}</th>
             <th>{{ 'USERNAME' | translate }}</th>
             <th>{{ 'CHANGES' | translate }}</th>
-            <th>{{ 'SCORE' | translate }}</th>
             <th>{{ 'STATUS' | translate }}</th>
             <th>{{ 'ACTION' | translate }}</th>
           </tr>
@@ -39,23 +38,22 @@
           <tr>
             <td>{{ currentChangeset.closedAt }}</td>
             <td>
-              <a href="http://www.openstreetmap.org/changeset/{{ currentChangeset.osmId }}"
+              <a href="https://www.openstreetmap.org/changeset/{{ currentChangeset.osmId }}"
                  target="_blank">
                 {{ currentChangeset.osmId }}
                 <i class="fa fa-external-link" aria-hidden="true"></i>
               </a>
             </td>
             <td>
-              <a href="http://www.openstreetmap.org/user/{{ currentChangeset.username }}"
+              <a href="https://www.openstreetmap.org/user/{{ currentChangeset.userName }}"
                  target="_blank">
-                {{ currentChangeset.username }}
+                {{ currentChangeset.userName }}
                 <i class="fa fa-external-link" aria-hidden="true"></i>
               </a>
             </td>
             <td>{{ currentChangeset.numChanges }}</td>
-            <td>{{ currentChangeset.sumScore }}</td>
             <td>{{ reviewStatus.byId(currentChangeset.status) | translate }}</td>
-            <td><josmlink [id]="currentChangeset.osmId"></josmlink></td>
+            <td><josmlink [changeset]="currentChangeset"></josmlink></td>
           </tr>
         </tbody>
       </table>
@@ -80,6 +78,13 @@
 
 <div class="row"
      *ngIf="currentChangeset">
+  <div class="col-md-12">
+    <changeset-changes-list [changeset]="currentChangesetDetails"></changeset-changes-list>
+  </div>
+</div> 
+
+<div class="row"
+     *ngIf="currentChangeset">
   <div class="col-md-8">
     <review-list [id]="currentChangeset.id"></review-list>
   </div>
@@ -88,16 +93,9 @@
   </div>
 </div>
 
-<div class="row"
+<!-- <div class="row"
      *ngIf="currentChangeset">
   <div class="col-md-8">
       <changeset-comment-list [id]="currentChangeset.osmId"></changeset-comment-list>
   </div>
-</div>
-
-<div class="row"
-     *ngIf="currentChangeset">
-  <div class="col-md-12">
-    <changeset-changes-list [id]="currentChangeset.osmId"></changeset-changes-list>
-  </div>
-</div>
+</div> -->

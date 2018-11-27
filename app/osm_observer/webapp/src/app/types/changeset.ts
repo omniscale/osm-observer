@@ -1,38 +1,44 @@
 export class Changeset {
   id: number;
   osmId: number;
-  createdAt: Date;
-  closedAt: Date;
-  numReviews: number;
-  username: string;
-  numChanges: number;
-  userId: number;
-  sumScore: number;
-  tags: Tags;
   status: number;
+  numReviews: number;
+
+  createdAt: Date; //
+  closedAt: Date; //
+  userName: string; //
+  numChanges: number; //
+  userID: number; //
+  sumScore: number;
+  tags: Tags; //
+  comments: Array<string>; //
   currentUserReviewed: boolean;
-  bbox: Array<number>;
+  changesetBBOX: Array<number>; //
+  dataBBOX: Array<number>; //
+  open: boolean; //
 
   constructor(
     id: number, osmId: number, createdAt: string, closedAt: string,
-    numReviews: number, username: string, numChanges: number,
-    userId: number, sumScore: number, tags: Tags, status: number,
-    currentUserReviewed: boolean, bbox: number[]
+    numReviews: number, userName: string, numChanges: number,
+    userID: number, sumScore: number, tags: Tags, status: number,
+    currentUserReviewed: boolean, changesetBBOX: number[], dataBBOX: number[],
+    comments: string[], open: boolean
   ) {
     this.id = id;
     this.osmId = osmId;
+    this.status = status;
     this.numReviews = numReviews;
-    this.username = username;
-    this.userId = userId;
+    this.userName = userName;
+    this.userID = userID;
     this.numChanges = numChanges;
     this.sumScore = sumScore;
     this.tags = tags;
-    this.status = status;
     this.currentUserReviewed = currentUserReviewed;
-    this.bbox = bbox;
-
+    this.changesetBBOX = changesetBBOX;
+    this.comments = comments;
     this.createdAt = new Date(createdAt);
     this.closedAt = new Date(closedAt);
+    this.open = open;
   }
 }
 

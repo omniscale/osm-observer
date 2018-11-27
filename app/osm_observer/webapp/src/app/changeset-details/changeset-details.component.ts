@@ -72,8 +72,9 @@ export class ChangesetDetailsComponent implements OnInit {
           }
         });
     this.route.data
-        .subscribe((data: {changeset: Changeset}) => {
-          this.currentChangeset = data.changeset;
+        .subscribe((data: {changeset: ChangesetDetails}) => {
+          this.currentChangeset = data.changeset.changeset;
+          this.currentChangesetDetails = data.changeset;
           this.prevChangeset = this.changesetService.getPrevChangeset(this.currentChangeset);
           this.nextChangeset = this.changesetService.getNextChangeset(this.currentChangeset);
         });
