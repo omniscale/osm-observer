@@ -4,10 +4,7 @@ import { ChangesetChange } from '../types/changeset-change';
 import { ChangesetDetails } from '../types/changeset-details';
 import { ChangesetDetailsService } from '../services/changeset-details.service';
 
-import Map from 'ol/Map';
-import View from 'ol/View';
-import TileLayer from 'ol/layer/Tile';
-import XYZ from 'ol/source/XYZ';
+import * as ol from 'openlayers';
 
 @Component({
   selector: 'changeset-map',
@@ -21,19 +18,17 @@ export class ChangesetMapComponent implements OnChanges {
   constructor(private changesetDetailsService: ChangesetDetailsService) { }
 
   updateMap(changeset: ChangesetDetails) {
-    let map = new Map({
+    let map = new ol.Map({
         target: 'map',
+        controls: ol.control.defaults({rotate: false, attribution: false}),
         layers: [
-          new TileLayer({
-            source: new XYZ({
-              url: 'https://rvr.demo.omniscale.net/compare/mapproxy/rvr_stadtplan/wmts/rvr_stadtplan/GLOBAL_WEBMERCATOR/{z}/{x}/{y}.png'
-            })
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
           })
         ],
-        view: new View({
-          projection: 'EPSG:4326',
-          center: [10.0154892, 53.60025167530279],
-          zoom: 12
+        view: new ol.View({
+          center: ol.proj.transform([10.0154, 53.60025], 'EPSG:4326','EPSG:3857'),
+          zoom: 17
         })
       });
   }
