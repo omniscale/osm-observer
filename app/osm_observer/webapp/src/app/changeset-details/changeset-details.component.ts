@@ -41,7 +41,7 @@ export class ChangesetDetailsComponent implements OnInit {
   getChangeset(id: number): void {
     this.changesetDetailsService.getChangesetDetails(id)
                          .subscribe(
-                           changeset => this.currentChangesetDetails = changeset,
+                           changeset => {this.currentChangesetDetails = changeset},
                            error => {}
                          );
   }

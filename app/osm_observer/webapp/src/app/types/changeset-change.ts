@@ -4,12 +4,12 @@ export class ChangesetChange {
   modified: boolean;
   deleted: boolean;
   key: string;
-  prev_key: string;
+  prevKey: string;
   version: number;
 
   constructor(
     id: number, added: boolean, modified: boolean, deleted: boolean,
-    key: string, prev_key: string, version: number
+    key: string, prevKey: string, version: number
   ) {
     this.id = id;
     this.added = added;
@@ -17,6 +17,6 @@ export class ChangesetChange {
     this.deleted = deleted;
     this.version = version;
     this.key = key;
-    this.prev_key = prev_key;
+    this.prevKey = prevKey;
   }
 }

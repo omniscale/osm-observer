@@ -61,15 +61,6 @@ export class ChangesetChangesListComponent implements OnChanges {
     // }
   }
 
-  // getChangesetChanges(): void {
-  //   this.changesetDetailsService.getChangesetDetails(this.id)
-  //                        .subscribe(
-  //                          changesetChanges => this.assignChangesetChanges(changesetChanges),
-  //                          // TODO define onError actions
-  //                          error => {}
-  //                        );
-  // }
-
   ngOnChanges(changes: SimpleChanges) {
     this.changeset = changes['changeset'].currentValue;
     this.assignChangesetChanges(this.changeset)
