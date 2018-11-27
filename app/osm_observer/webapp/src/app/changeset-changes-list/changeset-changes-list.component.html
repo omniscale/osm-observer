@@ -37,6 +37,8 @@
                   </changeset-tags-compare>
               </li>
             </ul>
+            <changeset-map [changeset]="changeset"></changeset-map>
+
             <span *ngIf="changeset.changes.nodes?.length === 0">
               {{ 'NO CHANGED NODES' | translate }}
             </span>
@@ -94,7 +96,7 @@
                     [key]="change.key"
                     [prevKey]="change.prevKey"
                     type="relations">
-                </changeset-tags-compare>                
+                </changeset-tags-compare>      
               </li>
             </ul>
             <span *ngIf="changeset.changes.relations?.length === 0">
