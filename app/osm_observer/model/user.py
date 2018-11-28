@@ -40,6 +40,8 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(256), unique=True, nullable=False)
     password = db.Column(db.String(256))
     last_login = db.Column(db.DateTime(timezone=True), default=datetime.datetime.now)
+    osm_token = db.Column(db.String(256))
+    osm_username = db.Column(db.String(256))
 
     reviews = db.relationship(
         'Review',

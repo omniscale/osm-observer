@@ -36,12 +36,16 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.model)
                     .subscribe(
                       authResponse => {
-                        if(authResponse.success) {
-                          let redirect = this.authService.redirectUrl && this.authService.redirectUrl !== '/login' ? this.authService.redirectUrl : '/dashboard';
-                          this.router.navigate([redirect]);
-                          this.messageService.add(this.messages[authResponse.messageId], 'success');
+                        if (authResponse.redirect) {
+                          window.location.href = authResponse.url;
                         } else {
-                          this.messageService.add(this.messages[authResponse.messageId], 'error');
+                          if(authResponse.success) {
+                            let redirect = this.authService.redirectUrl && this.authService.redirectUrl !== '/login' ? this.authService.redirectUrl : '/dashboard';
+                            this.router.navigate([redirect]);
+                            this.messageService.add(this.messages[authResponse.messageId], 'success');
+                          } else {
+                            this.messageService.add(this.messages[authResponse.messageId], 'error');
+                          }
                         }
                       },
                       // TODO define onError actions
