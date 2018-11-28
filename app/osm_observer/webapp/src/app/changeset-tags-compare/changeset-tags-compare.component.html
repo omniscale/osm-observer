@@ -1,3 +1,8 @@
+<span class="changeset-change" (click)="showCompareTags = !showCompareTags" *ngIf="combinedTags | hasKeys">
+    <i class="fa fa-tags" aria-hidden="true"></i>
+</span>
+
+<div *ngIf="showCompareTags">
   <table class="table table-sm table-borderless table-striped" 
     *ngIf="combinedTags | hasKeys">
     <thead>
@@ -15,3 +20,4 @@
       </tr>
     </tbody>
   </table>
+</div>

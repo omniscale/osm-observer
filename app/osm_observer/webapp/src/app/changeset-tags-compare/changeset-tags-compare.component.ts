@@ -15,8 +15,13 @@ export class ChangesetTagsCompareComponent implements OnChanges {
   @Input() key: string;
   @Input() prevKey: string;
   @Input() type: string;
+
+  showCompareTags: boolean;
   combinedTags = {};
-  constructor(private changesetDetailsService: ChangesetDetailsService) { }
+
+  constructor(private changesetDetailsService: ChangesetDetailsService) {
+    this.showCompareTags = false;
+  }
 
   assignChangesets(changeset: ChangesetDetails, type: string, key: string, prevKey: string) {
     let tags = changeset.elements[type][key].tags;

@@ -36,7 +36,8 @@ export class ChangesetDetailsComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private messageService: MessageService,
-              private translate: TranslateService) { }
+              private translate: TranslateService) { 
+   }
 
   next() {
     if(this.nextChangeset !== undefined) {
