@@ -1,3 +1,5 @@
+import { ChangesetComment } from './changeset-comment';
+
 export class Changeset {
   id: number;
   osmId: number;
@@ -11,7 +13,7 @@ export class Changeset {
   userID: number; //
   sumScore: number;
   tags: Tags; //
-  comments: Array<string>; //
+  comments: ChangesetComment[]; //
   currentUserReviewed: boolean;
   changesetBBOX: Array<number>; //
   dataBBOX: Array<number>; //
@@ -22,7 +24,7 @@ export class Changeset {
     numReviews: number, userName: string, numChanges: number,
     userID: number, sumScore: number, tags: Tags, status: number,
     currentUserReviewed: boolean, changesetBBOX: number[], dataBBOX: number[],
-    comments: string[], open: boolean
+    comments: ChangesetComment[], open: boolean
   ) {
     this.id = id;
     this.osmId = osmId;
