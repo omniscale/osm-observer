@@ -38,14 +38,6 @@ export class ChangesetDetailsComponent implements OnInit {
               private messageService: MessageService,
               private translate: TranslateService) { }
 
-  getChangeset(id: number): void {
-    this.changesetDetailsService.getChangesetDetails(id)
-                         .subscribe(
-                           changeset => {this.currentChangesetDetails = changeset},
-                           error => {}
-                         );
-  }
-
   next() {
     if(this.nextChangeset !== undefined) {
       this.router.navigate(['changesets', this.nextChangeset.osmId, 'details'])
