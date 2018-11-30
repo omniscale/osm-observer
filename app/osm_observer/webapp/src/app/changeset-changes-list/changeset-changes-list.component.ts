@@ -1,8 +1,8 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { ChangesetChange } from '../types/changeset-change';
-import { Changes } from '../types/changes';
-import { ChangesetService } from '../services/changeset.service';
+import { ChangesetDetails } from '../types/changeset-details';
+import { ChangesetDetailsService } from '../services/changeset-details.service';
 
 @Component({
   selector: 'changeset-changes-list',
@@ -11,66 +11,58 @@ import { ChangesetService } from '../services/changeset.service';
 })
 export class ChangesetChangesListComponent implements OnChanges {
 
-  @Input() id: number;
+  @Input() changeset: ChangesetDetails;
 
-  changesetNodeChanges: ChangesetChange[];
-  changesetWayChanges: ChangesetChange[];
-  changesetRelationChanges: ChangesetChange[];
+  // changesetNodeChanges: ChangesetChange[];
+  // changesetWayChanges: ChangesetChange[];
+  // changesetRelationChanges: ChangesetChange[];
 
-  nodesChanges: Changes;
-  waysChanges: Changes;
-  relationsChanges: Changes;
+  // nodesChanges: Changes;
+  // waysChanges: Changes;
+  // relationsChanges: Changes;
 
-  constructor(private changesetService: ChangesetService) { }
+  constructor(private changesetDetailsService: ChangesetDetailsService) { }
 
-  assignChangesetChanges(changesetChanges: ChangesetChange[]) {
-    this.changesetNodeChanges = [];
-    this.changesetWayChanges = [];
-    this.changesetRelationChanges = [];
+  assignChangesetChanges(changesetChanges: ChangesetDetails) {
+    // this.changesetNodeChanges = [];
+    // this.changesetWayChanges = [];
+    // this.changesetRelationChanges = [];
 
-    this.nodesChanges = new Changes();
-    this.waysChanges = new Changes();
-    this.relationsChanges = new Changes();
-
-    let changes: Changes;
-    for (let change of changesetChanges) {
-      switch(change.type) {
-        case 'node':
-          changes = this.nodesChanges;
-          this.changesetNodeChanges.push(change);
-          break;
-        case 'way':
-          changes= this.waysChanges;
-          this.changesetWayChanges.push(change);
-          break;
-        case 'relation':
-          changes = this.relationsChanges;
-          this.changesetRelationChanges.push(change);
-          break;
-      }
-      if(change.added) {
-        changes.added++;
-      }
-      if(change.modified) {
-        changes.modified++;
-      }
-      if(change.deleted) {
-        changes.deleted++;
-      }
-    }
-  }
-
-  getChangesetChanges(): void {
-    this.changesetService.getChangesetChanges(this.id)
-                         .subscribe(
-                           changesetChanges => this.assignChangesetChanges(changesetChanges),
-                           // TODO define onError actions
-                           error => {}
-                         );
+    // // this.nodesChanges = new Changes();
+    // // this.waysChanges = new Changes();
+    // // this.relationsChanges = new Changes();
+    // console.log(changesetChanges)
+    // let changes: Changes;
+    // for (let change of changesetChanges.changes) {
+    //    console.log(change)
+      // switch(change.type) {
+      //   case 'node':
+      //     changes = this.nodesChanges;
+      //     this.changesetNodeChanges.push(change);
+      //     break;
+      //   case 'way':
+      //     changes= this.waysChanges;
+      //     this.changesetWayChanges.push(change);
+      //     break;
+      //   case 'relation':
+      //     changes = this.relationsChanges;
+      //     this.changesetRelationChanges.push(change);
+      //     break;
+      // }
+      // if(change.added) {
+      //   changes.added++;
+      // }
+      // if(change.modified) {
+      //   changes.modified++;
+      // }
+      // if(change.deleted) {
+      //   changes.deleted++;
+      // }
+    // }
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.id = changes['id'].currentValue;
-    this.getChangesetChanges();
+    this.changeset = changes['changeset'].currentValue;
+    this.assignChangesetChanges(this.changeset)
   }
 }

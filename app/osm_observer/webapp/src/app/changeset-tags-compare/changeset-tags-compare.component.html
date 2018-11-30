@@ -1,0 +1,23 @@
+<span class="changeset-change" (click)="showCompareTags = !showCompareTags" *ngIf="combinedTags | hasKeys">
+    <i class="fa fa-tags" aria-hidden="true"></i>
+</span>
+
+<div *ngIf="showCompareTags">
+  <table class="table table-sm table-borderless table-striped" 
+    *ngIf="combinedTags | hasKeys">
+    <thead>
+      <tr>
+        <th>{{ 'KEY' | translate }}</th>
+        <th>{{ 'NEW VALUE' | translate }}</th>
+        <th>{{ 'OLD VALUE' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of combinedTags | keyValueList">
+        <td>{{ t.key }}</td>
+        <td>{{ combinedTags[t.key].currentValue }}</td>
+        <td>{{ combinedTags[t.key].prevValue }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

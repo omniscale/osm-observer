@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { ChangesetComment } from '../types/changeset-comment';
+import { ChangesetDetails } from '../types/changeset-details';
 import { ChangesetService } from '../services/changeset.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { ChangesetService } from '../services/changeset.service';
 })
 export class ChangesetCommentListComponent implements OnChanges {
 
-  @Input() id: number;
+  @Input() changeset: ChangesetDetails;
 
   changesetComments: ChangesetComment[];
 
@@ -20,17 +21,8 @@ export class ChangesetCommentListComponent implements OnChanges {
     this.changesetComments = changesetComments;
   }
 
-  getChangesetComments(): void {
-    this.changesetService.getChangesetComments(this.id)
-                         .subscribe(
-                           changesetComments => this.assignChangesetComments(changesetComments),
-                           // TODO define onError actions
-                           error => {}
-                         );
-  }
-
   ngOnChanges(changes: SimpleChanges) {
-    this.id = changes['id'].currentValue;
-    this.getChangesetComments();
+    this.changeset = changes['changeset'].currentValue;
+    this.assignChangesetComments(this.changeset.changeset.comments);
   }
 }

@@ -15,6 +15,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoverageListComponent }         from './coverage-list/coverage-list.component';
 import { ChangesetListComponent }        from './changeset-list/changeset-list.component';
 import { ChangesetDetailsComponent }     from './changeset-details/changeset-details.component';
+import { ChangesetTagsCompareComponent } from './changeset-tags-compare/changeset-tags-compare.component';
+import { ChangesetMapComponent }         from './changeset-map/changeset-map.component';
 import { ReviewListComponent }           from './review-list/review-list.component';
 import { ReviewFormComponent }           from './review-form/review-form.component';
 import { ChangesetCommentListComponent } from './changeset-comment-list/changeset-comment-list.component';
@@ -51,6 +53,8 @@ export function createTranslateLoader(http: Http, location: Location) {
     HasKeysPipe,
     ChangesetCommentListComponent,
     ChangesetChangesListComponent,
+    ChangesetTagsCompareComponent,
+    ChangesetMapComponent,
     LoginComponent,
     MessageViewerComponent,
     JOSMLinkComponent,

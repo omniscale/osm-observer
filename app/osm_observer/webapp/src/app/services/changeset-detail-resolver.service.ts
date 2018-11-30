@@ -19,7 +19,6 @@ export class ChangesetDetailResolver implements Resolve<ChangesetDetails> {
                                     return changeset;
                                   }
                                   this.router.navigate(['/changesets']);
-                                  return false;
-                                });
+                                }, osmId => id);
   }
 }
