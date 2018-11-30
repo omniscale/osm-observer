@@ -3,14 +3,28 @@ from __future__ import (absolute_import, division,
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text, select
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time, date
+
+SQL_CHANGESETS = text(
+'''
+select id,
+    to_char(created_at, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as created_at,
+    to_char(closed_at, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as closed_at,
+    num_changes, open, user_name, user_id, tags,
+    st_xmin(bbox) as minx, st_ymin(bbox) as miny, st_xmax(bbox) as maxx, st_ymax(bbox) as maxy
+from changesets where id = ANY(:cids ::int[]) order by closed_at
+''')
 
 SQL_CHANGESET_NODES_INTERSECTS = text(
 '''
 -- all nodes for changeset within a bbox including dependent nodes from ways and relations
 with recursive
 cchangesets as (
-    select id as cid from changesets order by id desc limit 50
+    select id as cid from changesets
+    where
+        closed_at >= :time_from
+        and closed_at <= :time_till
+    order by id desc
 ),
 crelations as (
     select r.id, r.version, c.cid from cchangesets c inner join relations r on c.cid = r.changeset
@@ -80,7 +94,13 @@ crelations as (
     select r.id, cid, r.tags, true as direct from cchangesets c inner join relations r on c.cid = r.changeset
 ),
 cchangesets as (
-    select id as cid from changesets where closed_at >= :time_from and closed_at <= :time_till order by id desc limit 150
+    select id as cid
+    from changesets
+    where
+        closed_at >= :time_from
+        and closed_at <= :time_till
+        and (:cids ::int[] = array[]::int[] or id = ANY(:cids ::int[]))
+    order by id desc
 )
 select cid, id, 'node' as type, tags, true as direct from cnodes where tags != ''::hstore
 union all
@@ -171,7 +191,13 @@ crelations as (
     )
 ),
 cchangesets as (
-    select id as cid from changesets where closed_at >= :time_from and closed_at <= :time_till order by id desc
+    select id as cid
+    from changesets
+    where
+        closed_at >= :time_from
+        and closed_at <= :time_till
+        and (:cids ::int[] = array[]::int[] or id = ANY(:cids ::int[]))
+    order by id desc
 )
 select cid, id, 'relation' as type, tags, direct from crelations where tags != ''::hstore
 union all
@@ -182,11 +208,7 @@ select cid, id, 'node' as type, tags, direct from cnodes where tags != ''::hstor
 '''
 )
 
-def collect_changesets(conn, coverages=None, time_from=None, time_till=None):
-    if not coverages:
-        raise NotImplementedError()
-
-    changesets = set()
+def collect_changesets_coverages(conn, coverages, time_from=None, time_till=None):
 
     if not time_from:
         time_from = datetime.now()- timedelta(days=99*365)
@@ -202,74 +224,96 @@ def collect_changesets(conn, coverages=None, time_from=None, time_till=None):
             'time_till': time_till,
         }
     )
+    changesets = set()
     for row in res:
         changesets.add(row.cid)
 
     return changesets
 
-def collect_changesets_tags(conn, filter=None, recursive=False, time_from=None, time_till=None):
-    if not filter:
-        raise NotImplementedError()
-
-#     res = conn.execute(text(
-# '''
-# with recursive cnodes as (
-#     select n.id, cid, n.tags from cchangesets c inner join nodes n on c.cid = n.changeset
-# ),
-# cchangesets as (
-#     select id as cid from changesets order by id desc limit 150
-# )
-# -- select * from cnodes;
-#
-# (select id, cid, tags, false as direct from (
-#         select distinct on (n.cid, w.id, n.id)
-#             n.cid, w.id, w.tags,
-#         -- w.tags,
-#         w.version, nds.way_version
-#         from cnodes n
-#         inner join nds on nds.node_id = n.id
-#         inner join ways w on nds.way_id = w.id and w.version >= nds.way_version
-#         -- join nds/ways contains no check for way_version, we need to join with all versions to check if latest contains our node
-#         where w.changeset < n.cid
-#         order by n.cid, w.id, n.id, w.changeset desc
-#     ) as sub
-#         where version = way_version
-# );
-# '''))
-#     print()
-#     for row in res:
-#         print(row)
-#     # return
-
+def collect_changesets_tags(conn, filter=None, recursive=False, time_from=None, time_till=None, cids=None):
     if not time_from:
         time_from = datetime.now() - timedelta(days=99*365)
     if not time_till:
         time_till = datetime.now()
 
-    changesets = set()
-    # stmt = select([text('distinct cid')])
-    stmt = select([text('cid'), text('id'), text('type'), text('direct'), text('tags')])
-    stmt = stmt.where(text(filter))
+    stmt = select([text('distinct cid')])
+    # stmt = select([text('cid'), text('id'), text('type'), text('direct'), text('tags')])
+    if filter:
+        stmt = stmt.where(text(filter))
 
     if recursive:
         stmt = stmt.select_from(SQL_CHANGESET_TAGS_FILTER_RECURSIVE)
     else:
         stmt = stmt.select_from(SQL_CHANGESET_TAGS_FILTER)
 
-    print()
     res = conn.execute(
         stmt,
         {
             'time_from': time_from,
             'time_till': time_till,
+            'cids': list(cids or []),
         }
     )
 
+    changesets = set()
     for row in res:
-        # print(row)
         changesets.add(row.cid)
 
     return changesets
+
+def collect_changesets(conn, cids):
+    """
+    Load metadata for the given changeset IDs.
+    """
+    if not cids:
+        return []
+    res = conn.execute(SQL_CHANGESETS, {'cids': list(cids)})
+    changesets = []
+    for row in res:
+        changeset = {
+            'id': row.id,
+            'userName': row.user_name,
+            'userID': row.user_name,
+            'createdAt': row.created_at,
+            'closedAt': row.closed_at,
+            'numChanges': row.num_changes,
+            'tags': row.tags,
+            'open': row.open,
+            'changesetBBOX': [row.minx, row.miny, row.maxx, row.maxy],
+        }
+        changesets.append(changeset)
+
+    return changesets
+
+def changesets(conn, day, filter=None, recursive=False, coverages=None):
+    """
+    Return metadata of all changesets from a given day (as datetime.date).
+
+    Optional filter can be an SQL where filter (tags->'building' = 'office').
+    Only changesets where at least match is found are returned.
+    If recursive is True, the filter is also applied to affected elements (e.g. if a node
+    was changed, also check the tags for any way it belongs to).
+
+    Optional coverages can be a list of IDs of geometries in the coverages table. Only
+    changesets with at least one node within the geometry are returned.
+    """
+
+    cids = []
+
+    time_from = datetime.combine(day, time(hour=0, minute=0, second=0, microsecond=0))
+    time_till = datetime.combine(day, time(hour=23, minute=59, second=59, microsecond=999999))
+
+    if coverages:
+        cids = collect_changesets_coverages(conn, coverages, time_from=time_from, time_till=time_till)
+
+    cids = collect_changesets_tags(
+        conn, filter=filter,
+        recursive=recursive, time_from=time_from, time_till=time_till,
+        cids=cids,
+    )
+
+    return collect_changesets(conn, cids)
+
 
 def main():
     import sys
@@ -277,7 +321,7 @@ def main():
     dbschema = 'changes,public'
     engine = create_engine(
         "postgresql+psycopg2://localhost/osm_observer",
-        connect_args={'options': '-csearch_path={} -cenable_seqscan=false -cwork_mem=4MB'.format(dbschema)},
+        connect_args={'options': '-csearch_path={} -cenable_seqscan=false -cenable_indexscan=true'.format(dbschema)},
         # echo=True,
     )
 
@@ -287,7 +331,9 @@ def main():
     time_from = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - days_delta
     time_till = datetime.now().replace(hour=23, minute=59, second=59, microsecond=0) - days_delta
 
-    result = collect_changesets_tags(conn, sys.argv[1], recursive=True, time_from=time_from, time_till=time_till)
+    day = date.today() - days_delta
+    # result = collect_changesets_tags(conn, sys.argv[1], recursive=True, time_from=time_from, time_till=time_till)
+    result = changesets(conn, day=day, filter=sys.argv[1], recursive=True, coverages=[1])
     print(result)
     # import json
     # print(json.dumps(result))
