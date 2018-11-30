@@ -187,6 +187,7 @@ def collect_changeset(conn, cid):
     res = conn.execute(SQL_CHANGESET, {'cid': cid})
     row = res.fetchone()
     changeset = {
+        'id': cid,
         'userName': row.user_name,
         'userID': row.user_name,
         'createdAt': row.created_at,
