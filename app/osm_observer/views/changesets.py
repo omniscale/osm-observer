@@ -29,6 +29,7 @@ def changesets_list():
             raise abort(403)
         coverages.append(coverage)
 
+    # TODO 
     # filter with username
     # username = request.args.get('username', None)
 
@@ -41,13 +42,13 @@ def changesets_list():
     # # filter with current user reviewed
     # current_user_reviewed = request.args.get('currentUserReviewed', None)
 
-    # filter with time_range
-    # actually we support today and a time delta
     time_range = request.args.get('timeRange', None)
+
+    day = date.today()
+    # TODO remove
     day = date(2018, 11, 20)
-    # day = date.today()
-    print(time_range)
-    if time_range and time_range != 'today':
+    
+    if time_range:
         day = day - timedelta(int(time_range))
 
     # TODO move engine
