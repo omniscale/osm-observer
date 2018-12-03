@@ -1,62 +1,67 @@
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-5">
     <div class="component-container"
          *ngIf="currentChangeset">
       <div class="row">
-        <div class="col-md-2">
+     <!--    <div class="col-md-2">
           <button class="btn btn-secondary btn-sm"
                   (click)="prev(currentChangeset)"
                   [disabled]="!prevChangeset">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
             {{ 'PREVIOUS' | translate }}
-          </button>
-        </div>
-        <div class="col-md-8 text-center">
+          </button> 
+        </div>-->
+        <div class="col-md-12">
           <h4 class="">{{ 'CHANGESET DETAILS' | translate }}</h4>
+          <josmlink [changeset]="currentChangeset" class="pull-right"></josmlink>          
         </div>
-        <div class="col-md-2 text-right">
+<!--         <div class="col-md-2 text-right">
           <button class="btn btn-secondary btn-sm"
                   (click)="next(currentChangeset)"
                   [disabled]="!nextChangeset">
             {{ 'NEXT' | translate }}
             <i class="fa fa-arrow-right" aria-hidden="true"></i>
           </button>
-        </div>
+        </div> -->
       </div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>{{ 'CLOSED AT' | translate }}</th>
-            <th>{{ 'OSM ID' | translate }}</th>
-            <th>{{ 'USERNAME' | translate }}</th>
-            <th>{{ 'CHANGES' | translate }}</th>
-            <th>{{ 'STATUS' | translate }}</th>
-            <th>{{ 'ACTION' | translate }}</th>
-          </tr>
-        </thead>
+
+      <table class="table table-striped table-sm">
         <tbody>
           <tr>
+            <td>{{ 'CLOSED AT' | translate }}</td>
             <td>{{ currentChangeset.closedAt | date:'d.M.y HH:mm:ss' }}</td>
+          </tr>
+          <tr>
+            <td>{{ 'OSM ID' | translate }}</td>
             <td>
               <a href="https://www.openstreetmap.org/changeset/{{ currentChangeset.id }}"
                  target="_blank">
                 {{ currentChangeset.id }}
                 <i class="fa fa-external-link" aria-hidden="true"></i>
               </a>
-            </td>
+            </td>            
+          </tr>
+          <tr>
+            <td>{{ 'USERNAME' | translate }}</td>
             <td>
               <a href="https://www.openstreetmap.org/user/{{ currentChangeset.userName }}"
                  target="_blank">
                 {{ currentChangeset.userName }}
                 <i class="fa fa-external-link" aria-hidden="true"></i>
               </a>
-            </td>
+            </td>            
+          </tr>
+          <tr>
+            <td>{{ 'CHANGES' | translate }}</td>
             <td>{{ currentChangeset.numChanges }}</td>
+          </tr>
+          <tr>
+            <td>{{ 'STATUS' | translate }}</td>
             <td>{{ reviewStatus.byId(currentChangeset.status) | translate }}</td>
-            <td><josmlink [changeset]="currentChangeset"></josmlink></td>
           </tr>
         </tbody>
       </table>
+
       <strong>{{ 'TAGS' | translate }}</strong>
       <table class="table table-striped table-sm">
         <thead>
@@ -73,6 +78,10 @@
         </tbody>
       </table>
     </div>
+  </div>
+
+  <div class="col-md-7">
+    <!-- <changeset-map [changeset]="currentChangesetDetails"></changeset-map> -->
   </div>
 </div>
 

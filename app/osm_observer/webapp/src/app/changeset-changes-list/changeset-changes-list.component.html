@@ -7,6 +7,7 @@
           <th>{{ 'NODES' | translate }}</th>
           <th>{{ 'WAYS' | translate }}</th>
           <th>{{ 'RELATIONS' | translate }}</th>
+          <th>{{ 'SELECTED CHANGE' | translate }}</th>
         </tr>
       </thead>
       <tbody>
@@ -20,7 +21,7 @@
             </div>
             <ul class="list-unstyled"
                 *ngIf="changeset.changes.nodes ?.length > 0">
-              <li *ngFor="let change of changeset.changes.nodes">
+              <li *ngFor="let change of changeset.changes.nodes" (click)="updateCurrentChange(change, 'nodes')">
                   <span class="change-title"
                         [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
                     {{ change.id }} (v{{ change.version }})
@@ -37,7 +38,6 @@
                   </changeset-tags-compare>
               </li>
             </ul>
-            <!-- <changeset-map [changeset]="changeset"></changeset-map> -->
 
             <span *ngIf="changeset.changes.nodes?.length === 0">
               {{ 'NO CHANGED NODES' | translate }}
@@ -52,7 +52,7 @@
             </div>
             <ul class="list-unstyled"
                 *ngIf="changeset.changes.ways ?.length > 0">
-              <li *ngFor="let change of changeset.changes.ways">
+              <li *ngFor="let change of changeset.changes.ways" (click)="updateCurrentChange(change, 'ways')">
                 <span class="change-title"
                     [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
                    {{ change.id }} (v{{ change.version }})
@@ -82,7 +82,7 @@
             </div>
             <ul class="list-unstyled"
                 *ngIf="changeset.changes.relations ?.length > 0">
-              <li *ngFor="let change of changeset.changes.relations">
+              <li *ngFor="let change of changeset.changes.relations" (click)="updateCurrentChange(change, 'relations')">
                 <span class="change-title"
                   [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
                   {{ change.id }} (v{{ change.version }})
@@ -102,6 +102,18 @@
             <span *ngIf="changeset.changes.relations?.length === 0">
               {{ 'NO CHANGED RELATIONS' | translate }}
             </span>
+          </td>
+          <td>
+            <div>
+              <changeset-tags-compare *ngIf="currentChange"
+                [changeset]="changeset"
+                [key]="currentChange.key"
+                [prevKey]="currentChange.prevKey"
+                [type]="currentChangeType"
+                [openIntialCompare]=true
+              >
+              </changeset-tags-compare>
+            </div>
           </td>
         </tr>
       </tbody>

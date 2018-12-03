@@ -13,56 +13,17 @@ export class ChangesetChangesListComponent implements OnChanges {
 
   @Input() changeset: ChangesetDetails;
 
-  // changesetNodeChanges: ChangesetChange[];
-  // changesetWayChanges: ChangesetChange[];
-  // changesetRelationChanges: ChangesetChange[];
-
-  // nodesChanges: Changes;
-  // waysChanges: Changes;
-  // relationsChanges: Changes;
+  currentChange: ChangesetChange;
+  currentChangeType: String;
 
   constructor(private changesetDetailsService: ChangesetDetailsService) { }
 
-  assignChangesetChanges(changesetChanges: ChangesetDetails) {
-    // this.changesetNodeChanges = [];
-    // this.changesetWayChanges = [];
-    // this.changesetRelationChanges = [];
-
-    // // this.nodesChanges = new Changes();
-    // // this.waysChanges = new Changes();
-    // // this.relationsChanges = new Changes();
-    // console.log(changesetChanges)
-    // let changes: Changes;
-    // for (let change of changesetChanges.changes) {
-    //    console.log(change)
-      // switch(change.type) {
-      //   case 'node':
-      //     changes = this.nodesChanges;
-      //     this.changesetNodeChanges.push(change);
-      //     break;
-      //   case 'way':
-      //     changes= this.waysChanges;
-      //     this.changesetWayChanges.push(change);
-      //     break;
-      //   case 'relation':
-      //     changes = this.relationsChanges;
-      //     this.changesetRelationChanges.push(change);
-      //     break;
-      // }
-      // if(change.added) {
-      //   changes.added++;
-      // }
-      // if(change.modified) {
-      //   changes.modified++;
-      // }
-      // if(change.deleted) {
-      //   changes.deleted++;
-      // }
-    // }
+  updateCurrentChange(changeset: ChangesetChange, changesetType: String) {
+    this.currentChange = changeset;
+    this.currentChangeType = changesetType;
   }
 
   ngOnChanges(changes: SimpleChanges) {
     this.changeset = changes['changeset'].currentValue;
-    this.assignChangesetChanges(this.changeset)
   }
 }

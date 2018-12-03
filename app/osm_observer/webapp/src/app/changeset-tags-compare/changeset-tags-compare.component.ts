@@ -15,6 +15,7 @@ export class ChangesetTagsCompareComponent implements OnChanges {
   @Input() key: string;
   @Input() prevKey: string;
   @Input() type: string;
+  @Input() openIntialCompare: boolean;
 
   showCompareTags: boolean;
   combinedTags = {};
@@ -52,10 +53,18 @@ export class ChangesetTagsCompareComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.changeset = changes['changeset'].currentValue;
+    if (changes['changeset']) {  
+      this.changeset = changes['changeset'].currentValue;
+    }
+    if (changes['type']) {  
+      this.type = changes['type'].currentValue
+    }
+
     this.key = changes['key'].currentValue;
-    this.prevKey = changes['prevKey'].currentValue
-    this.type = changes['type'].currentValue
+    this.prevKey = changes['prevKey'].currentValue;
+    if (changes['openIntialCompare']) {
+      this.showCompareTags = changes['openIntialCompare'].currentValue
+    }
     this.assignChangesets(this.changeset, this.type, this.key, this.prevKey);
   }
 }
