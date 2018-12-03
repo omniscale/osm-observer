@@ -21,14 +21,14 @@ export class ChangesetListComponent implements OnInit {
   coverages: Coverage[];
 
   username: string;
-  timeRange: string;
+  timeRange: number;
   sumScore: number;
   numReviews: number;
   coverageId: number;
   statusId: number;
   currentUserReviewed: boolean;
 
-  allowedTimeRanges = ['today', 'yesterday', 'lastWeek']
+  // allowedTimeRanges = ['today', 'yesterday', 'lastWeek']
   allowedCoverageIds: number[];
 
   orderBy: string = 'closedAt';
@@ -73,7 +73,14 @@ export class ChangesetListComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.changesetService.getChangesets(this.username, this.timeRange, this.sumScore, this.numReviews, this.coverageId, this.statusId, this.currentUserReviewed)
+    this.changesetService.getChangesets(
+      this.username, 
+      this.timeRange,
+      this.sumScore,
+      this.numReviews,
+      this.coverageId,
+      this.statusId,
+      this.currentUserReviewed)
                          .subscribe(
                            changesets => this.assignChangesets(changesets),
                            // TODO define onError actions
@@ -101,11 +108,8 @@ export class ChangesetListComponent implements OnInit {
     if(this.username !== undefined && this.username !== null && this.username !== '') {
       routeParams['username'] = this.username;
     }
-    if(this.timeRange !== undefined && this.timeRange !== null && this.timeRange !== '') {
+    if(this.timeRange !== undefined && this.timeRange !== null) {
       routeParams['timeRange'] = this.timeRange;
-    }
-    if(this.sumScore !== undefined && this.sumScore !== null) {
-      routeParams['score'] = this.sumScore;
     }
     if(this.numReviews !== undefined && this.numReviews !== null) {
       routeParams['numReviews'] = this.numReviews;
@@ -126,7 +130,7 @@ export class ChangesetListComponent implements OnInit {
 
   handleRouteParams(params: any): void {
     this.username = params['username'] as string;
-    this.timeRange = params['timeRange'] as string;
+    this.timeRange = params['timeRange'] as number;
     this.sumScore = parseInt(params['score']) as number;
     if(isNaN(this.sumScore)) {
       this.sumScore = undefined;
@@ -156,7 +160,24 @@ export class ChangesetListComponent implements OnInit {
     this.applyChange();
   }
 
-  setTimeRange(timeRange: string): void {
+  nextTimeRange(rangeStep: string): void {
+
+    if (rangeStep == 'prev') {
+      if (this.timeRange > 0) {
+         this.timeRange = +this.timeRange + -1;
+      }
+    }
+
+    if (rangeStep == 'next') {
+      if (this.timeRange >= 0) {
+         this.timeRange = +this.timeRange + +1;
+      }
+    }
+
+    this.applyChange();
+  }
+
+  setTimeRange(timeRange: number): void {
     if(timeRange === this.timeRange) {
       this.timeRange = undefined;
     } else {

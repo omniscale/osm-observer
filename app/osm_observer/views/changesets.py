@@ -9,9 +9,9 @@ from geoalchemy2.shape import to_shape
 from osm_observer.changes.changes import collect_changeset
 
 from osm_observer.views import api
+from osm_observer.changes.changesets import changesets
 from osm_observer.lib.changes import (
-    query_changesets, query_changeset_comments,
-    query_changeset_changes
+    query_changeset_comments,
 )
 from osm_observer.model import Coverage
 from sqlalchemy import create_engine
@@ -30,51 +30,39 @@ def changesets_list():
         coverages.append(coverage)
 
     # filter with username
-    username = request.args.get('username', None)
+    # username = request.args.get('username', None)
 
-    # filter with num_reviews
-    num_reviews = request.args.get('numReviews', None)
+    # # filter with num_reviews
+    # num_reviews = request.args.get('numReviews', None)
 
-    # filter with average sorce
-    sum_score = request.args.get('sumScore', None)
+    # # filter with status
+    # status_id = request.args.get('statusId', None)
 
-    # filter with status
-    status_id = request.args.get('statusId', None)
-
-    # filter with current user reviewed
-    current_user_reviewed = request.args.get('currentUserReviewed', None)
+    # # filter with current user reviewed
+    # current_user_reviewed = request.args.get('currentUserReviewed', None)
 
     # filter with time_range
-    # actually we support today, yesterday and last_week
+    # actually we support today and a time delta
     time_range = request.args.get('timeRange', None)
-    if time_range == 'today':
-        from_time = date.today()
-        to_time = date.today() + timedelta(1)
-    elif time_range == 'yesterday':
-        from_time = date.today() - timedelta(1)
-        to_time = date.today()
-    elif time_range == 'last_week':
-        from_time = date.today() - timedelta(7)
-        to_time = date.today()
-    else:
-        from_time = None
-        to_time = None
+    day = date(2018, 11, 20)
+    # day = date.today()
+    print(time_range)
+    if time_range and time_range != 'today':
+        day = day - timedelta(int(time_range))
 
-    changesets = list(query_changesets(
-        current_user_id=current_user.id,
-        coverages=coverages or current_user.coverages,
-        from_time=from_time,
-        to_time=to_time,
-        username=username,
-        num_reviews=num_reviews,
-        sum_score=sum_score,
-        status_id=status_id,
-        current_user_reviewed=current_user_reviewed,
-        limit=current_app.config.get('CHANGESETS_LIMIT')
-    ))
+    # TODO move engine
+    dbschema = 'changes,public'
+    engine = create_engine(
+        "postgresql+psycopg2://localhost/osm_observer",
+        connect_args={'options': '-csearch_path={} -cenable_seqscan=false -cenable_indexscan=true'.format(dbschema)},
+        # echo=True,
+    )
+    conn = engine.connect()
 
-    return jsonify(serialize_changesets(changesets))
-
+    result = changesets(
+        conn, day=day, filter=None, recursive=True, coverages=coverages
+    )
+    return jsonify(result)
 
 @api.route('/changesets/comments/<int:changeset_id>')
 @login_required
@@ -95,34 +83,6 @@ def changeset_changes(changeset_id):
 
     result = collect_changeset(conn, changeset_id)
     return jsonify(result)
-
-
-def serialize_changeset(changeset):
-    bbox_wkt = to_shape(changeset.bbox)
-    r = {
-        'id': changeset.app_id,
-        'osmId': changeset.id,
-        'createdAt': changeset.created_at.strftime("%d.%m.%Y %H:%M:%S"),
-        'closedAt': changeset.closed_at.strftime("%d.%m.%Y %H:%M:%S"),
-        'username': changeset.user_name,
-        'numChanges': changeset.num_changes,
-        'userId': changeset.user_id,
-        'tags': changeset.tags,
-        'numReviews': changeset.num_reviews,
-        'sumScore': changeset.sum_score,
-        'status': changeset.status,
-        'currentUserReviewed': changeset.current_user_reviewed,
-        'bbox': bbox_wkt.bounds
-    }
-    return r
-
-
-def serialize_changesets(changesets):
-    data = []
-    for changeset in changesets:
-        data.append(serialize_changeset(changeset))
-    return data
-
 
 def serialize_changeset_comments(comments):
     data = []
