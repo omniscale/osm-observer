@@ -27,8 +27,6 @@ export class ChangesetListComponent implements OnInit {
   coverageId: number;
   statusId: number;
   currentUserReviewed: boolean;
-
-  // allowedTimeRanges = ['today', 'yesterday', 'lastWeek']
   allowedCoverageIds: number[];
 
   orderBy: string = 'closedAt';
