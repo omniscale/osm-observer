@@ -4,9 +4,15 @@
     <table class="table table-sm">
       <thead>
         <tr>
-          <th>{{ 'NODES' | translate }}</th>
-          <th>{{ 'WAYS' | translate }}</th>
-          <th>{{ 'RELATIONS' | translate }}</th>
+          <th *ngIf="changeset.changes.nodes ?.length > 0">
+            {{ 'NODES' | translate }} 
+            ({{ changeset.changes.nodes.length }})</th>
+          <th *ngIf="changeset.changes.ways ?.length > 0">
+            {{ 'WAYS' | translate }} 
+            ({{ changeset.changes.ways.length }})</th>
+          <th *ngIf="changeset.changes.relations ?.length > 0">
+            {{ 'RELATIONS' | translate }}
+            ({{ changeset.changes.relations.length }})</th>
           <th>{{ 'SELECTED CHANGE' | translate }}</th>
         </tr>
       </thead>
