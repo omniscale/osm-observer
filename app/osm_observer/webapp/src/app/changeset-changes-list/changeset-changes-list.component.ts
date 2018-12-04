@@ -1,8 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
 
 import { ChangesetChange } from '../types/changeset-change';
 import { ChangesetDetails } from '../types/changeset-details';
-import { ChangesetDetailsService } from '../services/changeset-details.service';
+import { MapService } from '../services/map.service';
 
 @Component({
   selector: 'changeset-changes-list',
@@ -16,11 +16,12 @@ export class ChangesetChangesListComponent implements OnChanges {
   currentChange: ChangesetChange;
   currentChangeType: String;
 
-  constructor(private changesetDetailsService: ChangesetDetailsService) { }
+  constructor(private mapService: MapService) { }
 
-  updateCurrentChange(changeset: ChangesetChange, changesetType: String) {
-    this.currentChange = changeset;
-    this.currentChangeType = changesetType;
+  updateCurrentChange(change: ChangesetChange, type: String) {
+    this.mapService.activeChange(change, type);
+    this.currentChange = change;
+    this.currentChangeType = type;
   }
 
   ngOnChanges(changes: SimpleChanges) {

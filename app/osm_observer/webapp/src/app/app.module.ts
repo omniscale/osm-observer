@@ -25,6 +25,7 @@ import { LoginComponent }                from './login/login.component';
 import { MessageViewerComponent }        from './message-viewer/message-viewer.component';
 import { JOSMLinkComponent }             from './josmlink/josmlink.component';
 
+import { MapService }        from './services/map.service';
 import { CoverageService }        from './services/coverage.service';
 import { ChangesetService }       from './services/changeset.service';
 import { ChangesetDetailsService }       from './services/changeset-details.service';
@@ -80,7 +81,8 @@ export function createTranslateLoader(http: Http, location: Location) {
     ChangesetDetailsService,
     ReviewService,
     ChangesetDetailResolver,
-    MessageService
+    MessageService,
+    MapService
   ],
   bootstrap: [AppComponent]
 })

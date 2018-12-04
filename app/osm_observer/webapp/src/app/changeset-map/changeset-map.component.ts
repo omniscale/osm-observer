@@ -1,8 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, HostBinding } from '@angular/core';
 
 import { ChangesetChange } from '../types/changeset-change';
 import { ChangesetDetails } from '../types/changeset-details';
-import { ChangesetDetailsService } from '../services/changeset-details.service';
+import { MapService } from '../services/map.service';
 
 import * as ol from 'openlayers';
 
@@ -14,10 +14,60 @@ import * as ol from 'openlayers';
 export class ChangesetMapComponent implements OnChanges {
 
   @Input() changeset: ChangesetDetails;
+  @Input() currentChange: ChangesetChange;
+  @Input() currentChangeType: String;
 
   map: ol.Map;
+  nodesVectorLayer: ol.layer.Vector;
+  waysVectorLayer: ol.layer.Vector;
+  relationsVectorLayer: ol.layer.Vector;
 
-  constructor(private changesetDetailsService: ChangesetDetailsService) { }
+  activeChange: ChangesetChange;
+  activeChangeType: string;
+
+  constructor(private mapService: MapService) {}
+
+  styleFunction(feature, resolution) {
+    var styles = [
+      new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'blue',
+          width: 3
+        })
+      }),
+      new ol.style.Style({
+        image: new ol.style.Circle({
+          radius: 3,
+          fill: new ol.style.Fill({
+            color: 'blue'
+          })
+        })
+      })
+    ];
+  
+    var highlightStyle = [
+      new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'red',
+          width: 3
+        })
+      }),
+      new ol.style.Style({
+        image: new ol.style.Circle({
+          radius: 3,
+          fill: new ol.style.Fill({
+            color: 'red'
+          })
+        })
+       })
+    ];
+    
+    var active = feature.get('active');
+    if (active) {
+      styles = highlightStyle;
+    }
+    return styles;
+  }
 
   createNodesLayer() {
     var nodes = [];
@@ -25,24 +75,14 @@ export class ChangesetMapComponent implements OnChanges {
        let changeSetnode = this.changeset.changes.nodes[node];
        let key = changeSetnode.key;
        let element = this.changeset.elements['nodes'][key];
-       let marker = new ol.Feature({
+       let nd = new ol.Feature({
         geometry: new ol.geom.Point(
           ol.proj.fromLonLat(element.coodinates)
         ),
         });
-       nodes.push(marker);
+       nd.setProperties({'key': key })
+       nodes.push(nd);
     }
-
-    var styles = [
-      new ol.style.Style({
-        image: new ol.style.Circle({
-          radius: 5,
-          fill: new ol.style.Fill({
-            color: 'green'
-          })
-        })
-      })
-    ];
 
     var vectorSource = new ol.source.Vector({
       features: nodes
@@ -50,7 +90,7 @@ export class ChangesetMapComponent implements OnChanges {
 
     var nodesVectorLayer = new ol.layer.Vector({
       source: vectorSource,
-      style: styles
+      style: this.styleFunction
     });
     nodesVectorLayer.setZIndex(3);
     return nodesVectorLayer;
@@ -70,35 +110,18 @@ export class ChangesetMapComponent implements OnChanges {
        });
        var geometry = new ol.geom.LineString(way)
        geometry.transform('EPSG:4326', 'EPSG:3857');
-       ways.push(new ol.Feature({
-        geometry: geometry 
-       }));       
+       var wayFeature = new ol.Feature({ geometry: geometry });
+       wayFeature.setProperties({'key': key });
+       ways.push(wayFeature);
     }
 
     var vectorSource = new ol.source.Vector({
       features: ways
     });
 
-      var styles = [
-        new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'red',
-            width: 3
-          })
-        }),
-        new ol.style.Style({
-          image: new ol.style.Circle({
-            radius: 3,
-            fill: new ol.style.Fill({
-              color: 'red'
-            })
-          })
-        })
-      ];
-
     var waysVectorLayer = new ol.layer.Vector({
       source: vectorSource,
-      style: styles
+      style: this.styleFunction
     });
     waysVectorLayer.setZIndex(2);
     return waysVectorLayer;
@@ -108,8 +131,8 @@ export class ChangesetMapComponent implements OnChanges {
     var relationWays = [];
     var relationPoints = [];
     for (let node in this.changeset.changes.relations) {
-       let changesetWay = this.changeset.changes.relations[node];
-       let key = changesetWay.key;
+       let changesetRelation = this.changeset.changes.relations[node];
+       let key = changesetRelation.key;
        let element = this.changeset.elements['relations'][key];
 
        var relation = [];
@@ -134,9 +157,11 @@ export class ChangesetMapComponent implements OnChanges {
            var geometry = new ol.geom.LineString(way)
            geometry.transform('EPSG:4326', 'EPSG:3857');
            
-           relationWays.push(new ol.Feature({
+           let relationFeature = new ol.Feature({
               geometry: geometry 
-            }));  
+            })
+           relationFeature.setProperties({'key': key });
+           relationWays.push(relationFeature);  
          }
        });
     }
@@ -145,31 +170,14 @@ export class ChangesetMapComponent implements OnChanges {
       features: relationPoints.concat(relationWays)
     });
 
-      var styles = [
-        new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'blue',
-            width: 3
-          })
-        }),
-        new ol.style.Style({
-          image: new ol.style.Circle({
-            radius: 3,
-            fill: new ol.style.Fill({
-              color: 'orange'
-            })
-          })
-        })
-      ];
-
-
-    var relationVectorLayer = new ol.layer.Vector({
+    var relationsVectorLayer = new ol.layer.Vector({
       source: vectorSource,
-      style: styles
+      style: this.styleFunction
     });
-    relationVectorLayer.setZIndex(1)
-    return relationVectorLayer;
+    relationsVectorLayer.setZIndex(1)
+    return relationsVectorLayer;
   }
+
   updateMap(changeset: ChangesetDetails) {
     let extent = changeset.changeset.dataBBOX;
     this.map = new ol.Map({
@@ -200,19 +208,49 @@ export class ChangesetMapComponent implements OnChanges {
         size: this.map.getSize()
     });
 
-    let nodesVectorLayer = this.createNodesLayer();
-    this.map.addLayer(nodesVectorLayer);
+    this.nodesVectorLayer = this.createNodesLayer();
+    this.map.addLayer(this.nodesVectorLayer);
 
-    let waysVectorLayer = this.createWaysLayer();
-    this.map.addLayer(waysVectorLayer);
+    this.waysVectorLayer = this.createWaysLayer();
+    this.map.addLayer(this.waysVectorLayer);
 
-    let relationsVectorLayer = this.createRelationLayer();
-    this.map.addLayer(relationsVectorLayer);
+    this.relationsVectorLayer = this.createRelationLayer();
+    this.map.addLayer(this.relationsVectorLayer);
+  }
+
+  zoomToFeature() {
+    let key = this.activeChange.key;
+    let features = [];
+    if (this.activeChangeType == 'nodes') {
+      features = this.nodesVectorLayer.getSource().getFeatures();
+    }
+    if (this.activeChangeType == 'ways') {
+      features = this.waysVectorLayer.getSource().getFeatures();
+    }
+    
+    if (this.activeChangeType == 'relations') {
+      features = this.relationsVectorLayer.getSource().getFeatures();
+    }
+    
+    for (let feature in features) {
+      features[feature].unset('active');
+      if (key == features[feature].get('key')) {
+        this.map.getView().fit(features[feature].getGeometry().getExtent(), {"maxZoom": 17} );
+        features[feature].setProperties({'active': true })
+      }
+    }
+  }
+
+  ngOnInit() {
+    this.mapService.change.subscribe(activeChange => {
+        this.activeChange = activeChange.change;
+        this.activeChangeType = activeChange.type;
+        this.zoomToFeature();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
     this.changeset = changes['changeset'].currentValue;
     this.updateMap(this.changeset);
   }
-
 }
