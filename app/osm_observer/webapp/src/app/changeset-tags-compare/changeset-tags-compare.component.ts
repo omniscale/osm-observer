@@ -18,7 +18,8 @@ export class ChangesetTagsCompareComponent implements OnChanges {
   @Input() openIntialCompare: boolean;
 
   showCompareTags: boolean;
-  combinedTags = {};
+  combinedTags: {};
+  hasPrevValue: boolean;
 
   constructor(private changesetDetailsService: ChangesetDetailsService) {
     this.showCompareTags = false;
@@ -27,7 +28,7 @@ export class ChangesetTagsCompareComponent implements OnChanges {
   assignChangesets(changeset: ChangesetDetails, type: string, key: string, prevKey: string) {
     let tags = changeset.elements[type][key].tags;
     let combinedTags = {};
-
+    this.hasPrevValue = false;
     for (let tag in tags) {
         combinedTags[tag] = {
           'currentValue': tags[tag],
@@ -37,6 +38,9 @@ export class ChangesetTagsCompareComponent implements OnChanges {
 
     if (prevKey) {
         let prevTags = changeset.elements[type][prevKey].tags;
+        if (prevTags) {
+          this.hasPrevValue = true;
+        }
         for (let tag in prevTags) {
             if (tag in combinedTags) {
                 combinedTags[tag]['prevValue'] = prevTags[tag]  

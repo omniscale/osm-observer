@@ -1,6 +1,6 @@
 <div class="component-container restrict-height">
   <h4>{{ 'CHANGES' | translate }}</h4>
-  <div class="table-container">
+  <div class="table-responsive">
     <table class="table table-sm">
       <thead>
         <tr>
@@ -34,7 +34,10 @@
                       popoverPlacement="top-right"
                       popoverTitle="{{ change.id }} (v{{ change.version }})"
                       [popover]="myPopover"
-                      [popoverOnHover]="true">
+                      [popoverOnHover]="changeset.elements['nodes'][change.key].tags | hasKeys ">
+                  <i class="fa fa-tags"
+                     aria-hidden="true"
+                     *ngIf="(changeset.elements['nodes'][change.key].tags | hasKeys)"></i>
                   <span class="change-title"
                         [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
                     {{ change.id }} (v{{ change.version }})
@@ -73,7 +76,10 @@
                       popoverPlacement="top-right"
                       popoverTitle="{{ change.id }} (v{{ change.version }})"
                       [popover]="myPopover"
-                      [popoverOnHover]="true">
+                      [popoverOnHover]="changeset.elements['ways'][change.key].tags | hasKeys ">
+                  <i class="fa fa-tags"
+                     aria-hidden="true"
+                     *ngIf="(changeset.elements['ways'][change.key].tags | hasKeys)"></i>                      
                   <span class="change-title"
                       [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
                      {{ change.id }} (v{{ change.version }})
@@ -111,7 +117,10 @@
                       popoverPlacement="top-right"
                       popoverTitle="{{ change.id }} (v{{ change.version }})"
                       [popover]="myPopover"
-                      [popoverOnHover]="true">
+                      [popoverOnHover]="changeset.elements['relations'][change.key].tags | hasKeys ">
+                  <i class="fa fa-tags"
+                     aria-hidden="true"
+                     *ngIf="(changeset.elements['relations'][change.key].tags | hasKeys)"></i>                      
                   <span class="change-title"
                       [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
                      {{ change.id }} (v{{ change.version }})

@@ -5,7 +5,7 @@
       <tr>
         <th>{{ 'KEY' | translate }}</th>
         <th>{{ 'NEW VALUE' | translate }}</th>
-        <th>{{ 'OLD VALUE' | translate }}</th>
+        <th *ngIf="hasPrevValue">{{ 'OLD VALUE' | translate }}</th>
       </tr>
     </thead>
     <tbody>
