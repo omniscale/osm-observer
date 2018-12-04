@@ -36,14 +36,14 @@ export class ChangesetTagsCompareComponent implements OnChanges {
     }
 
     if (prevKey) {
-        let prevTags = changeset.elements[type][key].tags;
+        let prevTags = changeset.elements[type][prevKey].tags;
         for (let tag in prevTags) {
             if (tag in combinedTags) {
                 combinedTags[tag]['prevValue'] = prevTags[tag]  
             } else {
                 combinedTags[tag] = {
                   'currentValue': '',
-                  'prevValue': tags[tag]
+                  'prevValue': prevTags[tag]
                 };
             }
         }
