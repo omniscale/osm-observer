@@ -18,7 +18,7 @@
       </thead>
       <tbody>
         <tr>
-          <td>
+          <td *ngIf="changeset.changes.nodes ?.length > 0">
             <div class="changes-count"
                  *ngIf="nodesChanges!==undefined">
               <span *ngIf="nodesChanges.added > 0">{{ nodesChanges.added }} {{ 'ADDED' | translate }}</span>
@@ -48,19 +48,16 @@
                         [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
                     {{ change.id }} (v{{ change.version }})
                   </span>
-                  <a href="http://www.openstreetmap.org/node/{{ change.id }}"
-                     target="_blank">
-                    <i class="fa fa-external-link" aria-hidden="true"></i>
-                  </a>
                 </span>
+                <a href="http://www.openstreetmap.org/node/{{ change.id }}"
+                   target="_blank">
+                  <i class="fa fa-external-link" aria-hidden="true"></i>
+                </a>
+                <i class="fa fa-search" aria-hidden="true"></i>
               </li>
             </ul>
-
-            <span *ngIf="changeset.changes.nodes?.length === 0">
-              {{ 'NO CHANGED NODES' | translate }}
-            </span>
           </td>
-          <td>
+          <td *ngIf="changeset.changes.ways ?.length > 0">
             <div class="changes-count"
                  *ngIf="waysChanges!==undefined">
               <span *ngIf="waysChanges.added > 0">{{ waysChanges.added }} {{ 'ADDED' | translate }}</span>
@@ -95,16 +92,15 @@
                   target="_blank">
                   <i class="fa fa-external-link" aria-hidden="true"></i>
                 </a>
+                <i class="fa fa-search" aria-hidden="true"></i>
               </li>
             </ul>
-            <span *ngIf="changeset.changes.ways?.length === 0">
-              {{ 'NO CHANGED WAYS' | translate }}
-            </span>
           </td>
-          <td>
+          <td *ngIf="changeset.changes.relations ?.length > 0">
             <div class="changes-count"
                  *ngIf="relationsChanges!==undefined">
-              <span *ngIf="relationsChanges.added > 0">{{ relationsChanges.added }} {{ 'ADDED' | translate }}</span>
+              <span *ngIf="relationsChanges.added > 0">
+              {{ relationsChanges.added }} {{ 'ADDED' | translate }}</span>
               <span *ngIf="relationsChanges.modified > 0">{{ relationsChanges.modified }} {{ 'MODIFIED' | translate }}</span>
               <span *ngIf="relationsChanges.deleted > 0">{{ relationsChanges.deleted }} {{ 'DELETED' | translate }}</span>
             </div>
@@ -136,11 +132,9 @@
                   target="_blank">
                   <i class="fa fa-external-link" aria-hidden="true"></i>
                 </a>
+                <i class="fa fa-search" aria-hidden="true"></i>
               </li>
             </ul>
-            <span *ngIf="changeset.changes.relations?.length === 0">
-              {{ 'NO CHANGED RELATIONS' | translate }}
-            </span>
           </td>
           <td>
             <div>
