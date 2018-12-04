@@ -22,6 +22,19 @@
             <ul class="list-unstyled"
                 *ngIf="changeset.changes.nodes ?.length > 0">
               <li *ngFor="let change of changeset.changes.nodes" (click)="updateCurrentChange(change, 'nodes')">
+                <popover-content #myPopover>
+                  <changeset-tags-compare 
+                      [changeset]="changeset"
+                      [key]="change.key"
+                      [prevKey]="change.prevKey"
+                      type="nodes">
+                  </changeset-tags-compare>  
+                </popover-content>
+                <span class="changeset-change"
+                      popoverPlacement="top-right"
+                      popoverTitle="{{ change.id }} (v{{ change.version }})"
+                      [popover]="myPopover"
+                      [popoverOnHover]="true">
                   <span class="change-title"
                         [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
                     {{ change.id }} (v{{ change.version }})
@@ -30,12 +43,7 @@
                      target="_blank">
                     <i class="fa fa-external-link" aria-hidden="true"></i>
                   </a>
-                  <changeset-tags-compare 
-                    [changeset]="changeset"
-                    [key]="change.key"
-                    [prevKey]="change.prevKey"
-                    type="nodes">
-                  </changeset-tags-compare>
+                </span>
               </li>
             </ul>
 
@@ -53,20 +61,28 @@
             <ul class="list-unstyled"
                 *ngIf="changeset.changes.ways ?.length > 0">
               <li *ngFor="let change of changeset.changes.ways" (click)="updateCurrentChange(change, 'ways')">
-                <span class="change-title"
-                    [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-                   {{ change.id }} (v{{ change.version }})
+                <popover-content #myPopover>
+                  <changeset-tags-compare 
+                      [changeset]="changeset"
+                      [key]="change.key"
+                      [prevKey]="change.prevKey"
+                      type="ways">
+                  </changeset-tags-compare>  
+                </popover-content>
+                <span class="changeset-change"
+                      popoverPlacement="top-right"
+                      popoverTitle="{{ change.id }} (v{{ change.version }})"
+                      [popover]="myPopover"
+                      [popoverOnHover]="true">
+                  <span class="change-title"
+                      [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+                     {{ change.id }} (v{{ change.version }})
+                  </span>
                 </span>
                 <a href="http://www.openstreetmap.org/way/{{ change.id }}"
                   target="_blank">
                   <i class="fa fa-external-link" aria-hidden="true"></i>
                 </a>
-                <changeset-tags-compare 
-                    [changeset]="changeset"
-                    [key]="change.key"
-                    [prevKey]="change.prevKey"
-                    type="ways">
-                </changeset-tags-compare>  
               </li>
             </ul>
             <span *ngIf="changeset.changes.ways?.length === 0">
@@ -81,22 +97,30 @@
               <span *ngIf="relationsChanges.deleted > 0">{{ relationsChanges.deleted }} {{ 'DELETED' | translate }}</span>
             </div>
             <ul class="list-unstyled"
-                *ngIf="changeset.changes.relations ?.length > 0">
+                *ngIf="changeset.changes.ways ?.length > 0">
               <li *ngFor="let change of changeset.changes.relations" (click)="updateCurrentChange(change, 'relations')">
-                <span class="change-title"
-                  [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-                  {{ change.id }} (v{{ change.version }})
+                <popover-content #myPopover>
+                  <changeset-tags-compare 
+                      [changeset]="changeset"
+                      [key]="change.key"
+                      [prevKey]="change.prevKey"
+                      type="relations">
+                  </changeset-tags-compare>  
+                </popover-content>
+                <span class="changeset-change"
+                      popoverPlacement="top-right"
+                      popoverTitle="{{ change.id }} (v{{ change.version }})"
+                      [popover]="myPopover"
+                      [popoverOnHover]="true">
+                  <span class="change-title"
+                      [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+                     {{ change.id }} (v{{ change.version }})
+                  </span>
                 </span>
-                <a href="http://www.openstreetmap.org/relation/{{ change.id }}"
-                   target="_blank">
+                <a href="http://www.openstreetmap.org/way/{{ change.id }}"
+                  target="_blank">
                   <i class="fa fa-external-link" aria-hidden="true"></i>
                 </a>
-                <changeset-tags-compare 
-                    [changeset]="changeset"
-                    [key]="change.key"
-                    [prevKey]="change.prevKey"
-                    type="relations">
-                </changeset-tags-compare>      
               </li>
             </ul>
             <span *ngIf="changeset.changes.relations?.length === 0">

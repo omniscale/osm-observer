@@ -59,12 +59,13 @@ export class ChangesetTagsCompareComponent implements OnChanges {
     if (changes['type']) {  
       this.type = changes['type'].currentValue
     }
-
-    this.key = changes['key'].currentValue;
-    this.prevKey = changes['prevKey'].currentValue;
     if (changes['openIntialCompare']) {
       this.showCompareTags = changes['openIntialCompare'].currentValue
     }
+
+    this.key = changes['key'].currentValue;
+    this.prevKey = changes['prevKey'].currentValue;
+
     this.assignChangesets(this.changeset, this.type, this.key, this.prevKey);
   }
 }
