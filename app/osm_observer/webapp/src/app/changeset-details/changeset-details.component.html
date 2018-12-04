@@ -81,7 +81,10 @@
   </div>
 
   <div class="col-md-7">
-    <!-- <changeset-map [changeset]="currentChangesetDetails"></changeset-map> -->
+    <div class="component-container"
+         *ngIf="currentChangeset">
+      <changeset-map [changeset]="currentChangesetDetails"></changeset-map>
+    </div>
   </div>
 </div>
 

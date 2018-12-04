@@ -18,19 +18,34 @@ export class ChangesetMapComponent implements OnChanges {
   constructor(private changesetDetailsService: ChangesetDetailsService) { }
 
   updateMap(changeset: ChangesetDetails) {
+    let extent = changeset.changeset.changesetBBOX;
     let map = new ol.Map({
         target: 'map',
-        controls: ol.control.defaults({rotate: false, attribution: false}),
+        controls: ol.control.defaults(
+          {
+            rotate: false,
+            attribution: false
+          }
+        ),
         layers: [
           new ol.layer.Tile({
             source: new ol.source.OSM()
           })
         ],
         view: new ol.View({
-          center: ol.proj.transform([10.0154, 53.60025], 'EPSG:4326','EPSG:3857'),
-          zoom: 17
+          center: ol.proj.transform(
+            [extent[0], extent[1]], 'EPSG:4326','EPSG:3857'
+          ),
+          zoom: 15
         })
-      });
+    });
+
+    map.getView().fit(
+      ol.proj.transformExtent(
+        [extent[0], extent[1], extent[2], extent[3]], 'EPSG:4326','EPSG:3857'
+      ), {
+        size: map.getSize()
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {

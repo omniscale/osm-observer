@@ -6,18 +6,18 @@ export class Changeset {
   status: number;
   numReviews: number;
 
-  createdAt: Date; //
-  closedAt: Date; //
-  userName: string; //
-  numChanges: number; //
-  userID: number; //
+  createdAt: Date; 
+  closedAt: Date; 
+  userName: string; 
+  numChanges: number; 
+  userID: number; 
   sumScore: number;
-  tags: Tags; //
-  comments: ChangesetComment[]; //
+  tags: Tags; 
+  comments: ChangesetComment[]; 
   currentUserReviewed: boolean;
-  changesetBBOX: Array<number>; //
-  dataBBOX: Array<number>; //
-  open: boolean; //
+  changesetBBOX: Array<number>; 
+  dataBBOX: Array<number>; 
+  open: boolean; 
 
   constructor(
     id: number, osmId: number, createdAt: string, closedAt: string,
@@ -37,6 +37,7 @@ export class Changeset {
     this.tags = tags;
     this.currentUserReviewed = currentUserReviewed;
     this.changesetBBOX = changesetBBOX;
+    this.dataBBOX = dataBBOX;
     this.comments = comments;
     this.createdAt = new Date(createdAt);
     this.closedAt = new Date(closedAt);
