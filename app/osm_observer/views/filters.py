@@ -10,21 +10,12 @@ from osm_observer.model import Filter
 @api.route('/filter/all')
 @login_required
 def filter_all():
-    print("Humpty")
     data = []
     filters = Filter.query.all()
     for tag_filter in filters:
         filter_json = tag_filter.json
         data.append(filter_json)
 
-    filter_json = {
-        'id': 1,
-        'name': 'Name',
-        'description': 'Description',
-        'code': 'CODDE',
-        'active': True
-    }
-    data.append(filter_json)
     return jsonify(data)
 
 
@@ -40,6 +31,21 @@ def filter_load():
     
     return jsonify({'error': 'Missing ID'})
 
+@api.route('/filter/delete')
+@login_required
+def filter_delete():
+    data = request.json
+    id = data.get('id', False)
+
+    if not id:
+        return jsonify({'error': True})
+
+    tag_filter = Filter.query.by_id(id)
+    db.session.remove(tag_filter)
+    db.session.commit()
+    return jsonify({'success': True})
+    
+  
 @api.route('/filter/save', methods=['POST'])
 @login_required
 def filter_save():

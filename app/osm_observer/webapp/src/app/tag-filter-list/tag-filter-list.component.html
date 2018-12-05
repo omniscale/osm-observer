@@ -1,33 +1,40 @@
-<div class="component-container w-50">
-  <h4>{{ 'FILTER LIST' | translate }}</h4>
-  <table class="table table-striped table-sm">
-    <thead>
-      <tr>
-        <th>{{ 'ID' | translate }}</th>
-        <th>{{ 'ACTIVE' | translate }}</th>
-        <th>{{ 'NAME' | translate }}</th>
-        <th>{{ 'DESCRIPTION' | translate }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let filter of tagFilters">
-        <td>
-          {{ filter.id }}
-        </td>
-        <td>
-          {{ filter.active }}
-        </td>
-        <td>
-          {{ filter.name }}
-        </td>
-        <td>
-          {{ filter.name }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <button class="btn btn-primary btn-sm"
-          (click)="createNewFilter()">
-    {{ 'CREATE NEW' | translate }}
-  </button>
+<div class="row">
+  <div class="col-md-6">
+    <div class="component-container">
+      <h4>{{ 'FILTER LIST' | translate }}</h4>
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th>{{ 'ID' | translate }}</th>
+            <th>{{ 'ACTIVE' | translate }}</th>
+            <th>{{ 'NAME' | translate }}</th>
+            <th>{{ 'DESCRIPTION' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let filter of tagFilters">
+            <td>
+              {{ filter.id }}
+            </td>
+            <td>
+              {{ filter.active }}
+            </td>
+            <td>
+              {{ filter.name }}
+            </td>
+            <td>
+              {{ filter.name }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-primary btn-sm"
+              (click)="createNewFilter()">
+        {{ 'CREATE NEW' | translate }}
+      </button>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <tag-filter-form></tag-filter-form>
+  </div>
 </div>

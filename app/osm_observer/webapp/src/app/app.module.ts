@@ -13,6 +13,8 @@ import { AppComponent }     from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { TagFilterListComponent }        from './tag-filter-list/tag-filter-list.component';
+import { TagFilterFormComponent }           from './tag-filter-form/tag-filter-form.component';
+
 import { CoverageListComponent }         from './coverage-list/coverage-list.component';
 import { ChangesetListComponent }        from './changeset-list/changeset-list.component';
 import { ChangesetDetailsComponent }     from './changeset-details/changeset-details.component';
@@ -62,7 +64,8 @@ export function createTranslateLoader(http: Http, location: Location) {
     MessageViewerComponent,
     JOSMLinkComponent,
     ReadyDirective,
-    TagFilterListComponent
+    TagFilterListComponent,
+    TagFilterFormComponent    
   ],
   imports: [
     BrowserModule,

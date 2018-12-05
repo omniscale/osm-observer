@@ -37,20 +37,19 @@ export class TagFilterService extends BaseHttpService {
                ));
   }
 
-  // loadTagFilter(id: number): Observable<any> {
-  //   let data = {'id': id}
-  //   return this.http.post(this.saveFilterUrl(), data, this.getRequestOptions())
-  //                   .catch((error:any) => Observable.throw(
-  //                     this.handleError(error, 'loadTagFilter', this.loadFilterUrl(), data)
-  //                   ));
-  // }
+  loadTagFilter(id: number): Observable<any> {
+    let data = {'id': id}
+    return this.http.post(this.saveFilterUrl(), data, this.getRequestOptions())
+                    .catch((error:any) => Observable.throw(
+                      this.handleError(error, 'loadTagFilter', this.loadFilterUrl(), data)
+                    ));
+  }
 
-  // saveTagFilter(tagFilter: TagFilter): Observable<any> {
-  //   let data = {'code': tagFilter.code};
-  //   // TODO JSON.stringify 
-  //   return this.http.post(this.saveFilterUrl(), data, this.getRequestOptions())
-  //                   .catch((error:any) => Observable.throw(
-  //                     this.handleError(error, 'saveTagFilter', this.saveFilterUrl(), data)
-  //                   ));
-  // }
+  saveTagFilter(tagFilter: TagFilter): Observable<any> {
+    let data = JSON.stringify(tagFilter); 
+    return this.http.post(this.saveFilterUrl(), data, this.getRequestOptions())
+                    .catch((error:any) => Observable.throw(
+                      this.handleError(error, 'saveTagFilter', this.saveFilterUrl(), data)
+                    ));
+  }
 }
