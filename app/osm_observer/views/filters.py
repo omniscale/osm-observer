@@ -26,22 +26,22 @@ def filter_load():
     id = data.get('id', False)
 
     if id:
-        tag_filter = Filter.query.by_id(id)
+        tag_filter = Filter.by_id(id)
         return jsonify(tag_filter.json)
     
     return jsonify({'error': 'Missing ID'})
 
-@api.route('/filter/delete')
+@api.route('/filter/remove', methods=['POST'])
 @login_required
-def filter_delete():
+def filter_remove():
     data = request.json
     id = data.get('id', False)
 
     if not id:
         return jsonify({'error': True})
 
-    tag_filter = Filter.query.by_id(id)
-    db.session.remove(tag_filter)
+    tag_filter = Filter.by_id(id)
+    db.session.delete(tag_filter)
     db.session.commit()
     return jsonify({'success': True})
     
@@ -53,7 +53,7 @@ def filter_save():
     id = data.get('id', False)
 
     if id:
-        tag_filter = Filter.query.by_id(id)
+        tag_filter = Filter.by_id(id)
         tag_filter.name = data.get('name')
         tag_filter.code = data.get('code')
         tag_filter.description = data.get('description')

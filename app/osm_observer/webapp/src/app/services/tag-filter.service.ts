@@ -17,8 +17,8 @@ export class TagFilterService extends BaseHttpService {
     return this.location.prepareExternalUrl('api/filter/all');
   }
 
-  private loadFilterUrl(): string {
-    return this.location.prepareExternalUrl('api/filter/load');
+  private removeFilterUrl(): string {
+    return this.location.prepareExternalUrl('api/filter/remove');
   }
 
   private saveFilterUrl(): string {
@@ -37,11 +37,11 @@ export class TagFilterService extends BaseHttpService {
                ));
   }
 
-  loadTagFilter(id: number): Observable<any> {
+  removeTagFilter(id: number): Observable<any> {
     let data = {'id': id}
-    return this.http.post(this.saveFilterUrl(), data, this.getRequestOptions())
+    return this.http.post(this.removeFilterUrl(), data, this.getRequestOptions())
                     .catch((error:any) => Observable.throw(
-                      this.handleError(error, 'loadTagFilter', this.loadFilterUrl(), data)
+                      this.handleError(error, 'loadTagFilter', this.removeFilterUrl(), data)
                     ));
   }
 

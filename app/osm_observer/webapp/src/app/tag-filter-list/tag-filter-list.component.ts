@@ -14,32 +14,35 @@ import { MessageService } from '../services/message.service';
 export class TagFilterListComponent implements OnInit {
 
   tagFilters: TagFilter[];
+  selectedFilter: TagFilter;
 
   private changesSavedText: string;
   private changesDiscardedText: string;
 
   constructor(private tagFilterService: TagFilterService, private messageService: MessageService, private translate: TranslateService) { }
 
-  assignCoverages(tagFilters: TagFilter[]) {
+  assignFilters(tagFilters: TagFilter[]) {
     this.tagFilters = tagFilters;
   }
 
   getFilters(): void {
     this.tagFilterService.getTagFilters()
                         .subscribe(
-                          tagFilters => this.assignCoverages(tagFilters),
+                          tagFilters => this.assignFilters(tagFilters),
                           // TODO define onError actions
                           error => {}
                         );
   }
 
-  createNewFilter():void {
-    console.log("create new one")
-  }
-
-  cancelChanges(): void {
-    this.getFilters();
-    this.messageService.add(this.changesDiscardedText, 'success');
+  removeFilter(tagFitler: TagFilter): void {
+    this.tagFilterService.removeTagFilter(tagFitler.id)
+                        .subscribe(
+                        v => {
+                          this.messageService.add('removed', 'success');
+                          this.getFilters();
+                        },
+                        error => {}
+                      );
   }
 
   ngOnInit() {

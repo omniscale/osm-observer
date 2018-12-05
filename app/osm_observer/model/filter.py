@@ -48,4 +48,4 @@ class Filter(db.Model):
     @classmethod
     def by_id(cls, id):
         q = cls.query.filter(cls.id == id)
-        return q.first_or_404()
+        return q.first()

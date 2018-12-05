@@ -9,6 +9,7 @@
             <th>{{ 'ACTIVE' | translate }}</th>
             <th>{{ 'NAME' | translate }}</th>
             <th>{{ 'DESCRIPTION' | translate }}</th>
+            <th>{{ 'ACTIONS' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -25,16 +26,21 @@
             <td>
               {{ filter.name }}
             </td>
+            <td>
+              <button class="btn btn-sm btn-secondary" (click)="selectedFilter = filter">
+                {{ 'EDIT' | translate }}
+              </button>
+
+              <button class="btn btn-sm btn-secondary" (click)="removeFilter(filter)">
+                {{ 'REMOVE' | translate }}
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
-      <button class="btn btn-primary btn-sm"
-              (click)="createNewFilter()">
-        {{ 'CREATE NEW' | translate }}
-      </button>
     </div>
   </div>
   <div class="col-md-6">
-    <tag-filter-form></tag-filter-form>
+    <tag-filter-form [selectedFilter]="selectedFilter"></tag-filter-form>
   </div>
 </div>

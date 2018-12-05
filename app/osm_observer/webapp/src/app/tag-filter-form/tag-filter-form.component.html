@@ -1,4 +1,5 @@
 <div class="component-container">
+
   <h4>{{ 'ADD FILTER' | translate }}</h4>
   <form novalidate
         autocomplete="off" 
@@ -69,4 +70,10 @@
       {{ 'RESET' | translate }}
     </button>
   </form>
+  <hr>
+  
+  <button class="btn btn-secondary btn-sm"
+        (click)="createNewFilter()">
+        {{ 'CREATE NEW' | translate }}
+   </button>
 </div>

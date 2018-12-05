@@ -13,7 +13,7 @@ import { MessageService } from '../services/message.service';
   styleUrls: ['./tag-filter-form.component.sass']
 })
 export class TagFilterFormComponent implements OnInit, OnChanges {
-  @Input() id: number;
+  @Input() selectedFilter: TagFilter;
 
   @ViewChild('filterForm') public filterForm: NgForm;
 
@@ -45,7 +45,10 @@ export class TagFilterFormComponent implements OnInit, OnChanges {
   };
 
   ngOnChanges(changes: SimpleChanges) {
-    this.id = changes['id'].currentValue;
+    console.log(changes)
+    if (changes['selectedFilter']) {
+       console.log(changes['selectedFilter'].currentValue);
+    }
   }
 
   ngOnInit() {
