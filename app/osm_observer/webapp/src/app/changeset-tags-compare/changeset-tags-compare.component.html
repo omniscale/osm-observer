@@ -1,4 +1,5 @@
 <div>
+  <h5 *ngIf="combinedTags | hasKeys">{{ key }}</h5>
   <table class="table table-sm table-borderless table-striped" 
     *ngIf="combinedTags | hasKeys">
     <thead>
@@ -11,9 +12,11 @@
     <tbody>
       <tr *ngFor="let t of combinedTags | keyValueList">
         <td>{{ t.key }}</td>
-        <td>{{ combinedTags[t.key].currentValue }}</td>
-        <td>{{ combinedTags[t.key].prevValue }}</td>
+        <td [class.table-warning]="combinedTags[t.key].currentValue !== combinedTags[t.key].prevValue">
+          {{ combinedTags[t.key].currentValue }}</td>
+        <td *ngIf="hasPrevValue">
+          {{ combinedTags[t.key].prevValue }}</td>
       </tr>
     </tbody>
   </table>
-</div>
+</div> 

@@ -138,6 +138,8 @@ nav
     display: inline-block
 
 table.table
+  table-layout: fixed
+
   thead
     tr
       th
@@ -155,6 +157,8 @@ table.table
   thead, tbody
     tr
       th, td
+        word-wrap: break-word
+        overflow-wrap: break-word
         &.comment-column
           max-width: 30rem
           word-break: break-word
@@ -178,6 +182,11 @@ table
     tr
       td.loading-data
         text-align: center
+
+
+.restrict-height
+  max-height: 350px
+  overflow: auto
 
 .popover
   max-width: none

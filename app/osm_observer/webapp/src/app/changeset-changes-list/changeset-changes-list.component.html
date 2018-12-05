@@ -1,155 +1,131 @@
-<div class="component-container restrict-height">
+<div class="component-container">
   <h4>{{ 'CHANGES' | translate }}</h4>
-  <div class="table-responsive">
-    <table class="table table-sm">
-      <thead>
-        <tr>
-          <th *ngIf="changeset.changes.nodes ?.length > 0">
-            {{ 'NODES' | translate }} 
-            ({{ changeset.changes.nodes.length }})</th>
-          <th *ngIf="changeset.changes.ways ?.length > 0">
-            {{ 'WAYS' | translate }} 
-            ({{ changeset.changes.ways.length }})</th>
-          <th *ngIf="changeset.changes.relations ?.length > 0">
-            {{ 'RELATIONS' | translate }}
-            ({{ changeset.changes.relations.length }})</th>
-          <th>{{ 'SELECTED CHANGE' | translate }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td *ngIf="changeset.changes.nodes ?.length > 0">
-            <div class="changes-count"
-                 *ngIf="nodesChanges!==undefined">
-              <span *ngIf="nodesChanges.added > 0">{{ nodesChanges.added }} {{ 'ADDED' | translate }}</span>
-              <span *ngIf="nodesChanges.modified > 0">{{ nodesChanges.modified }} {{ 'MODIFIED' | translate }}</span>
-              <span *ngIf="nodesChanges.deleted > 0">{{ nodesChanges.deleted }} {{ 'DELETED' | translate }}</span>
-            </div>
-            <ul class="list-unstyled"
-                *ngIf="changeset.changes.nodes ?.length > 0">
-              <li *ngFor="let change of changeset.changes.nodes" (click)="updateCurrentChange(change, 'nodes')">
-                <popover-content #myPopover>
-                  <changeset-tags-compare 
-                      [changeset]="changeset"
-                      [key]="change.key"
-                      [prevKey]="change.prevKey"
-                      type="nodes">
-                  </changeset-tags-compare>  
-                </popover-content>
-                <span class="changeset-change"
-                      popoverPlacement="top-right"
-                      popoverTitle="{{ change.id }} (v{{ change.version }})"
-                      [popover]="myPopover"
-                      [popoverOnHover]="changeset.elements['nodes'][change.key].tags | hasKeys ">
-                  <i class="fa fa-tags"
-                     aria-hidden="true"
-                     *ngIf="(changeset.elements['nodes'][change.key].tags | hasKeys)"></i>
-                  <span class="change-title"
+  <div class="row">
+    <div class="col-md-7">
+      <div class="table-responsive restrict-height">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th *ngIf="changeset.changes.nodes ?.length > 0">
+                {{ 'NODES' | translate }} 
+                ({{ changeset.changes.nodes.length }})</th>
+              <th *ngIf="changeset.changes.ways ?.length > 0">
+                {{ 'WAYS' | translate }} 
+                ({{ changeset.changes.ways.length }})</th>
+              <th *ngIf="changeset.changes.relations ?.length > 0">
+                {{ 'RELATIONS' | translate }}
+                ({{ changeset.changes.relations.length }})</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td *ngIf="changeset.changes.nodes ?.length > 0">
+                <div class="changes-count"
+                     *ngIf="nodesChanges!==undefined">
+                  <span *ngIf="nodesChanges.added > 0">{{ nodesChanges.added }} {{ 'ADDED' | translate }}</span>
+                  <span *ngIf="nodesChanges.modified > 0">{{ nodesChanges.modified }} {{ 'MODIFIED' | translate }}</span>
+                  <span *ngIf="nodesChanges.deleted > 0">{{ nodesChanges.deleted }} {{ 'DELETED' | translate }}</span>
+                </div>
+                <ul class="list-unstyled"
+                    *ngIf="changeset.changes.nodes ?.length > 0">
+                  <li *ngFor="let change of changeset.changes.nodes">
+                      <i class="fa fa-tags"
+                         aria-hidden="true"
+                         *ngIf="(changeset.elements['nodes'][change.key].tags | hasKeys)"></i>
+                      <span class="change-title" 
+                            [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}"
+                          (click)="setSelectedChange(change, 'nodes')"
+                          (mouseenter)="updateCurrentChange(change, 'nodes')"
+                          (mouseleave)="getSelectedChange(change, 'nodes')"
+                          >
+                        {{ change.id }} (v{{ change.version }})
+                      </span>
+                    <a href="http://www.openstreetmap.org/node/{{ change.id }}"
+                       target="_blank">
+                      <i class="fa fa-external-link" aria-hidden="true"></i>
+                    </a>
+                  </li>
+                </ul>
+              </td>
+              <td *ngIf="changeset.changes.ways ?.length > 0">
+                <div class="changes-count"
+                     *ngIf="waysChanges!==undefined">
+                  <span *ngIf="waysChanges.added > 0">{{ waysChanges.added }} {{ 'ADDED' | translate }}</span>
+                  <span *ngIf="waysChanges.modified > 0">{{ waysChanges.modified }} {{ 'MODIFIED' | translate }}</span>
+                  <span *ngIf="waysChanges.deleted > 0">{{ waysChanges.deleted }} {{ 'DELETED' | translate }}</span>
+                </div>
+                <ul class="list-unstyled"
+                    *ngIf="changeset.changes.ways ?.length > 0">
+                  <li *ngFor="let change of changeset.changes.ways">
+
+                      <i class="fa fa-tags"
+                         aria-hidden="true"
+                         *ngIf="(changeset.elements['ways'][change.key].tags | hasKeys)"></i>                      
+                      <span class="change-title"
+                          (click)="setSelectedChange(change, 'ways')"
+                          (mouseenter)="updateCurrentChange(change, 'ways')"
+                          (mouseleave)="getSelectedChange(change, 'ways')"
+                          [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
+                         {{ change.id }} (v{{ change.version }})
+                      </span>
+                    <a href="http://www.openstreetmap.org/way/{{ change.id }}"
+                      target="_blank">
+                      <i class="fa fa-external-link" aria-hidden="true"></i>
+                    </a>
+                  </li>
+                </ul>
+              </td>
+              <td *ngIf="changeset.changes.relations ?.length > 0">
+                <div class="changes-count"
+                     *ngIf="relationsChanges!==undefined">
+                  <span *ngIf="relationsChanges.added > 0">
+                  {{ relationsChanges.added }} {{ 'ADDED' | translate }}</span>
+                  <span *ngIf="relationsChanges.modified > 0">{{ relationsChanges.modified }} {{ 'MODIFIED' | translate }}</span>
+                  <span *ngIf="relationsChanges.deleted > 0">{{ relationsChanges.deleted }} {{ 'DELETED' | translate }}</span>
+                </div>
+                <ul class="list-unstyled"
+                    *ngIf="changeset.changes.ways ?.length > 0">
+                  <li *ngFor="let change of changeset.changes.relations">              
+                      <i class="fa fa-tags"
+                         aria-hidden="true"
+                         *ngIf="(changeset.elements['relations'][change.key].tags | hasKeys)"></i>                      
+                      <span class="change-title"
+                        (click)="setSelectedChange(change, 'relations')"
+                        (mouseenter)="updateCurrentChange(change, 'relations')"
+                        (mouseleave)="getSelectedChange(change, 'relations')"
                         [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-                    {{ change.id }} (v{{ change.version }})
-                  </span>
-                </span>
-                <a href="http://www.openstreetmap.org/node/{{ change.id }}"
-                   target="_blank">
-                  <i class="fa fa-external-link" aria-hidden="true"></i>
-                </a>
-                <i class="fa fa-search" aria-hidden="true"></i>
-              </li>
-            </ul>
-          </td>
-          <td *ngIf="changeset.changes.ways ?.length > 0">
-            <div class="changes-count"
-                 *ngIf="waysChanges!==undefined">
-              <span *ngIf="waysChanges.added > 0">{{ waysChanges.added }} {{ 'ADDED' | translate }}</span>
-              <span *ngIf="waysChanges.modified > 0">{{ waysChanges.modified }} {{ 'MODIFIED' | translate }}</span>
-              <span *ngIf="waysChanges.deleted > 0">{{ waysChanges.deleted }} {{ 'DELETED' | translate }}</span>
-            </div>
-            <ul class="list-unstyled"
-                *ngIf="changeset.changes.ways ?.length > 0">
-              <li *ngFor="let change of changeset.changes.ways" (click)="updateCurrentChange(change, 'ways')">
-                <popover-content #myPopover>
-                  <changeset-tags-compare 
-                      [changeset]="changeset"
-                      [key]="change.key"
-                      [prevKey]="change.prevKey"
-                      type="ways">
-                  </changeset-tags-compare>  
-                </popover-content>
-                <span class="changeset-change"
-                      popoverPlacement="top-right"
-                      popoverTitle="{{ change.id }} (v{{ change.version }})"
-                      [popover]="myPopover"
-                      [popoverOnHover]="changeset.elements['ways'][change.key].tags | hasKeys ">
-                  <i class="fa fa-tags"
-                     aria-hidden="true"
-                     *ngIf="(changeset.elements['ways'][change.key].tags | hasKeys)"></i>                      
-                  <span class="change-title"
-                      [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-                     {{ change.id }} (v{{ change.version }})
-                  </span>
-                </span>
-                <a href="http://www.openstreetmap.org/way/{{ change.id }}"
-                  target="_blank">
-                  <i class="fa fa-external-link" aria-hidden="true"></i>
-                </a>
-                <i class="fa fa-search" aria-hidden="true"></i>
-              </li>
-            </ul>
-          </td>
-          <td *ngIf="changeset.changes.relations ?.length > 0">
-            <div class="changes-count"
-                 *ngIf="relationsChanges!==undefined">
-              <span *ngIf="relationsChanges.added > 0">
-              {{ relationsChanges.added }} {{ 'ADDED' | translate }}</span>
-              <span *ngIf="relationsChanges.modified > 0">{{ relationsChanges.modified }} {{ 'MODIFIED' | translate }}</span>
-              <span *ngIf="relationsChanges.deleted > 0">{{ relationsChanges.deleted }} {{ 'DELETED' | translate }}</span>
-            </div>
-            <ul class="list-unstyled"
-                *ngIf="changeset.changes.ways ?.length > 0">
-              <li *ngFor="let change of changeset.changes.relations" (click)="updateCurrentChange(change, 'relations')">
-                <popover-content #myPopover>
-                  <changeset-tags-compare 
-                      [changeset]="changeset"
-                      [key]="change.key"
-                      [prevKey]="change.prevKey"
-                      type="relations">
-                  </changeset-tags-compare>  
-                </popover-content>
-                <span class="changeset-change"
-                      popoverPlacement="top-right"
-                      popoverTitle="{{ change.id }} (v{{ change.version }})"
-                      [popover]="myPopover"
-                      [popoverOnHover]="changeset.elements['relations'][change.key].tags | hasKeys ">
-                  <i class="fa fa-tags"
-                     aria-hidden="true"
-                     *ngIf="(changeset.elements['relations'][change.key].tags | hasKeys)"></i>                      
-                  <span class="change-title"
-                      [ngClass]="{'added': change.added, 'modified': change.modified, 'deleted': change.deleted}">
-                     {{ change.id }} (v{{ change.version }})
-                  </span>
-                </span>
-                <a href="http://www.openstreetmap.org/relation/{{ change.id }}"
-                  target="_blank">
-                  <i class="fa fa-external-link" aria-hidden="true"></i>
-                </a>
-                <i class="fa fa-search" aria-hidden="true"></i>
-              </li>
-            </ul>
-          </td>
-          <td>
-            <div>
-              <changeset-tags-compare *ngIf="currentChange"
-                [changeset]="changeset"
-                [key]="currentChange.key"
-                [prevKey]="currentChange.prevKey"
-                [type]="currentChangeType"
-                [openIntialCompare]=true
-              >
-              </changeset-tags-compare>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+                         {{ change.id }} (v{{ change.version }})
+                      </span>
+                    <a href="http://www.openstreetmap.org/relation/{{ change.id }}"
+                      target="_blank">
+                      <i class="fa fa-external-link" aria-hidden="true"></i>
+                    </a>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-5 restrict-height">
+      <changeset-tags-compare *ngIf="selectedChange && selectedChangeShow"
+         [changeset]="changeset"
+         [key]="selectedChange.key"
+         [prevKey]="selectedChange.prevKey"
+         [type]="selectedChangeType"
+         [openIntialCompare]=true
+       >
+       </changeset-tags-compare>
+
+       <changeset-tags-compare *ngIf="currentChange"
+         [changeset]="changeset"
+         [key]="currentChange.key"
+         [prevKey]="currentChange.prevKey"
+         [type]="currentChangeType"
+         [openIntialCompare]=true
+       >
+       </changeset-tags-compare>
+    </div>
   </div>
 </div>

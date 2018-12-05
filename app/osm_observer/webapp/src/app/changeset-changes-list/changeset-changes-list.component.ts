@@ -16,15 +16,33 @@ export class ChangesetChangesListComponent implements OnChanges {
   currentChange: ChangesetChange;
   currentChangeType: String;
 
+  selectedChange: ChangesetChange;
+  selectedChangeType: String;
+  selectedChangeShow: boolean;
+
   constructor(private mapService: MapService) { }
 
-  updateCurrentChange(change: ChangesetChange, type: String) {
+  getSelectedChange() {
+    this.selectedChangeShow = true;
+    this.currentChange = undefined;
+  }
+
+  setSelectedChange(change: ChangesetChange, type: String) {
     this.mapService.activeChange(change, type);
+    this.selectedChange = change;
+    this.selectedChangeType = type;
+  }
+  
+  updateCurrentChange(change: ChangesetChange, type: String) {
     this.currentChange = change;
     this.currentChangeType = type;
+    this.selectedChangeShow = false;
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.changeset = changes['changeset'].currentValue;
+    if (changes['changeset']) {
+      this.changeset = changes['changeset'].currentValue;
+    }
   }
+
 }
