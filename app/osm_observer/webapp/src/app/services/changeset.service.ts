@@ -44,7 +44,7 @@ export class ChangesetService extends BaseHttpService {
     location.prepareExternalUrl('api/changesets/comments/')
   }
 
-  getChangesets(username?: string, timeRange?: number, sumScore?: number, numReviews?: number, coverageId?: number, statusId?: number, currentUserReviewed?: boolean): Observable<Changeset[]> {
+  getChangesets(username?: string, timeRange?: number, numReviews?: number, coverageId?: number, statusId?: number, currentUserReviewed?: boolean): Observable<Changeset[]> {
     let params = new URLSearchParams();
     if(username !== undefined && username !== null && username !== '') {
       params.set('username', username);

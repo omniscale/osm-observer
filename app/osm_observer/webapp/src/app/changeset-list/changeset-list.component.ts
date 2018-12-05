@@ -22,7 +22,6 @@ export class ChangesetListComponent implements OnInit {
 
   username: string;
   timeRange: number;
-  sumScore: number;
   numReviews: number;
   coverageId: number;
   statusId: number;
@@ -74,7 +73,6 @@ export class ChangesetListComponent implements OnInit {
     this.changesetService.getChangesets(
       this.username, 
       this.timeRange,
-      this.sumScore,
       this.numReviews,
       this.coverageId,
       this.statusId,
@@ -129,10 +127,6 @@ export class ChangesetListComponent implements OnInit {
   handleRouteParams(params: any): void {
     this.username = params['username'] as string;
     this.timeRange = params['timeRange'] as number;
-    this.sumScore = parseInt(params['score']) as number;
-    if(isNaN(this.sumScore)) {
-      this.sumScore = undefined;
-    }
     this.numReviews = parseInt(params['numReviews']) as number;
     if(isNaN(this.numReviews)) {
       this.numReviews = undefined;
@@ -227,7 +221,6 @@ export class ChangesetListComponent implements OnInit {
   resetFilters(): void {
     this.username = undefined;
     this.timeRange = undefined;
-    this.sumScore = undefined;
     this.numReviews = undefined;
     this.coverageId = undefined;
     this.statusId = undefined;

@@ -11,7 +11,6 @@ export class Changeset {
   userName: string; 
   numChanges: number; 
   userID: number; 
-  sumScore: number;
   tags: Tags; 
   comments: ChangesetComment[]; 
   currentUserReviewed: boolean;
@@ -22,7 +21,7 @@ export class Changeset {
   constructor(
     id: number, osmId: number, createdAt: string, closedAt: string,
     numReviews: number, userName: string, numChanges: number,
-    userID: number, sumScore: number, tags: Tags, status: number,
+    userID: number, tags: Tags, status: number,
     currentUserReviewed: boolean, changesetBBOX: number[], dataBBOX: number[],
     comments: ChangesetComment[], open: boolean
   ) {
@@ -33,7 +32,6 @@ export class Changeset {
     this.userName = userName;
     this.userID = userID;
     this.numChanges = numChanges;
-    this.sumScore = sumScore;
     this.tags = tags;
     this.currentUserReviewed = currentUserReviewed;
     this.changesetBBOX = changesetBBOX;
