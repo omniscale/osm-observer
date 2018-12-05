@@ -12,6 +12,7 @@ import { PopoverModule } from "ngx-popover";
 import { AppComponent }     from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+import { TagFilterListComponent }        from './tag-filter-list/tag-filter-list.component';
 import { CoverageListComponent }         from './coverage-list/coverage-list.component';
 import { ChangesetListComponent }        from './changeset-list/changeset-list.component';
 import { ChangesetDetailsComponent }     from './changeset-details/changeset-details.component';
@@ -32,6 +33,7 @@ import { ChangesetDetailsService }       from './services/changeset-details.serv
 import { ReviewService }          from './services/review.service';
 import { ChangesetDetailResolver } from './services/changeset-detail-resolver.service';
 import { MessageService } from './services/message.service';
+import { TagFilterService } from './services/tag-filter.service';
 
 import { KeyValueListPipe } from './pipes/key-value-list.pipe';
 import { HasKeysPipe } from './pipes/has-keys.pipe';
@@ -59,7 +61,8 @@ export function createTranslateLoader(http: Http, location: Location) {
     LoginComponent,
     MessageViewerComponent,
     JOSMLinkComponent,
-    ReadyDirective
+    ReadyDirective,
+    TagFilterListComponent
   ],
   imports: [
     BrowserModule,
@@ -82,6 +85,7 @@ export function createTranslateLoader(http: Http, location: Location) {
     ReviewService,
     ChangesetDetailResolver,
     MessageService,
+    TagFilterService,
     MapService
   ],
   bootstrap: [AppComponent]
