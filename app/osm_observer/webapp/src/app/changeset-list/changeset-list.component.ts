@@ -159,6 +159,9 @@ export class ChangesetListComponent implements OnInit {
   }
 
   nextTimeRange(rangeStep: string): void {
+    if (!this.timeRange) {
+      this.timeRange = 0;
+    }
 
     if (rangeStep == 'prev') {
       if (this.timeRange > 0) {
