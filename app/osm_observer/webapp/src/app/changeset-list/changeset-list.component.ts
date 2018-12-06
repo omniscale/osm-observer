@@ -39,6 +39,7 @@ export class ChangesetListComponent implements OnInit {
   reviewStatus = ReviewStatus;
 
   loading: boolean = false;
+  currentDay: Date = new Date();
 
   private timer;
 
@@ -195,7 +196,7 @@ export class ChangesetListComponent implements OnInit {
          this.timeRange = +this.timeRange + +1;
       }
     }
-
+    this.calcDate(this.timeRange);
     this.applyChange();
   }
 
@@ -205,7 +206,15 @@ export class ChangesetListComponent implements OnInit {
     } else {
       this.timeRange = timeRange;
     }
+    this.calcDate(this.timeRange);
     this.applyChange();
+  }
+
+  calcDate(timeRange: number): void {
+    let today = new Date();
+    today.setDate(today.getDate() - timeRange)
+    this.currentDay = today;
+
   }
 
   setTagFilterId(tagFilterId: string): void {

@@ -74,6 +74,9 @@
               (click)="nextTimeRange('prev')">
             <i class="fa fa-angle-left" aria-hidden="true"></i>
       </button>
+      <button class="btn btn-sm btn-secondary">
+          {{ currentDay | date:'dd.MM.y' }}
+      </button>
       <button class="btn btn-sm btn-secondary"
               (click)="nextTimeRange('next')">
             <i class="fa fa-angle-right" aria-hidden="true"></i>
