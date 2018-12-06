@@ -18,6 +18,7 @@ export class TagFilterFormComponent implements OnInit, OnChanges {
   @ViewChild('filterForm') public filterForm: NgForm;
 
   filterAddedText: string;
+  editFilter: boolean;
 
   model = new TagFilter();
 
@@ -29,6 +30,14 @@ export class TagFilterFormComponent implements OnInit, OnChanges {
 
   resetForm() {
     this.filterForm.reset();
+    this.editFilter = false;
+  }
+
+  assignCurrentFilter(currentFilter: TagFilter) {
+    if (currentFilter) {
+      this.model = currentFilter;
+      this.editFilter = true;
+    }
   }
 
   onSubmit() {
@@ -45,9 +54,8 @@ export class TagFilterFormComponent implements OnInit, OnChanges {
   };
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes)
     if (changes['selectedFilter']) {
-       console.log(changes['selectedFilter'].currentValue);
+       this.assignCurrentFilter(changes['selectedFilter'].currentValue)
     }
   }
 

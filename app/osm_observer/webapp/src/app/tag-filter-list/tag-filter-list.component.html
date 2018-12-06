@@ -24,13 +24,12 @@
               {{ filter.name }}
             </td>
             <td>
-              {{ filter.name }}
+              {{ filter.description }}
             </td>
             <td>
               <button class="btn btn-sm btn-secondary" (click)="selectedFilter = filter">
                 {{ 'EDIT' | translate }}
               </button>
-
               <button class="btn btn-sm btn-secondary" (click)="removeFilter(filter)">
                 {{ 'REMOVE' | translate }}
               </button>

@@ -1,6 +1,10 @@
 <div class="component-container">
 
-  <h4>{{ 'ADD FILTER' | translate }}</h4>
+  <h4 *ngIf="editFilter">{{ 'EDIT FILTER' | translate }}<br>
+    <span>{{ model.name }} {{ (model.id) }}</span>
+  </h4>
+  <h4 *ngIf="!editFilter">{{ 'ADD FILTER' | translate }}</h4>
+
   <form novalidate
         autocomplete="off" 
         #filterForm="ngForm"
@@ -24,7 +28,7 @@
       <label for="description">
         {{ 'DESCRIPTION' | translate }}
       </label>
-      <textarea class="form-control form-control-sm"
+      <textarea rows="4" class="form-control form-control-sm"
                 id="description"
                 name="description"
                 [class.form-control-danger]="hasFormError(filterForm.controls.description)"
@@ -34,10 +38,10 @@
 
     <div class="form-group"
          [class.has-danger]="hasFormError(filterForm.controls.code)">
-      <label for="comment">
+      <label for="code">
         {{ 'CODE' | translate }}
       </label>
-      <textarea required class="form-control form-control-sm"
+      <textarea rows="20" required class="form-control form-control-sm"
                 id="code"
                 name="code"
                 [class.form-control-danger]="hasFormError(filterForm.controls.code)"
@@ -70,10 +74,4 @@
       {{ 'RESET' | translate }}
     </button>
   </form>
-  <hr>
-  
-  <button class="btn btn-secondary btn-sm"
-        (click)="createNewFilter()">
-        {{ 'CREATE NEW' | translate }}
-   </button>
 </div>
