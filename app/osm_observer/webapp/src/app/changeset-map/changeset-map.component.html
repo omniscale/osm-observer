@@ -1,3 +1,24 @@
 <div id="map" class="map">
-	
+  <div class="controls">  
+    <button type="button" class="btn btn-default btn-sm pull-right" (click)="showAllFeatures()">
+      {{ 'SHOW ALL' | translate }}
+    </button>
+
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-default btn-sm"
+        (click)="activatePrevFeatures()">
+        {{ 'PREV' | translate }}
+      </button>
+      <button type="button" class="btn btn-default btn-sm"  
+        (click)="activateNextFeatures()">
+        {{ 'NEXT' | translate }}
+      </button>
+      <button type="button" class="btn btn-default btn-sm" 
+        (click)="activateAllFeatures()">
+        {{ 'BOTH' | translate }}
+      </button>
+    </div>
+  </div>
+
 </div>
+
