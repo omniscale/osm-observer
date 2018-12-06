@@ -35,6 +35,21 @@
         {{ coverage.name }}
       </option>
     </select>
+
+    <select class="form-control form-control-sm"
+            id="tagFilter"
+            type="number"
+            #tagFilter
+            (change)="setTagFilterId(tagFilter.value)"
+            [(ngModel)]="tagFilterId">
+      <option [value]="undefined">
+        {{ 'SELECT TAG FILTER' | translate }}
+      </option>
+      <option *ngFor="let tagFilter of tagFilters"
+              [value]="tagFilter.id">
+        {{ tagFilter.name }}
+      </option>
+    </select>    
   </div>
 </div>
 <div class="component-container">

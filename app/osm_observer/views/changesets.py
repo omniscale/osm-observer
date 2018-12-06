@@ -13,28 +13,31 @@ from osm_observer.changes.changesets import changesets
 from osm_observer.lib.changes import (
     query_changeset_comments,
 )
-from osm_observer.model import Coverage
+from osm_observer.model import Filter
 from sqlalchemy import create_engine
 
 
 @api.route('/changesets')
 @login_required
 def changesets_list():
-    # filter with coverage
-    coverages = []
+    # load covarge filter and time from request
     coverage_id = request.args.get('coverageId', False)
+    coverages = []
     if coverage_id:
-        coverage = Coverage.by_id(coverage_id)
-        if coverage not in current_user.coverages:
-            raise abort(403)
-        coverages.append(coverage.id)
+        coverages = [coverage_id]
+
+    tag_filter = request.args.get('tagFilterId', None)
+    if tag_filter:
+       tag_filter = Filter.by_id(tag_filter)
+       if tag_filter:
+           tag_filter = tag_filter.code
 
     time_range = request.args.get('timeRange', None)
+
 
     day = date.today()
     # TODO remove
     day = date(2018, 11, 20)
-    
     if time_range:
         day = day - timedelta(int(time_range))
 
@@ -47,11 +50,10 @@ def changesets_list():
     )
     conn = engine.connect()
 
-    filter_ = None
     # filter_ = tags ? 'building'
     # filter_ = "tags->'highway' = 'residential' and type = 'way'"
     result = changesets(
-        conn, day=day, filter=filter_, recursive=True, coverages=coverages
+        conn, day=day, filter=tag_filter, recursive=True, coverages=coverages
     )
     return jsonify(result)
 

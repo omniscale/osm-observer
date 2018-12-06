@@ -5,9 +5,11 @@ import { Subscription } from 'rxjs';
 
 import { Changeset } from '../types/changeset';
 import { Coverage } from '../types/coverage';
+import { TagFilter } from '../types/tag-filter';
 import { ReviewStatus } from '../types/review';
 import { ChangesetService } from '../services/changeset.service';
 import { CoverageService } from '../services/coverage.service';
+import { TagFilterService } from '../services/tag-filter.service';
 
 @Component({
   selector: 'changeset-list',
@@ -19,14 +21,17 @@ export class ChangesetListComponent implements OnInit {
 
   changesets: Changeset[];
   coverages: Coverage[];
+  tagFilters: TagFilter[];
 
   username: string;
   timeRange: number;
   numReviews: number;
   coverageId: number;
+  tagFilterId: number;
   statusId: number;
   currentUserReviewed: boolean;
   allowedCoverageIds: number[];
+  allowedTagFilterIds: number[];
 
   orderBy: string = 'closedAt';
   order: string = 'desc';
@@ -42,6 +47,7 @@ export class ChangesetListComponent implements OnInit {
   constructor(
     private changesetService: ChangesetService,
     private coverageService: CoverageService,
+    private tagFilterService: TagFilterService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -54,6 +60,14 @@ export class ChangesetListComponent implements OnInit {
     // so loading is not set to false in that case
     if(this.changesets.length === 0) {
       this.loading = false;
+    }
+  }
+
+  assignTagFilters(tagFilters: TagFilter[]) {
+    this.allowedTagFilterIds = [];
+    this.tagFilters = tagFilters;
+    for(let c of tagFilters) {
+      this.allowedTagFilterIds.push(c.id);
     }
   }
 
@@ -71,12 +85,9 @@ export class ChangesetListComponent implements OnInit {
     }
     this.loading = true;
     this.changesetService.getChangesets(
-      this.username, 
       this.timeRange,
-      this.numReviews,
       this.coverageId,
-      this.statusId,
-      this.currentUserReviewed)
+      this.tagFilterId)
                          .subscribe(
                            changesets => this.assignChangesets(changesets),
                            // TODO define onError actions
@@ -99,6 +110,15 @@ export class ChangesetListComponent implements OnInit {
                         );
   }
 
+  getTagFilters(): void {
+    this.tagFilterService.getTagFilters()
+                        .subscribe(
+                          tagFilters => this.assignTagFilters(tagFilters),
+                          // TODO define onError actions
+                          error => {}
+                        );
+  }
+
   updateRouteParams(): void {
     let routeParams = {};
     if(this.username !== undefined && this.username !== null && this.username !== '') {
@@ -112,6 +132,9 @@ export class ChangesetListComponent implements OnInit {
     }
     if(this.coverageId !== undefined && this.coverageId !== null) {
       routeParams['coverageId'] = this.coverageId;
+    }
+    if(this.tagFilterId !== undefined && this.tagFilterId !== null) {
+      routeParams['tagFilterId'] = this.tagFilterId;
     }
     if(this.statusId !== undefined && this.statusId !== null) {
       routeParams['statusId'] = this.statusId;
@@ -134,6 +157,10 @@ export class ChangesetListComponent implements OnInit {
     this.coverageId = parseInt(params['coverageId']) as number;
     if(isNaN(this.coverageId)) {
       this.coverageId = undefined;
+    }
+    this.tagFilterId = parseInt(params['tagFilterId']) as number;
+    if(isNaN(this.tagFilterId)) {
+      this.tagFilterId = undefined;
     }
     this.statusId = parseInt(params['statusId']) as number;
     if(isNaN(this.statusId)) {
@@ -181,13 +208,20 @@ export class ChangesetListComponent implements OnInit {
     this.applyChange();
   }
 
+  setTagFilterId(tagFilterId: string): void {
+    this.tagFilterId = parseInt(tagFilterId);
+    if(isNaN(this.tagFilterId)) {
+      this.tagFilterId = undefined;
+    }
+    this.applyChange();
+  }
+
   setCoverageId(coverageId: string): void {
     this.coverageId = parseInt(coverageId);
     if(isNaN(this.coverageId)) {
       this.coverageId = undefined;
     }
     this.applyChange();
-
   }
 
   setStatusId(statusId: string): void {
@@ -223,6 +257,7 @@ export class ChangesetListComponent implements OnInit {
     this.timeRange = undefined;
     this.numReviews = undefined;
     this.coverageId = undefined;
+    this.tagFilterId = undefined;
     this.statusId = undefined;
     this.currentUserReviewed = undefined;
     this.applyChange();
@@ -243,6 +278,7 @@ export class ChangesetListComponent implements OnInit {
       (params: any) => this.handleRouteParams(params)
     )
     this.getCoverages();
+    this.getTagFilters();
   }
 
   ngOnDestroy() {
