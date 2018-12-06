@@ -27,20 +27,7 @@ def changesets_list():
         coverage = Coverage.by_id(coverage_id)
         if coverage not in current_user.coverages:
             raise abort(403)
-        coverages.append(coverage)
-
-    # TODO 
-    # filter with username
-    # username = request.args.get('username', None)
-
-    # # filter with num_reviews
-    # num_reviews = request.args.get('numReviews', None)
-
-    # # filter with status
-    # status_id = request.args.get('statusId', None)
-
-    # # filter with current user reviewed
-    # current_user_reviewed = request.args.get('currentUserReviewed', None)
+        coverages.append(coverage.id)
 
     time_range = request.args.get('timeRange', None)
 
@@ -52,7 +39,7 @@ def changesets_list():
         day = day - timedelta(int(time_range))
 
     # TODO move engine
-    dbschema = 'changes,public'
+    dbschema = 'changes,changes_app,public'
     engine = create_engine(
         "postgresql+psycopg2://localhost/osm_observer",
         connect_args={'options': '-csearch_path={} -cenable_seqscan=false -cenable_indexscan=true'.format(dbschema)},
@@ -60,8 +47,11 @@ def changesets_list():
     )
     conn = engine.connect()
 
+    filter_ = None
+    # filter_ = tags ? 'building'
+    # filter_ = "tags->'highway' = 'residential' and type = 'way'"
     result = changesets(
-        conn, day=day, filter=None, recursive=True, coverages=coverages
+        conn, day=day, filter=filter_, recursive=True, coverages=coverages
     )
     return jsonify(result)
 
