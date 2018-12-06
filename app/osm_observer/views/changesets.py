@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 
-from flask import jsonify, request
+from flask import jsonify, request, current_app
 
 from flask_login import login_required
 
@@ -12,8 +12,6 @@ from osm_observer.lib.changes import (
     query_changeset_comments,
 )
 from osm_observer.model import Filter
-from sqlalchemy import create_engine
-
 
 @api.route('/changesets')
 @login_required
@@ -39,17 +37,12 @@ def changesets_list():
     if time_range:
         day = day - timedelta(int(time_range))
 
-    # TODO move engine
-    dbschema = 'changes,changes_app,public'
-    engine = create_engine(
-        "postgresql+psycopg2://localhost/osm_observer",
-        connect_args={'options': '-csearch_path={} -cenable_seqscan=false -cenable_indexscan=true'.format(dbschema)},
-        # echo=True,
-    )
-    conn = engine.connect()
-
     result = changesets(
-        conn, day=day, filter=tag_filter, recursive=True, coverages=coverages
+        current_app.changeset_connection, 
+        day=day,
+        filter=tag_filter,
+        recursive=True,
+        coverages=coverages
     )
     return jsonify(result)
 
@@ -62,15 +55,7 @@ def changeset_comments(changeset_id):
 
 @api.route('/changesets/changes/<int:changeset_id>')
 def changeset_changes(changeset_id):
-    # TODO move engine
-    dbschema = 'changes,public'
-    engine = create_engine(
-        "postgres://os:os@localhost:5432/osm_observer",
-        connect_args={'options': '-csearch_path={}'.format(dbschema)})
-
-    conn = engine.connect()
-
-    result = collect_changeset(conn, changeset_id)
+    result = collect_changeset(current_app.changes_connection, changeset_id)
     return jsonify(result)
 
 def serialize_changeset_comments(comments):

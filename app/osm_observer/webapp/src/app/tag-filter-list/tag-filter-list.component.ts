@@ -29,7 +29,6 @@ export class TagFilterListComponent implements OnInit {
     this.tagFilterService.getTagFilters()
                         .subscribe(
                           tagFilters => this.assignFilters(tagFilters),
-                          // TODO define onError actions
                           error => {}
                         );
   }
