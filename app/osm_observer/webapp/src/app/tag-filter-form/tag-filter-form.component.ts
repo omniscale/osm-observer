@@ -35,7 +35,8 @@ export class TagFilterFormComponent implements OnInit, OnChanges {
 
   assignCurrentFilter(currentFilter: TagFilter) {
     if (currentFilter) {
-      this.model = currentFilter;
+      var copy = Object.assign({}, currentFilter);
+      this.model = copy;
       this.editFilter = true;
     }
   }
