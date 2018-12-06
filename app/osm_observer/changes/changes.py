@@ -129,7 +129,7 @@ def collect_changeset(conn, cid):
     for row in res:
         key = tokey(row.id, row.version)
         elem = create_elem_dict(row)
-        elem['coodinates'] = [row.long, row.lat]
+        elem['coordinates'] = [row.long, row.lat]
         nodes[key] = elem
         if row.changed:
             changed_node_ids.add(key)
