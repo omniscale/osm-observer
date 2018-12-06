@@ -13,7 +13,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let filter of tagFilters">
+          <tr *ngFor="let filter of tagFilters | orderBy: name">
             <td>
               {{ filter.id }}
             </td>
@@ -40,6 +40,6 @@
     </div>
   </div>
   <div class="col-md-6">
-    <tag-filter-form [selectedFilter]="selectedFilter"></tag-filter-form>
+    <tag-filter-form [tagList]="this" [selectedFilter]="selectedFilter"></tag-filter-form>
   </div>
 </div>

@@ -41,6 +41,7 @@ import { KeyValueListPipe } from './pipes/key-value-list.pipe';
 import { HasKeysPipe } from './pipes/has-keys.pipe';
 import { ReadyDirective } from './directives/ready.directive';
 
+import { OrderModule } from 'ngx-order-pipe';
 
 export function createTranslateLoader(http: Http, location: Location) {
   return new TranslateStaticLoader(http, location.prepareExternalUrl('/static/i18n'), '.json' + '?' + Date.now());
@@ -74,6 +75,7 @@ export function createTranslateLoader(http: Http, location: Location) {
     CustomFormsModule,
     AppRoutingModule,
     PopoverModule,
+    OrderModule,
     TranslateModule.forRoot({
       provide: TranslateLoader,
       useFactory: (createTranslateLoader),

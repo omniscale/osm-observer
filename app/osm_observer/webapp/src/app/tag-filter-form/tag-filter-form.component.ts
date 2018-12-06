@@ -7,6 +7,8 @@ import { TagFilter } from '../types/tag-filter';
 import { TagFilterService } from '../services/tag-filter.service'
 import { MessageService } from '../services/message.service';
 
+import { TagFilterListComponent } from '../tag-filter-list/tag-filter-list.component';
+
 @Component({
   selector: 'tag-filter-form',
   templateUrl: './tag-filter-form.component.html',
@@ -14,11 +16,13 @@ import { MessageService } from '../services/message.service';
 })
 export class TagFilterFormComponent implements OnInit, OnChanges {
   @Input() selectedFilter: TagFilter;
+  @Input() tagList: TagFilterListComponent;
 
-  @ViewChild('tagFilterForm') public tagFilterForm: NgForm;
+  @ViewChild('filterForm') public filterForm: NgForm;
 
   filterAddedText: string;
   editFilter: boolean;
+  currentFilter: TagFilter;
 
   model = new TagFilter();
 
@@ -29,7 +33,8 @@ export class TagFilterFormComponent implements OnInit, OnChanges {
   }
 
   resetForm() {
-    this.tagFilterForm.reset();
+    this.filterForm.reset();
+    this.model = new TagFilter();
     this.editFilter = false;
   }
 
@@ -47,7 +52,8 @@ export class TagFilterFormComponent implements OnInit, OnChanges {
                         v => {
                           this.model = new TagFilter();
                           this.messageService.add(this.filterAddedText, 'success');
-                          this.tagFilterForm.reset();
+                          this.resetForm();
+                          this.tagList.getFilters();
                         },
                         error => {}
                       );
@@ -56,8 +62,9 @@ export class TagFilterFormComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['selectedFilter']) {
-       this.assignCurrentFilter(changes['selectedFilter'].currentValue)
+      this.currentFilter = changes['selectedFilter'].currentValue
     }
+    this.assignCurrentFilter(this.currentFilter);
   }
 
   ngOnInit() {

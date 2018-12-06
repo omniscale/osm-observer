@@ -7,56 +7,56 @@
 
   <form novalidate
         autocomplete="off" 
-        #tagFilterForm="ngForm"
+        #filterForm="ngForm"
         (ngSubmit)="onSubmit()">
 
     <div class="form-group"
-         [class.has-danger]="hasFormError(tagFilterForm.controls.name)">
+         [class.has-danger]="hasFormError(filterForm.controls.name)">
       <label for="name">
         {{ 'NAME' | translate }}
       </label>
       <input required type="text" class="form-control form-control-sm"
                 id="name"
                 name="name"
-                [class.form-control-danger]="hasFormError(tagFilterForm.controls.name)"
+                [class.form-control-danger]="hasFormError(filterForm.controls.name)"
                 [(ngModel)]="model.name" />
     </div>
 
 
     <div class="form-group"
-         [class.has-danger]="hasFormError(tagFilterForm.controls.description)">
+         [class.has-danger]="hasFormError(filterForm.controls.description)">
       <label for="description">
         {{ 'DESCRIPTION' | translate }}
       </label>
       <textarea rows="4" class="form-control form-control-sm"
                 id="description"
                 name="description"
-                [class.form-control-danger]="hasFormError(tagFilterForm.controls.description)"
+                [class.form-control-danger]="hasFormError(filterForm.controls.description)"
                 [(ngModel)]="model.description">
       </textarea>
     </div>
 
     <div class="form-group"
-         [class.has-danger]="hasFormError(tagFilterForm.controls.code)">
+         [class.has-danger]="hasFormError(filterForm.controls.code)">
       <label for="code">
         {{ 'CODE' | translate }}
       </label>
       <textarea rows="20" required class="form-control form-control-sm"
                 id="code"
                 name="code"
-                [class.form-control-danger]="hasFormError(tagFilterForm.controls.code)"
+                [class.form-control-danger]="hasFormError(filterForm.controls.code)"
                 [(ngModel)]="model.code">
       </textarea>
     </div>
 
     <div class="form-group"
-         [class.has-danger]="hasFormError(tagFilterForm.controls.active)">
+         [class.has-danger]="hasFormError(filterForm.controls.active)">
         <div class="checkbox">
           <label for="active">
             <input type="checkbox"
                 id="active"
                 name="active"
-                [class.form-control-danger]="hasFormError(tagFilterForm.controls.active)"
+                [class.form-control-danger]="hasFormError(filterForm.controls.active)"
                 [(ngModel)]="model.active" />
             {{ 'ACTIVE' | translate }}
           </label>
@@ -65,7 +65,7 @@
 
     <button type="submit"
             class="btn btn-sm btn-primary"
-            [disabled]="!tagFilterForm.form.valid">
+            [disabled]="!filterForm.form.valid">
       {{ 'SUBMIT' | translate }}
     </button>
     <button type="button"
