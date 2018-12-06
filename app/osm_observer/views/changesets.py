@@ -1,11 +1,9 @@
-import time
 from datetime import date, timedelta
 
-from flask import abort, jsonify, request, current_app
+from flask import jsonify, request
 
-from flask_login import login_required, current_user
+from flask_login import login_required
 
-from geoalchemy2.shape import to_shape
 from osm_observer.changes.changes import collect_changeset
 
 from osm_observer.views import api
@@ -50,8 +48,6 @@ def changesets_list():
     )
     conn = engine.connect()
 
-    # filter_ = tags ? 'building'
-    # filter_ = "tags->'highway' = 'residential' and type = 'way'"
     result = changesets(
         conn, day=day, filter=tag_filter, recursive=True, coverages=coverages
     )
