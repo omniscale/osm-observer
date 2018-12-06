@@ -15,7 +15,7 @@ import { MessageService } from '../services/message.service';
 export class TagFilterFormComponent implements OnInit, OnChanges {
   @Input() selectedFilter: TagFilter;
 
-  @ViewChild('filterForm') public filterForm: NgForm;
+  @ViewChild('tagFilterForm') public tagFilterForm: NgForm;
 
   filterAddedText: string;
   editFilter: boolean;
@@ -29,7 +29,7 @@ export class TagFilterFormComponent implements OnInit, OnChanges {
   }
 
   resetForm() {
-    this.filterForm.reset();
+    this.tagFilterForm.reset();
     this.editFilter = false;
   }
 
@@ -47,7 +47,7 @@ export class TagFilterFormComponent implements OnInit, OnChanges {
                         v => {
                           this.model = new TagFilter();
                           this.messageService.add(this.filterAddedText, 'success');
-                          this.filterForm.reset();
+                          this.tagFilterForm.reset();
                         },
                         error => {}
                       );
