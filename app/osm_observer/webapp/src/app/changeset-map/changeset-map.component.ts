@@ -33,94 +33,94 @@ export class ChangesetMapComponent implements OnChanges {
 
   styleFunction(feature, resolution) {
     let nextStyles = [
-      new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: '#cccccc',
-          width: 3
-        }),
-        zIndex: 10
+    new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: '#cccccc',
+        width: 3
       }),
-      new ol.style.Style({
-        image: new ol.style.Circle({
-          radius: 3,
-          fill: new ol.style.Fill({
-            color: '#cccccc'
-          })
-        }),
-        zIndex: 10
+      zIndex: 10
+    }),
+    new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: 3,
+        fill: new ol.style.Fill({
+          color: '#cccccc'
+        })
       }),
+      zIndex: 10
+    }),
     ];
 
     let highlightPrevStyle = [
-      new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: 'green',
-          width: 10
-        }),
-        zIndex: 15
+    new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: 'green',
+        width: 10
       }),
-      new ol.style.Style({
-        image: new ol.style.Circle({
-          radius: 10,
-          fill: new ol.style.Fill({
-            color: 'green'
-          })
-        }),
-        zIndex: 15
-       })
+      zIndex: 15
+    }),
+    new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: 10,
+        fill: new ol.style.Fill({
+          color: 'green'
+        })
+      }),
+      zIndex: 15
+    })
     ];
     
 
     let highlightStyle = [
-      new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: '#FF0000',
-          width: 3
-        }),
-        zIndex: 20
+    new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: '#FF0000',
+        width: 3
       }),
-      new ol.style.Style({
-        image: new ol.style.Circle({
-          radius: 3,
-          fill: new ol.style.Fill({
-            color: '#FF0000'
-          })
-        }),
-        zIndex: 20
-       })
+      zIndex: 20
+    }),
+    new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: 3,
+        fill: new ol.style.Fill({
+          color: '#FF0000'
+        })
+      }),
+      zIndex: 20
+    })
     ];
     
     let prevStyle = [
-      new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: '#dcc93d',
-          width: 5
-        }),
-        zIndex: 1
+    new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: '#dcc93d',
+        width: 5
       }),
-      new ol.style.Style({
-        image: new ol.style.Circle({
-          radius: 5,
-          fill: new ol.style.Fill({
-            color: '#dcc93d'
-          })
-        }),
-        zIndex: 1
-       })
+      zIndex: 1
+    }),
+    new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: 5,
+        fill: new ol.style.Fill({
+          color: '#dcc93d'
+        })
+      }),
+      zIndex: 1
+    })
     ];
 
     let styles = [];
     if (this.nextFeatures) {
-        let prev = feature.get('next');
-        if (prev) {
-          styles = nextStyles;
-        }
+      let prev = feature.get('next');
+      if (prev) {
+        styles = nextStyles;
+      }
     }
     if (this.prevFeatures) {
-        let prev = feature.get('prev');
-        if (prev) {
-          styles = prevStyle;
-        }
+      let prev = feature.get('prev');
+      if (prev) {
+        styles = prevStyle;
+      }
     }
 
     // hide all other features if app has active feture
@@ -146,34 +146,35 @@ export class ChangesetMapComponent implements OnChanges {
     let self = this;
     let nodes = [];
     for (let node in this.changeset.changes.nodes) {
-       let changeSetnode = this.changeset.changes.nodes[node];
-       let key = changeSetnode.key;
-       let element = this.changeset.elements['nodes'][key];
-       let nd = new ol.Feature({
+      let changeSetnode = this.changeset.changes.nodes[node];
+      let key = changeSetnode.key;
+      let element = this.changeset.elements['nodes'][key];
+      let nd = new ol.Feature({
         geometry: new ol.geom.Point(
           ol.proj.fromLonLat(element.coodinates)
-        ),
-        });
-       nd.setProperties({'key': key, 'next': true });
-       nodes.push(nd);
+          ),
+      });
+      nd.setProperties({'key': key, 'next': true });
+      nodes.push(nd);
 
-       if (changeSetnode.prevKey) {
-         let prevKey = changeSetnode.prevKey;
-         let prevElement = this.changeset.elements['nodes'][prevKey];
+      if (changeSetnode.prevKey) {
+        let prevKey = changeSetnode.prevKey;
+        let prevElement = this.changeset.elements['nodes'][prevKey];
 
-         let pevNd = new ol.Feature({
+        let pevNd = new ol.Feature({
           geometry: new ol.geom.Point(
             ol.proj.fromLonLat(prevElement.coodinates)
-           ),
-         });
-         pevNd.setProperties({'key': prevKey, 'prev': true })
-         nodes.push(pevNd);
-       }
+            ),
+        });
+        pevNd.setProperties({'key': prevKey, 'prev': true })
+        nodes.push(pevNd);
+      }
     }
 
     let vectorSource = new ol.source.Vector({
       features: nodes
     });
+
     let nodesVectorLayer = new ol.layer.Vector({
       source: vectorSource,
       style: function(feautre, resolution) {
@@ -188,36 +189,41 @@ export class ChangesetMapComponent implements OnChanges {
     let ways = [];
     let self = this;
     for (let node in this.changeset.changes.ways) {
-       let changesetWay = this.changeset.changes.ways[node];
-       let key = changesetWay.key;
-       let element = this.changeset.elements['ways'][key];
+      let changesetWay = this.changeset.changes.ways[node];
+      let key = changesetWay.key;
+      let element = this.changeset.elements['ways'][key];
 
-       let way = [];
-       element.nds.forEach((item, index) => {
+      let way = [];
+      element.nds.forEach((item, index) => {
+        let nd = this.changeset.elements['nodes'][item];
+        way.push(nd.coodinates)
+      });
+
+      let wayFeature = new ol.Feature({ 
+        geometry: new ol.geom.LineString(way)
+        .transform('EPSG:4326', 'EPSG:3857') 
+      });
+
+      wayFeature.setProperties({'key': key, 'next': true });
+      ways.push(wayFeature);
+
+      if (changesetWay.prevKey) {
+        let prevKey = changesetWay.prevKey;
+        let element = this.changeset.elements['ways'][prevKey];
+
+        let way = [];
+        element.nds.forEach((item, index) => {
           let nd = this.changeset.elements['nodes'][item];
           way.push(nd.coodinates)
-       });
-       let geometry = new ol.geom.LineString(way)
-       geometry.transform('EPSG:4326', 'EPSG:3857');
-       let wayFeature = new ol.Feature({ geometry: geometry });
-       wayFeature.setProperties({'key': key, 'next': true });
-       ways.push(wayFeature);
-       
-       if (changesetWay.prevKey) {
-         let prevKey = changesetWay.prevKey;
-         let element = this.changeset.elements['ways'][prevKey];
-
-         let way = [];
-         element.nds.forEach((item, index) => {
-            let nd = this.changeset.elements['nodes'][item];
-            way.push(nd.coodinates)
-         });
-         let geometry = new ol.geom.LineString(way)
-         geometry.transform('EPSG:4326', 'EPSG:3857');
-         let wayFeature = new ol.Feature({ geometry: geometry });
-         wayFeature.setProperties({'key': key, 'prev': true });
-         ways.push(wayFeature);
-       }
+        });
+        
+        let wayFeature = new ol.Feature({ 
+          geometry: new ol.geom.LineString(way)
+          .transform('EPSG:4326', 'EPSG:3857') 
+        });
+        wayFeature.setProperties({'key': key, 'prev': true });
+        ways.push(wayFeature);
+      }
 
     }
 
@@ -230,7 +236,7 @@ export class ChangesetMapComponent implements OnChanges {
       style: function(feautre, resolution) {
         return self.styleFunction(feautre, resolution);
       }
-     });
+    });
     waysVectorLayer.setZIndex(2);
     return waysVectorLayer;
   }
@@ -240,73 +246,72 @@ export class ChangesetMapComponent implements OnChanges {
     let relationWays = [];
     let relationPoints = [];
     for (let node in this.changeset.changes.relations) {
-       let changesetRelation = this.changeset.changes.relations[node];
-       let key = changesetRelation.key;
-       let element = this.changeset.elements['relations'][key];
+      let changesetRelation = this.changeset.changes.relations[node];
+      let key = changesetRelation.key;
+      let element = this.changeset.elements['relations'][key];
 
-       let relation = [];
-       element.members.forEach((item, index) => {
-         if (item["node"]) {
-           let element = this.changeset.elements['nodes'][item["node"]];
-           let point = new ol.Feature({
+      let relation = [];
+      element.members.forEach((item, index) => {
+        if (item["node"]) {
+          let element = this.changeset.elements['nodes'][item["node"]];
+          let point = new ol.Feature({
             geometry: new ol.geom.Point(
               ol.proj.fromLonLat(element.coodinates)
-            ),
-            });
-           relationPoints.push(point);
-         }
+              ),
+          });
+          relationPoints.push(point);
+        }
 
-         if (item["way"]) {
-           let element = this.changeset.elements['ways'][item["way"]];
-           let way = [];
-           element.nds.forEach((item, index) => {
-              let nd = this.changeset.elements['nodes'][item];
-              way.push(nd.coodinates)
-           });
-           let geometry = new ol.geom.LineString(way)
-           geometry.transform('EPSG:4326', 'EPSG:3857');
-           
-           let relationFeature = new ol.Feature({
-              geometry: geometry 
-            })
-           relationFeature.setProperties({'key': key, 'next': true });
-           relationWays.push(relationFeature);  
-         }
-       });
+        if (item["way"]) {
+          let element = this.changeset.elements['ways'][item["way"]];
+          let way = [];
+          element.nds.forEach((item, index) => {
+            let nd = this.changeset.elements['nodes'][item];
+            way.push(nd.coodinates)
+          });
 
-       if (changesetRelation.prevKey) {
-         let prevKey = changesetRelation.key;
-         let element = this.changeset.elements['relations'][prevKey];
+          let relationFeature = new ol.Feature({ 
+            geometry: new ol.geom.LineString(way)
+            .transform('EPSG:4326', 'EPSG:3857') 
+          });
+          relationFeature.setProperties({'key': key, 'next': true });
+          relationWays.push(relationFeature);  
+        }
+      });
 
-         let prevRelation = [];
-         element.members.forEach((item, index) => {
-           if (item["node"]) {
-             let element = this.changeset.elements['nodes'][item["node"]];
-             let point = new ol.Feature({
+      if (changesetRelation.prevKey) {
+        let prevKey = changesetRelation.key;
+        let element = this.changeset.elements['relations'][prevKey];
+
+        let prevRelation = [];
+        element.members.forEach((item, index) => {
+          if (item["node"]) {
+            let element = this.changeset.elements['nodes'][item["node"]];
+            let point = new ol.Feature({
               geometry: new ol.geom.Point(
                 ol.proj.fromLonLat(element.coodinates)
-              ),
-              });
-             relationPoints.push(point);
-           }
+                ),
+            });
+            relationPoints.push(point);
+          }
 
-           if (item["way"]) {
-             let element = this.changeset.elements['ways'][item["way"]];
-             let way = [];
-             element.nds.forEach((item, index) => {
-                let nd = this.changeset.elements['nodes'][item];
-                way.push(nd.coodinates)
-             });
-             let geometry = new ol.geom.LineString(way)
-             geometry.transform('EPSG:4326', 'EPSG:3857');
-             let relationFeature = new ol.Feature({
-                geometry: geometry 
-              })
-             relationFeature.setProperties({'key': key, 'prev': true });
-             relationWays.push(relationFeature);  
-           }
-         });
-       }
+          if (item["way"]) {
+            let element = this.changeset.elements['ways'][item["way"]];
+            let way = [];
+            element.nds.forEach((item, index) => {
+              let nd = this.changeset.elements['nodes'][item];
+              way.push(nd.coodinates)
+            });
+            let relationFeature = new ol.Feature({ 
+              geometry: new ol.geom.LineString(way)
+              .transform('EPSG:4326', 'EPSG:3857') 
+            });
+
+            relationFeature.setProperties({'key': key, 'prev': true });
+            relationWays.push(relationFeature);  
+          }
+        });
+      }
 
     }
 
@@ -327,32 +332,32 @@ export class ChangesetMapComponent implements OnChanges {
   updateMap(changeset: ChangesetDetails) {
     let extent = changeset.changeset.dataBBOX;
     this.map = new ol.Map({
-        target: 'map',
-        controls: ol.control.defaults(
-          {
-            rotate: false,
-            attribution: false
-          }
-        ),
-        layers: [
-          new ol.layer.Tile({
-            source: new ol.source.OSM()
-          })
-        ],
-        view: new ol.View({
-          center: ol.proj.transform(
-            [extent[0], extent[1]], 'EPSG:4326','EPSG:3857'
+      target: 'map',
+      controls: ol.control.defaults(
+      {
+        rotate: false,
+        attribution: true
+      }
+      ),
+      layers: [
+      new ol.layer.Tile({
+        source: new ol.source.OSM()
+      })
+      ],
+      view: new ol.View({
+        center: ol.proj.transform(
+          [extent[0], extent[1]], 'EPSG:4326','EPSG:3857'
           ),
-          zoom: 15
-        })
+        zoom: 15
+      })
     });
 
     this.map.getView().fit(
       ol.proj.transformExtent(
         [extent[0], extent[1], extent[2], extent[3]], 'EPSG:4326','EPSG:3857'
-      ), {
+        ), {
         size: this.map.getSize()
-    });
+      });
 
     this.nodesVectorLayer = this.createNodesLayer();
     this.map.addLayer(this.nodesVectorLayer);
@@ -395,45 +400,41 @@ export class ChangesetMapComponent implements OnChanges {
 
   zoomToFeature(): void {
     // remove active flag
-    let features = [];
-    features = this.nodesVectorLayer.getSource().getFeatures();
-    features = features.concat(this.waysVectorLayer.getSource().getFeatures());
-    features = features.concat(this.relationsVectorLayer.getSource().getFeatures());
-    for (let feature in features) {
-      features[feature].unset('active');
-    };
 
-    this.hasActiveFeature = true;
+    var nodes = this.nodesVectorLayer.getSource().getFeatures();
+    var ways = this.waysVectorLayer.getSource().getFeatures();;
+    var relations = this.relationsVectorLayer.getSource().getFeatures();;
 
-    // find active feature
+    let features = nodes.concat(ways).concat(relations);
+
     let key = this.activeChange.key;
     let prevKey = this.activeChange.prevKey;
 
-    if (this.activeChangeType == 'nodes') {
-      features = this.nodesVectorLayer.getSource().getFeatures();
-    }
-    if (this.activeChangeType == 'ways') {
-      features = this.waysVectorLayer.getSource().getFeatures();
-    }
-    if (this.activeChangeType == 'relations') {
-      features = this.relationsVectorLayer.getSource().getFeatures();
-    }
     for (let feature in features) {
+      // remove old active feature
+      if (features[feature].get('active') == true) {
+        features[feature].unset('active');
+      }
       if (key == features[feature].get('key')) {
-        this.map.getView().fit(features[feature].getGeometry().getExtent(), {"maxZoom": 19} );
+        this.map.getView().fit(
+          features[feature].getGeometry().getExtent(),
+          {"maxZoom": 19}
+          );
         features[feature].setProperties({'active': true })
+        this.hasActiveFeature = true;
       }
       if (prevKey == features[feature].get('key')) {
         features[feature].setProperties({'active': true })
+        this.hasActiveFeature = true;
       }
     }
   }
 
   ngOnInit() {
     this.mapService.change.subscribe(activeChange => {
-        this.activeChange = activeChange.change;
-        this.activeChangeType = activeChange.type;
-        this.zoomToFeature();
+      this.activeChange = activeChange.change;
+      this.activeChangeType = activeChange.type;
+      this.zoomToFeature();
     });
   }
 
