@@ -66,6 +66,7 @@ def filter_save():
             active=data.get('active')
         )
         db.session.add(tag_filter)
-        db.session.commit()
+    
+    db.session.commit()
 
     return jsonify({'success': True})
