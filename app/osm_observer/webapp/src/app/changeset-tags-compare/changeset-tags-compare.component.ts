@@ -26,6 +26,9 @@ export class ChangesetTagsCompareComponent implements OnChanges {
   }
 
   assignChangesets(changeset: ChangesetDetails, type: string, key: string, prevKey: string) {
+    if (key === undefined) {
+      return false;
+    }
     let tags = changeset.elements[type][key].tags;
     let combinedTags = {};
     this.hasPrevValue = false;
@@ -57,8 +60,10 @@ export class ChangesetTagsCompareComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.combinedTags = {};
     if (changes['changeset']) {  
       this.changeset = changes['changeset'].currentValue;
+      this.key = undefined;
     }
     
     if (changes['type']) {  
@@ -76,7 +81,7 @@ export class ChangesetTagsCompareComponent implements OnChanges {
     if (changes['prevKey']) {
       this.prevKey = changes['prevKey'].currentValue;
     }
-    
+
     this.assignChangesets(this.changeset, this.type, this.key, this.prevKey);
   }
 }
