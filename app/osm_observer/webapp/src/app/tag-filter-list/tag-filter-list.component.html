@@ -18,7 +18,7 @@
               {{ filter.id }}
             </td>
             <td>
-              {{ filter.active }}
+              <i class="fa" [class.fa-check]='filter.active' [class.fa-remove]='!filter.active' aria-hidden="true"></i>
             </td>
             <td>
               {{ filter.name }}
