@@ -46,7 +46,7 @@
         {{ 'SELECT TAG FILTER' | translate }}
       </option>
       <option *ngFor="let tagFilter of tagFilters"
-              [value]="tagFilter.id">
+              [value]="tagFilter.id" title="{{ tagFilter.description }}">
         {{ tagFilter.name }}
       </option>
     </select>    
