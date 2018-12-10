@@ -33,6 +33,7 @@ export class ChangesetListComponent implements OnInit {
   currentUserReviewed: boolean;
   allowedCoverageIds: number[];
   allowedTagFilterIds: number[];
+  currentChangeSet: number;
 
   orderBy: string = 'closedAt';
   order: string = 'desc';
@@ -43,7 +44,6 @@ export class ChangesetListComponent implements OnInit {
   currentDay: Date = new Date();
 
   private timer;
-
   private subscription: Subscription;
 
   constructor(

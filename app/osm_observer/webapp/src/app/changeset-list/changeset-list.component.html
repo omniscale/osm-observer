@@ -83,186 +83,200 @@
       </button>
     </div>
   </div>
-  <table class="table table-striped table-sm">
-    <thead>
-      <tr class="header-row">
-        <th class="pointer"
-            (click)="sortBy('id')">
-          {{ 'ID' | translate }}
-          <i class="fa fa-sort"
-             aria-hidden="true"
-             *ngIf="orderBy!=='id'">
-          </i>
-          <i class="fa fa-sort-asc"
-             aria-hidden="true"
-             *ngIf="orderBy==='id' && order==='asc'">
-          </i>
-          <i class="fa fa-sort-desc"
-             aria-hidden="true"
-             *ngIf="orderBy==='id' && order==='desc'">
-          </i>
-        <th class="pointer"
-            (click)="sortBy('closedAt')">
-          {{ 'CLOSED AT' | translate }}
-          <i class="fa fa-sort"
-             aria-hidden="true"
-             *ngIf="orderBy!=='closedAt'">
-          </i>
-          <i class="fa fa-sort-asc"
-             aria-hidden="true"
-             *ngIf="orderBy==='closedAt' && order==='asc'">
-          </i>
-          <i class="fa fa-sort-desc"
-             aria-hidden="true"
-             *ngIf="orderBy==='closedAt' && order==='desc'">
-          </i>
-        </th>
-        <th class="pointer"
-            (click)="sortBy('userName')">
-          {{ 'USERNAME' | translate }}
-          <i class="fa fa-sort"
-             aria-hidden="true"
-             *ngIf="orderBy!=='userName'">
-          </i>
-          <i class="fa fa-sort-asc"
-             aria-hidden="true"
-             *ngIf="orderBy==='userName' && order==='asc'">
-          </i>
-          <i class="fa fa-sort-desc"
-             aria-hidden="true"
-             *ngIf="orderBy==='userName' && order==='desc'">
-          </i>
-        </th>
-        <th class="comment-column">{{ 'COMMENT' | translate }}</th>
-        <th class="pointer"
-            (click)="sortBy('numChanges')">
-          {{ 'CHANGES' | translate }}
-          <i class="fa fa-sort"
-             aria-hidden="true"
-             *ngIf="orderBy!=='numChanges'">
-          </i>
-          <i class="fa fa-sort-asc"
-             aria-hidden="true"
-             *ngIf="orderBy==='numChanges' && order==='asc'">
-          </i>
-          <i class="fa fa-sort-desc"
-             aria-hidden="true"
-             *ngIf="orderBy==='numChanges' && order==='desc'">
-          </i>
-        </th>
-        <th class="pointer"
-            (click)="sortBy('numReviews')">
-          {{ 'REVIEWS' | translate }}
-          <i class="fa fa-sort"
-             aria-hidden="true"
-             *ngIf="orderBy!=='numReviews'">
-          </i>
-          <i class="fa fa-sort-asc"
-             aria-hidden="true"
-             *ngIf="orderBy==='numReviews' && order==='asc'">
-          </i>
-          <i class="fa fa-sort-desc"
-             aria-hidden="true"
-             *ngIf="orderBy==='numReviews' && order==='desc'">
-          </i>
-        </th>
-        <th class="pointer"
-            (click)="sortBy('status')">
-          {{ 'STATUS' | translate }}
-          <i class="fa fa-sort"
-             aria-hidden="true"
-             *ngIf="orderBy!=='status'">
-          </i>
-          <i class="fa fa-sort-asc"
-             aria-hidden="true"
-             *ngIf="orderBy==='status' && order==='asc'">
-          </i>
-          <i class="fa fa-sort-desc"
-             aria-hidden="true"
-             *ngIf="orderBy==='status' && order==='desc'">
-          </i>
-        </th>
-        <th></th>
-      </tr>
-      <tr class="filter-row">
-        <th class="id-column"></th>
-        <th class="closed-at-column"></th>
-        <th class="username-column">
-          <div class="form-group">
-            <input type="text"
-                   class="form-control form-control-sm"
-                   id="userName"
-                   placeholder="{{ 'USERNAME' | translate }}"
-                   (keyup)="applyChange()"
-                   [(ngModel)]="userName" />
-          </div>
-        </th>
-        <th class="comment-column"></th>
-        <th class="changes-column"></th>
-        <th class="review-column"></th>
-        <th class="status-column">
-          <div class="form-group">
-            <select class="form-control form-control-sm"
-                    id="status"
-                    #status
-                    (change)="setStatusId(status.value)"
-                    [(ngModel)]="statusId">
-              <option [value]="undefined">
-                {{ 'SELECT STATUS' | translate }}
-              </option>
-              <option *ngFor="let reviewStatusName of reviewStatus.names()"
-                      [value]="reviewStatus[reviewStatusName]">
-                {{ reviewStatusName | translate }}
-              </option>
-            </select>
-          </div>
-        </th>
-        <th class="link-column"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngIf="changesets !== undefined && changesets.length === 0">
-        <td colspan="9">
-          {{ 'NO CHANGESETS' | translate }}
-        </td>
-      </tr>
-      <tr *ngIf="loading">
-        <td colspan="8" class="loading-data">
-          {{ 'LOADING CHANGESETS' | translate }}
-        </td>
-      </tr>
-      <tr *ngIf="coverages !== undefined && coverages.length === 0">
-        <td colspan="9" class="loading-data">
-          {{ 'NO COVERAGES ASSIGNED' | translate }}
-        </td>
-      </tr>
-      <ng-container *ngFor="let changeset of changesets | search:'userName':userName; let last = last" [ready]="last" (onReady)="changesetsRendered()">
-        <tr [class.table-danger]="changeset.status === reviewStatus.BROKEN">
-          <td>
-            <a [routerLink]="[changeset.id, 'details']">
-              {{ changeset.id }}
-            </a>
-          </td>
-          <td>{{ changeset.closedAt | date:'d.M.y HH:mm:ss'  }}</td>
-          <td>
-            <a href="javascript:void(0)"
-               (click)="userName=changeset.userName;applyChange();">
-              {{ changeset.userName }}
-            </a>
-          </td>
-          <td class="comment-column">{{ changeset.tags.comment }}</td>
-          <td>{{ changeset.numChanges }}</td>
-          <td>{{ changeset.numReviews }}</td>
-          <td>{{ reviewStatus.byId(changeset.status) | translate }}</td>
-          <td>
-            <a class="btn btn-secondary btn-sm"
-               role="button"
-               [routerLink]="[changeset.id, 'details']">
-              {{ 'DETAILS' | translate }}
-            </a>
-          </td>
-        </tr>
-      </ng-container>
-    </tbody>
-  </table>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-6">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr class="header-row">
+            <th class="pointer"
+                (click)="sortBy('id')">
+              {{ 'ID' | translate }}
+              <i class="fa fa-sort"
+                 aria-hidden="true"
+                 *ngIf="orderBy!=='id'">
+              </i>
+              <i class="fa fa-sort-asc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='id' && order==='asc'">
+              </i>
+              <i class="fa fa-sort-desc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='id' && order==='desc'">
+              </i>
+            </th>
+            <th class="pointer"
+                (click)="sortBy('closedAt')">
+              {{ 'CLOSED AT' | translate }}
+              <i class="fa fa-sort"
+                 aria-hidden="true"
+                 *ngIf="orderBy!=='closedAt'">
+              </i>
+              <i class="fa fa-sort-asc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='closedAt' && order==='asc'">
+              </i>
+              <i class="fa fa-sort-desc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='closedAt' && order==='desc'">
+              </i>
+            </th>
+            <th class="pointer"
+                (click)="sortBy('userName')">
+              {{ 'USERNAME' | translate }}
+              <i class="fa fa-sort"
+                 aria-hidden="true"
+                 *ngIf="orderBy!=='userName'">
+              </i>
+              <i class="fa fa-sort-asc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='userName' && order==='asc'">
+              </i>
+              <i class="fa fa-sort-desc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='userName' && order==='desc'">
+              </i>
+            </th>
+            <th class="comment-column">{{ 'COMMENT' | translate }}</th>
+            <th class="pointer"
+                (click)="sortBy('numChanges')">
+              {{ 'CHANGES' | translate }}
+              <i class="fa fa-sort"
+                 aria-hidden="true"
+                 *ngIf="orderBy!=='numChanges'">
+              </i>
+              <i class="fa fa-sort-asc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='numChanges' && order==='asc'">
+              </i>
+              <i class="fa fa-sort-desc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='numChanges' && order==='desc'">
+              </i>
+            </th>
+            <th class="pointer"
+                (click)="sortBy('numReviews')">
+              {{ 'REVIEWS' | translate }}
+              <i class="fa fa-sort"
+                 aria-hidden="true"
+                 *ngIf="orderBy!=='numReviews'">
+              </i>
+              <i class="fa fa-sort-asc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='numReviews' && order==='asc'">
+              </i>
+              <i class="fa fa-sort-desc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='numReviews' && order==='desc'">
+              </i>
+            </th>
+            <th class="pointer"
+                (click)="sortBy('status')">
+              {{ 'STATUS' | translate }}
+              <i class="fa fa-sort"
+                 aria-hidden="true"
+                 *ngIf="orderBy!=='status'">
+              </i>
+              <i class="fa fa-sort-asc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='status' && order==='asc'">
+              </i>
+              <i class="fa fa-sort-desc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='status' && order==='desc'">
+              </i>
+            </th>
+            <th></th>
+          </tr>
+          <tr class="filter-row">
+            <th class="id-column"></th>
+            <th class="closed-at-column"></th>
+            <th class="username-column">
+              <div class="form-group">
+                <input type="text"
+                       class="form-control form-control-sm"
+                       id="userName"
+                       placeholder="{{ 'USERNAME' | translate }}"
+                       (keyup)="applyChange()"
+                       [(ngModel)]="userName" />
+              </div>
+            </th>
+            <th class="comment-column"></th>
+            <th class="changes-column"></th>
+            <th class="review-column"></th>
+            <th class="status-column">
+              <div class="form-group">
+                <select class="form-control form-control-sm"
+                        id="status"
+                        #status
+                        (change)="setStatusId(status.value)"
+                        [(ngModel)]="statusId">
+                  <option [value]="undefined">
+                    {{ 'SELECT STATUS' | translate }}
+                  </option>
+                  <option *ngFor="let reviewStatusName of reviewStatus.names()"
+                          [value]="reviewStatus[reviewStatusName]">
+                    {{ reviewStatusName | translate }}
+                  </option>
+                </select>
+              </div>
+            </th>
+            <th class="link-column"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="changesets !== undefined && changesets.length === 0">
+            <td colspan="9">
+              {{ 'NO CHANGESETS' | translate }}
+            </td>
+          </tr>
+          <tr *ngIf="loading">
+            <td colspan="8" class="loading-data">
+              {{ 'LOADING CHANGESETS' | translate }}
+            </td>
+          </tr>
+          <tr *ngIf="coverages !== undefined && coverages.length === 0">
+            <td colspan="9" class="loading-data">
+              {{ 'NO COVERAGES ASSIGNED' | translate }}
+            </td>
+          </tr>
+          <ng-container *ngFor="let changeset of changesets | search:'userName':userName; let last = last" [ready]="last" (onReady)="changesetsRendered()">
+            <tr [class.table-danger]="changeset.status === reviewStatus.BROKEN">
+              <td>
+                <a [routerLink]="[changeset.id, 'details']">
+                  {{ changeset.id }}
+                </a>
+              </td>
+              <td>{{ changeset.closedAt | date:'d.M.y HH:mm:ss'  }}</td>
+              <td>
+                <a href="javascript:void(0)"
+                   (click)="userName=changeset.userName;applyChange();">
+                  {{ changeset.userName }}
+                </a>
+              </td>
+              <td class="comment-column">{{ changeset.tags.comment }}</td>
+              <td>{{ changeset.numChanges }}</td>
+              <td>{{ changeset.numReviews }}</td>
+              <td>{{ reviewStatus.byId(changeset.status) | translate }}</td>
+              <td>
+                <a class="btn btn-secondary btn-sm"
+                   role="button"
+                   (click)='currentChangeSet = changeset.id'>
+                  {{ 'DETAILS' | translate }}
+                </a>
+                <a class="btn btn-secondary btn-sm"
+                   role="button"
+                   [routerLink]="[changeset.id, 'details']">
+                  <i class="fa fa-external-link" aria-hidden="true"></i>
+                </a>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6">
+       <changeset-details *ngIf="currentChangeSet" [id]="currentChangeSet">
+        </changeset-details>
+    </div>
+  </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {TranslateService} from 'ng2-translate';
@@ -39,16 +39,9 @@ export class ChangesetDetailsComponent implements OnInit {
               private translate: TranslateService) { 
    }
 
-  next() {
-    if(this.nextChangeset !== undefined) {
-      this.router.navigate(['changesets', this.nextChangeset.osmId, 'details'])
-    }
-  }
-
-  prev() {
-    if(this.prevChangeset !== undefined) {
-      this.router.navigate(['changesets', this.prevChangeset.osmId, 'details'])
-    }
+  assignChangeset(data: ChangesetDetails) {
+    this.currentChangeset = data.changeset;
+    this.currentChangesetDetails = data;
   }
 
   ngOnInit() {
@@ -64,12 +57,24 @@ export class ChangesetDetailsComponent implements OnInit {
             this.router.navigate(['/changesets']);
           }
         });
-    this.route.data
-        .subscribe((data: {changeset: ChangesetDetails}) => {
-          this.currentChangeset = data.changeset.changeset;
-          this.currentChangesetDetails = data.changeset;
-          this.prevChangeset = this.changesetService.getPrevChangeset(this.currentChangeset);
-          this.nextChangeset = this.changesetService.getNextChangeset(this.currentChangeset);
-        });
+
+    if (this.id === undefined) {
+      this.route.data
+          .subscribe((data: {changeset: ChangesetDetails}) => {
+            this.currentChangeset = data.changeset.changeset;
+            this.currentChangesetDetails = data.changeset;
+      });
+    }
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['id']) {
+      this.id = changes['id'].currentValue;
+      this.changesetDetailsService.getChangesetDetails(this.id)
+        .subscribe(changeset => { 
+           this.assignChangeset(changeset)
+          }, osmId => this.id);
+      }    
+    }
+   
 }

@@ -29,7 +29,8 @@ export class ChangesetMapComponent implements OnChanges {
   activeChange: ChangesetChange;
   activeChangeType: string;
 
-  constructor(private mapService: MapService) {}
+  constructor(private mapService: MapService) {
+  }
 
   styleFunction(feature, resolution) {
     let nextStyles = [
@@ -294,10 +295,9 @@ export class ChangesetMapComponent implements OnChanges {
     });
     relationsVectorLayer.setZIndex(1)
     return relationsVectorLayer;
-  }
+  }  
 
-  updateMap(changeset: ChangesetDetails) {
-    let extent = changeset.changeset.dataBBOX;
+  initMap() {
     this.map = new ol.Map({
       target: 'map',
       controls: ol.control.defaults(
@@ -309,15 +309,21 @@ export class ChangesetMapComponent implements OnChanges {
       layers: [
       new ol.layer.Tile({
         source: new ol.source.OSM()
+        // TODO make configurable
+        // source: new ol.source.XYZ({
+        //   url: "https://rvr.demo.omniscale.net/compare/mapproxy/rvr_stadtplan/wmts/rvr_stadtplan/GLOBAL_WEBMERCATOR/{z}/{x}/{y}.png"
+        // })
       })
-      ],
-      view: new ol.View({
-        center: ol.proj.transform(
-          [extent[0], extent[1]], 'EPSG:4326','EPSG:3857'
-          ),
-        zoom: 15
-      })
+      ]
     });
+  }
+
+  updateMap(changeset: ChangesetDetails) {
+    let extent = changeset.changeset.dataBBOX;
+
+    if (this.map === undefined) {
+      this.initMap();
+    }
 
     this.map.getView().fit(
       ol.proj.transformExtent(
@@ -326,12 +332,23 @@ export class ChangesetMapComponent implements OnChanges {
         size: this.map.getSize()
       });
 
+    if (this.nodesVectorLayer) {
+      this.map.removeLayer(this.nodesVectorLayer);
+    }
     this.nodesVectorLayer = this.createNodesLayer();
     this.map.addLayer(this.nodesVectorLayer);
 
+
+    if (this.waysVectorLayer) {
+      this.map.removeLayer(this.waysVectorLayer);
+    }
     this.waysVectorLayer = this.createWaysLayer();
     this.map.addLayer(this.waysVectorLayer);
 
+    if (this.relationsVectorLayer) {
+      this.map.removeLayer(this.relationsVectorLayer);
+    }
+ 
     this.relationsVectorLayer = this.createRelationLayer();
     this.map.addLayer(this.relationsVectorLayer);
   }
@@ -404,6 +421,8 @@ export class ChangesetMapComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.activeChange = undefined;
+    this.activeChangeType = undefined;
     this.changeset = changes['changeset'].currentValue;
     this.updateMap(this.changeset);
   }
