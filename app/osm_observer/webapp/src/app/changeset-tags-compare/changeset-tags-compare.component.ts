@@ -20,6 +20,7 @@ export class ChangesetTagsCompareComponent implements OnChanges {
   showCompareTags: boolean;
   combinedTags: {};
   hasPrevValue: boolean;
+  element: any;
 
   constructor(private changesetDetailsService: ChangesetDetailsService) {
     this.showCompareTags = false;
@@ -29,34 +30,37 @@ export class ChangesetTagsCompareComponent implements OnChanges {
     if (key === undefined) {
       return false;
     }
-    let tags = changeset.elements[type][key].tags;
-    let combinedTags = {};
-    this.hasPrevValue = false;
-    for (let tag in tags) {
-        combinedTags[tag] = {
-          'currentValue': tags[tag],
-          'prevValue': ''
-        };
-    }
+    this.element = changeset.elements[type][key];   
+    if (this.element) {
+      let tags = this.element.tags;
+      let combinedTags = {};
+      this.hasPrevValue = false;
+      for (let tag in tags) {
+          combinedTags[tag] = {
+            'currentValue': tags[tag],
+            'prevValue': ''
+          };
+      }
 
-    if (prevKey) {
-        let prevTags = changeset.elements[type][prevKey].tags;
-        if (prevTags) {
-          this.hasPrevValue = true;
-        }
-        for (let tag in prevTags) {
-            if (tag in combinedTags) {
-                combinedTags[tag]['prevValue'] = prevTags[tag]  
-            } else {
-                combinedTags[tag] = {
-                  'currentValue': '',
-                  'prevValue': prevTags[tag]
-                };
-            }
-        }
+      if (prevKey) {
+          let prevTags = changeset.elements[type][prevKey].tags;
+          if (prevTags) {
+            this.hasPrevValue = true;
+          }
+          for (let tag in prevTags) {
+              if (tag in combinedTags) {
+                  combinedTags[tag]['prevValue'] = prevTags[tag]  
+              } else {
+                  combinedTags[tag] = {
+                    'currentValue': '',
+                    'prevValue': prevTags[tag]
+                  };
+              }
+          }
 
+      }
+      this.combinedTags = combinedTags;
     }
-    this.combinedTags = combinedTags;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -65,7 +69,7 @@ export class ChangesetTagsCompareComponent implements OnChanges {
       this.changeset = changes['changeset'].currentValue;
       this.key = undefined;
     }
-    
+
     if (changes['type']) {  
       this.type = changes['type'].currentValue
     }
