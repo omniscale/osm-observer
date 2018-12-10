@@ -119,7 +119,7 @@ nav
 /* content */
 .component-container
   border-radius: 0.2rem
-  margin: 2rem 1rem
+  margin: 1rem
   padding: 1rem
   background-color: $component-background-color
   h4
@@ -128,7 +128,9 @@ nav
 
 .row
   .component-container
-    height: calc(100% - 2rem)
+    height: calc(100% - 1rem)
+  .map-component-container
+    max-height: 450px
 
 .login-component
   text-align: center
@@ -136,6 +138,13 @@ nav
     text-align: initial
   .component-container
     display: inline-block
+
+.map-component-container
+  padding: 1rem
+  border-radius: 0.2rem
+  margin: 1rem
+  background-color: $component-background-color
+  border: 1px solid white
 
 table.table
   table-layout: fixed

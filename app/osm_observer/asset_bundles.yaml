@@ -10,6 +10,7 @@ main-css:
   contents:
     - sass/variables.sass
     - sass/main.sass
+    - sass/ol.sass
 
 app-css:
     output: app.css
