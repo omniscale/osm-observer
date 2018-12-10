@@ -16,6 +16,9 @@ export class AuthService extends BaseHttpService {
   private loginUrl(): string {
     return this.location.prepareExternalUrl('api/login');
   }
+  private isAdminUrl(): string {
+    return this.location.prepareExternalUrl('api/is_admin');
+  }
   private logoutUrl(): string {
     return this.location.prepareExternalUrl('api/logout');
   }
