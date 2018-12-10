@@ -33,7 +33,10 @@ export class ChangesetListComponent implements OnInit {
   currentUserReviewed: boolean;
   allowedCoverageIds: number[];
   allowedTagFilterIds: number[];
-  currentChangeSet: number;
+  
+  currentChangeSetId: number;
+  nextChangeSetId: number;
+  prevChangeSetId: number;
 
   orderBy: string = 'closedAt';
   order: string = 'desc';
@@ -141,6 +144,9 @@ export class ChangesetListComponent implements OnInit {
     if(this.statusId !== undefined && this.statusId !== null) {
       routeParams['statusId'] = this.statusId;
     }
+    if(this.currentChangeSetId !== undefined && this.currentChangeSetId !== null) {
+      routeParams['currentChangeSetId'] = this.currentChangeSetId;
+    }    
     if((typeof(this.currentUserReviewed) === "boolean")) {
       routeParams['currentUserReviewed'] = this.currentUserReviewed;
     }
@@ -167,6 +173,10 @@ export class ChangesetListComponent implements OnInit {
     this.statusId = parseInt(params['statusId']) as number;
     if(isNaN(this.statusId)) {
       this.statusId = undefined;
+    }
+    this.currentChangeSetId = parseInt(params['currentChangeSetId']) as number;
+    if(isNaN(this.currentChangeSetId)) {
+      this.currentChangeSetId = undefined;
     }
     switch(params['currentUserReviewed']) {
       case 'true':
@@ -208,7 +218,7 @@ export class ChangesetListComponent implements OnInit {
       this.timeRange = timeRange;
     }
     this.calcDate(this.timeRange);
-    this.applyChange();
+    this.applyChange(true);
   }
 
   calcDate(timeRange: number): void {
@@ -223,7 +233,7 @@ export class ChangesetListComponent implements OnInit {
     if(isNaN(this.tagFilterId)) {
       this.tagFilterId = undefined;
     }
-    this.applyChange();
+    this.applyChange(true);
   }
 
   setCoverageId(coverageId: string): void {
@@ -231,7 +241,7 @@ export class ChangesetListComponent implements OnInit {
     if(isNaN(this.coverageId)) {
       this.coverageId = undefined;
     }
-    this.applyChange();
+    this.applyChange(true);
   }
 
   setStatusId(statusId: string): void {
@@ -239,6 +249,31 @@ export class ChangesetListComponent implements OnInit {
     if(isNaN(this.statusId)) {
       this.statusId = undefined;
     }
+    this.applyChange();
+  }
+
+  setCurrentChangesetId(currentChangeSetId: string): void {
+    this.currentChangeSetId = parseInt(currentChangeSetId);
+    if(isNaN(this.currentChangeSetId)) {
+      this.currentChangeSetId = undefined;
+    }
+    for (let changset in this.changesets) {
+      if (this.changesets[changset].id == this.currentChangeSetId) {
+        let prev = parseInt(changset) - 1;
+        if (prev > -1) {
+          this.prevChangeSetId = this.changesets[prev].id
+        } else {
+          this.prevChangeSetId = undefined
+        }
+        let next = parseInt(changset) + 1;
+        if (next > 0 && next < this.changesets.length) {
+          this.nextChangeSetId = this.changesets[next].id
+        } else {
+          this.nextChangeSetId = undefined
+        }
+      } 
+    }
+
     this.applyChange();
   }
 
@@ -251,14 +286,16 @@ export class ChangesetListComponent implements OnInit {
     this.applyChange();
   }
 
-  applyChange(): void {
+  applyChange(reload?: boolean): void {
     if(this.timer !== undefined) {
       clearTimeout(this.timer);
     }
     this.timer = setTimeout(() => {
       this.timer = undefined;
       this.updateRouteParams();
-      this.getChangesets();
+      if (reload) {
+        this.getChangesets();
+      }
     }, 200);
   }
 
@@ -270,6 +307,7 @@ export class ChangesetListComponent implements OnInit {
     this.tagFilterId = undefined;
     this.statusId = undefined;
     this.currentUserReviewed = undefined;
+    this.currentChangeSetId = undefined;
     this.applyChange();
   }
 
@@ -289,6 +327,7 @@ export class ChangesetListComponent implements OnInit {
     )
     this.getCoverages();
     this.getTagFilters();
+    this.getChangesets();
   }
 
   ngOnDestroy() {

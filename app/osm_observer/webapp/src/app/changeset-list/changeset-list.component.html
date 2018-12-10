@@ -53,6 +53,9 @@
   </div>
 </div>
 <div class="component-container">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-6">
+
   <h4>{{ 'CHANGESET LIST' | translate }}</h4>
   <div class="pull-right">
     <div class="btn-group btn-group-sm mr-2">
@@ -83,8 +86,6 @@
       </button>
     </div>
   </div>
-  <div class="row">
-    <div class="col-sm-12 col-md-12 col-lg-6">
       <table class="table table-striped table-sm">
         <thead>
           <tr class="header-row">
@@ -230,7 +231,7 @@
             </td>
           </tr>
           <tr *ngIf="loading">
-            <td colspan="8" class="loading-data">
+            <td colspan="6" class="loading-data">
               {{ 'LOADING CHANGESETS' | translate }}
             </td>
           </tr>
@@ -240,7 +241,8 @@
             </td>
           </tr>
           <ng-container *ngFor="let changeset of changesets | search:'userName':userName; let last = last" [ready]="last" (onReady)="changesetsRendered()">
-            <tr [class.table-danger]="changeset.status === reviewStatus.BROKEN">
+            <tr [class.table-danger]="changeset.status === reviewStatus.BROKEN"
+                [class.table-success]="changeset.id === currentChangeSetId">
               <td>
                 <a [routerLink]="[changeset.id, 'details']">
                   {{ changeset.id }}
@@ -260,7 +262,7 @@
  -->              <td>
                 <a class="btn btn-secondary btn-sm"
                    role="button"
-                   (click)='currentChangeSet = changeset.id'>
+                   (click)='setCurrentChangesetId(changeset.id)'>
                   {{ 'DETAILS' | translate }}
                 </a>
                 <a class="btn btn-secondary btn-sm"
@@ -275,7 +277,12 @@
       </table>
     </div>
     <div class="col-sm-12 col-md-12 col-lg-6">
-       <changeset-details *ngIf="currentChangeSet" [id]="currentChangeSet">
+       <changeset-details 
+            *ngIf="currentChangeSetId" 
+              [id]="currentChangeSetId" 
+              [prevChangesetId]="prevChangesetId"
+              [nextChangesetId]="nextChangesetId"
+            >
         </changeset-details>
     </div>
   </div>

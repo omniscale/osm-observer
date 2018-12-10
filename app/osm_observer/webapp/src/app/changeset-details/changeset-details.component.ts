@@ -19,13 +19,15 @@ import { MessageService } from '../services/message.service';
 })
 export class ChangesetDetailsComponent implements OnInit {
   @Input() id: number;
+  @Input() prevChangesetId: number;
+  @Input() nextChangesetId: number;
 
-  prevChangeset: Changeset;
   currentChangeset: Changeset;
-  nextChangeset: Changeset;
   currentChangesetDetails: ChangesetDetails;
 
+
   reviewStatus = ReviewStatus;
+  extern: boolean = false;
 
   private endOfListReachedText: string;
 
@@ -50,8 +52,8 @@ export class ChangesetDetailsComponent implements OnInit {
     });
     this.reviewService.refreshReviews$
         .subscribe(e => {
-          if(this.nextChangeset !== undefined) {
-            this.router.navigate(['changesets', this.nextChangeset.osmId, 'details'])
+          if(this.nextChangesetId !== undefined) {
+            this.router.navigate(['changesets', this.nextChangesetId, 'details'])
           } else {
             this.messageService.add(this.endOfListReachedText, 'info');
             this.router.navigate(['/changesets']);
@@ -59,6 +61,7 @@ export class ChangesetDetailsComponent implements OnInit {
         });
 
     if (this.id === undefined) {
+      this.extern = true;
       this.route.data
           .subscribe((data: {changeset: ChangesetDetails}) => {
             this.currentChangeset = data.changeset.changeset;
