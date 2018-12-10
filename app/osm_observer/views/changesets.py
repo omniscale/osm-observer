@@ -8,9 +8,6 @@ from osm_observer.changes.changes import collect_changeset
 
 from osm_observer.views import api
 from osm_observer.changes.changesets import changesets
-from osm_observer.lib.changes import (
-    query_changeset_comments,
-)
 from osm_observer.model import Filter
 
 @api.route('/changesets')
@@ -45,13 +42,6 @@ def changesets_list():
         coverages=coverages
     )
     return jsonify(result)
-
-@api.route('/changesets/comments/<int:changeset_id>')
-@login_required
-def changeset_comments(changeset_id):
-    comments = query_changeset_comments(changeset_id)
-    return jsonify(serialize_changeset_comments(comments))
-
 
 @api.route('/changesets/changes/<int:changeset_id>')
 def changeset_changes(changeset_id):
