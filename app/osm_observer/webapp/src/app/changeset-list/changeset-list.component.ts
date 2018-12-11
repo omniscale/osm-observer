@@ -34,9 +34,9 @@ export class ChangesetListComponent implements OnInit {
   allowedCoverageIds: number[];
   allowedTagFilterIds: number[];
   
-  currentChangeSetId: number;
-  nextChangeSetId: number;
-  prevChangeSetId: number;
+  currentChangesetId: number;
+  nextChangesetId: number;
+  prevChangesetId: number;
 
   orderBy: string = 'closedAt';
   order: string = 'desc';
@@ -66,6 +66,7 @@ export class ChangesetListComponent implements OnInit {
     if(this.changesets.length === 0) {
       this.loading = false;
     }
+    this.setCurrentChangesetId(this.currentChangesetId);
   }
 
   assignTagFilters(tagFilters: TagFilter[]) {
@@ -144,8 +145,8 @@ export class ChangesetListComponent implements OnInit {
     if(this.statusId !== undefined && this.statusId !== null) {
       routeParams['statusId'] = this.statusId;
     }
-    if(this.currentChangeSetId !== undefined && this.currentChangeSetId !== null) {
-      routeParams['currentChangeSetId'] = this.currentChangeSetId;
+    if(this.currentChangesetId !== undefined && this.currentChangesetId !== null) {
+      routeParams['currentChangesetId'] = this.currentChangesetId;
     }    
     if((typeof(this.currentUserReviewed) === "boolean")) {
       routeParams['currentUserReviewed'] = this.currentUserReviewed;
@@ -174,9 +175,9 @@ export class ChangesetListComponent implements OnInit {
     if(isNaN(this.statusId)) {
       this.statusId = undefined;
     }
-    this.currentChangeSetId = parseInt(params['currentChangeSetId']) as number;
-    if(isNaN(this.currentChangeSetId)) {
-      this.currentChangeSetId = undefined;
+    this.currentChangesetId = parseInt(params['currentChangesetId']) as number;
+    if(isNaN(this.currentChangesetId)) {
+      this.currentChangesetId = undefined;
     }
     switch(params['currentUserReviewed']) {
       case 'true':
@@ -252,28 +253,27 @@ export class ChangesetListComponent implements OnInit {
     this.applyChange();
   }
 
-  setCurrentChangesetId(currentChangeSetId: string): void {
-    this.currentChangeSetId = parseInt(currentChangeSetId);
-    if(isNaN(this.currentChangeSetId)) {
-      this.currentChangeSetId = undefined;
+  setCurrentChangesetId(currentChangesetId: number): void {
+    this.currentChangesetId = currentChangesetId;
+    if(isNaN(this.currentChangesetId)) {
+      this.currentChangesetId = undefined;
     }
     for (let changset in this.changesets) {
-      if (this.changesets[changset].id == this.currentChangeSetId) {
+      if (this.changesets[changset].id == this.currentChangesetId) {
         let prev = parseInt(changset) - 1;
         if (prev > -1) {
-          this.prevChangeSetId = this.changesets[prev].id
+          this.prevChangesetId = this.changesets[prev].id
         } else {
-          this.prevChangeSetId = undefined
+          this.prevChangesetId = undefined
         }
         let next = parseInt(changset) + 1;
         if (next > 0 && next < this.changesets.length) {
-          this.nextChangeSetId = this.changesets[next].id
+          this.nextChangesetId = this.changesets[next].id
         } else {
-          this.nextChangeSetId = undefined
+          this.nextChangesetId = undefined
         }
       } 
     }
-
     this.applyChange();
   }
 
@@ -307,7 +307,7 @@ export class ChangesetListComponent implements OnInit {
     this.tagFilterId = undefined;
     this.statusId = undefined;
     this.currentUserReviewed = undefined;
-    this.currentChangeSetId = undefined;
+    this.currentChangesetId = undefined;
     this.applyChange();
   }
 

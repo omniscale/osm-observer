@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {TranslateService} from 'ng2-translate';
@@ -21,6 +21,8 @@ export class ChangesetDetailsComponent implements OnInit {
   @Input() id: number;
   @Input() prevChangesetId: number;
   @Input() nextChangesetId: number;
+
+  @Output() idChange = new EventEmitter<number>();
 
   currentChangeset: Changeset;
   currentChangesetDetails: ChangesetDetails;
@@ -46,6 +48,10 @@ export class ChangesetDetailsComponent implements OnInit {
     this.currentChangesetDetails = data;
   }
 
+  changeId(){
+    this.idChange.emit(this.nextChangesetId);
+  }
+
   ngOnInit() {
     this.translate.get('END OF LIST REACHED').subscribe((res: string) => {
       this.endOfListReachedText = res;
@@ -53,7 +59,7 @@ export class ChangesetDetailsComponent implements OnInit {
     this.reviewService.refreshReviews$
         .subscribe(e => {
           if(this.nextChangesetId !== undefined) {
-            this.router.navigate(['changesets', this.nextChangesetId, 'details'])
+            this.changeId();
           } else {
             this.messageService.add(this.endOfListReachedText, 'info');
             this.router.navigate(['/changesets']);
@@ -77,7 +83,15 @@ export class ChangesetDetailsComponent implements OnInit {
         .subscribe(changeset => { 
            this.assignChangeset(changeset)
           }, osmId => this.id);
-      }    
+    }    
+    console.log(changes)
+    if (changes['nextChangesetId']) {
+      this.nextChangesetId = changes['nextChangesetId'].currentValue;
+    }
+
+    if (changes['prevChangesetId']) {
+      this.prevChangesetId = changes['prevChangesetId'].currentValue;
     }
    
+   }
 }

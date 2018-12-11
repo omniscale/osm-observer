@@ -242,7 +242,7 @@
           </tr>
           <ng-container *ngFor="let changeset of changesets | search:'userName':userName; let last = last" [ready]="last" (onReady)="changesetsRendered()">
             <tr [class.table-danger]="changeset.status === reviewStatus.BROKEN"
-                [class.table-success]="changeset.id === currentChangeSetId">
+                [class.table-success]="changeset.id === currentChangesetId">
               <td>
                 <a [routerLink]="[changeset.id, 'details']">
                   {{ changeset.id }}
@@ -278,11 +278,12 @@
     </div>
     <div class="col-sm-12 col-md-12 col-lg-6">
        <changeset-details 
-            *ngIf="currentChangeSetId" 
-              [id]="currentChangeSetId" 
+            *ngIf="currentChangesetId" 
+              [id]="currentChangesetId" 
               [prevChangesetId]="prevChangesetId"
               [nextChangesetId]="nextChangesetId"
-            >
+              (idChange)="setCurrentChangesetId($event)"
+             >
         </changeset-details>
     </div>
   </div>
