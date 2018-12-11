@@ -8,6 +8,7 @@ from logging.handlers import SMTPHandler
 from flask import (
     Flask, request, jsonify, render_template, make_response
 )
+from sqlalchemy import create_engine
 
 import webassets.loaders
 import webassets.env
@@ -27,6 +28,7 @@ def create_app(config=None):
     configure_jinja2(app)
     configure_app(app, config)
     configure_extensions(app)
+    configure_db_connections(app)
     configure_logging(app)
     configure_login(app)
     configure_errorhandlers(app)
@@ -134,6 +136,22 @@ def configure_extensions(app):
     db.init_app(app)
 
     configure_assets(app)
+
+def configure_db_connections(app):
+    dbschema = 'changes,changes_app,public'
+    engine = create_engine(
+        "postgresql+psycopg2://localhost/osm_observer",
+        connect_args={'options': '-csearch_path={} -cenable_seqscan=false -cenable_indexscan=true'.format(dbschema)},
+        # echo=True,
+    )
+    app.changeset_connection = engine.connect()
+
+    dbschema = 'changes,public'
+    engine = create_engine(
+        "postgres://os:os@localhost:5432/osm_observer",
+        connect_args={'options': '-csearch_path={}'.format(dbschema)})
+
+    app.changes_connection = engine.connect()
 
 
 def configure_assets(app):

@@ -42,7 +42,7 @@ class User(db.Model, UserMixin):
     last_login = db.Column(db.DateTime(timezone=True), default=datetime.datetime.now)
     osm_token = db.Column(db.String(256))
     osm_username = db.Column(db.String(256))
-
+    admin = db.Column(db.Boolean, default=False)
     reviews = db.relationship(
         'Review',
         backref='user',
@@ -82,6 +82,11 @@ class User(db.Model, UserMixin):
         conn.unbind()
         return True
 
+
+    @property
+    def is_admin(self):
+        return self.admin
+    
     def update_password(self, password):
         if not password:
             raise ValueError('Password must be non empty.')

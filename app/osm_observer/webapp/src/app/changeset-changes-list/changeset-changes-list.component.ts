@@ -1,8 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
 
 import { ChangesetChange } from '../types/changeset-change';
 import { ChangesetDetails } from '../types/changeset-details';
-import { ChangesetDetailsService } from '../services/changeset-details.service';
+import { MapService } from '../services/map.service';
 
 @Component({
   selector: 'changeset-changes-list',
@@ -13,56 +13,36 @@ export class ChangesetChangesListComponent implements OnChanges {
 
   @Input() changeset: ChangesetDetails;
 
-  // changesetNodeChanges: ChangesetChange[];
-  // changesetWayChanges: ChangesetChange[];
-  // changesetRelationChanges: ChangesetChange[];
+  currentChange: ChangesetChange;
+  currentChangeType: String;
 
-  // nodesChanges: Changes;
-  // waysChanges: Changes;
-  // relationsChanges: Changes;
+  selectedChange: ChangesetChange;
+  selectedChangeType: String;
+  selectedChangeShow: boolean;
 
-  constructor(private changesetDetailsService: ChangesetDetailsService) { }
+  constructor(private mapService: MapService) { }
 
-  assignChangesetChanges(changesetChanges: ChangesetDetails) {
-    // this.changesetNodeChanges = [];
-    // this.changesetWayChanges = [];
-    // this.changesetRelationChanges = [];
+  getSelectedChange() {
+    this.selectedChangeShow = true;
+    this.currentChange = undefined;
+  }
 
-    // // this.nodesChanges = new Changes();
-    // // this.waysChanges = new Changes();
-    // // this.relationsChanges = new Changes();
-    // console.log(changesetChanges)
-    // let changes: Changes;
-    // for (let change of changesetChanges.changes) {
-    //    console.log(change)
-      // switch(change.type) {
-      //   case 'node':
-      //     changes = this.nodesChanges;
-      //     this.changesetNodeChanges.push(change);
-      //     break;
-      //   case 'way':
-      //     changes= this.waysChanges;
-      //     this.changesetWayChanges.push(change);
-      //     break;
-      //   case 'relation':
-      //     changes = this.relationsChanges;
-      //     this.changesetRelationChanges.push(change);
-      //     break;
-      // }
-      // if(change.added) {
-      //   changes.added++;
-      // }
-      // if(change.modified) {
-      //   changes.modified++;
-      // }
-      // if(change.deleted) {
-      //   changes.deleted++;
-      // }
-    // }
+  setSelectedChange(change: ChangesetChange, type: String) {
+    this.mapService.activeChange(change, type);
+    this.selectedChange = change;
+    this.selectedChangeType = type;
+  }
+  
+  updateCurrentChange(change: ChangesetChange, type: String) {
+    this.currentChange = change;
+    this.currentChangeType = type;
+    this.selectedChangeShow = false;
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.changeset = changes['changeset'].currentValue;
-    this.assignChangesetChanges(this.changeset)
+    if (changes['changeset']) {
+      this.changeset = changes['changeset'].currentValue;
+    }
   }
+
 }

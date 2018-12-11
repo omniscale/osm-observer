@@ -1,11 +1,8 @@
-.changeset-change
-  .change-title
+.change-title
+  cursor: pointer
+  &:hover
+    // reffers $link-text-color in static/sass
+    color: #314E66
+  &.deleted
+    text-decoration: line-through
     cursor: default
-    &:hover
-      // reffers $link-text-color in static/sass
-      color: #314E66
-    &.deleted
-      text-decoration: line-through
-.changes-count
-  font-size: 0.75rem
-  font-style: italic

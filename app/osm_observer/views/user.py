@@ -70,6 +70,17 @@ def login():
 
     return response
 
+@api.route('/is_admin', methods=['POST'])
+def is_admin():
+    if current_user.is_authenticated and current_user.is_admin:
+        return jsonify({
+            'success': True
+        })
+    
+    return jsonify({
+        'success': False
+    })
+
 
 @api.route('/logout')
 def logout():

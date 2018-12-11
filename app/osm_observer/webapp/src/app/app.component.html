@@ -19,6 +19,12 @@
     {{ 'CHANGESETS' | translate }}
   </a>
   <a class="nav-link rounded-0"
+     routerLink="/filter"
+     [routerLinkActive]="['active']">
+    <i class="fa fa-tags" aria-hidden="true"></i>
+    {{ 'TAG FILTER' | translate }}
+  </a>
+  <a class="nav-link rounded-0"
      routerLink="/coverages"
      [routerLinkActive]="['active']">
     <i class="fa fa-object-ungroup" aria-hidden="true"></i>

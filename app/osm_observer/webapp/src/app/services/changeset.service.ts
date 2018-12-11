@@ -44,28 +44,16 @@ export class ChangesetService extends BaseHttpService {
     location.prepareExternalUrl('api/changesets/comments/')
   }
 
-  getChangesets(username?: string, timeRange?: string, sumScore?: number, numReviews?: number, coverageId?: number, statusId?: number, currentUserReviewed?: boolean): Observable<Changeset[]> {
+  getChangesets(timeRange?: number, coverageId?: number, tagFilterId?): Observable<Changeset[]> {
     let params = new URLSearchParams();
-    if(username !== undefined && username !== null && username !== '') {
-      params.set('username', username);
-    }
-    if(timeRange !== undefined && timeRange !== null && timeRange !== '') {
-      params.set('timeRange', timeRange);
-    }
-    if(sumScore !== undefined && sumScore !== null) {
-      params.set('sumScore', sumScore.toString());
-    }
-    if(numReviews !== undefined && numReviews !== null) {
-      params.set('numReviews', numReviews.toString());
+    if(timeRange !== undefined && timeRange !== null) {
+      params.set('timeRange', timeRange.toString());
     }
     if(coverageId !== undefined && coverageId !== null) {
       params.set('coverageId', coverageId.toString());
     }
-    if(statusId !== undefined && statusId !== null) {
-      params.set('statusId', statusId.toString());
-    }
-    if((typeof(currentUserReviewed) === "boolean")) {
-      params.set('currentUserReviewed', currentUserReviewed.toString());
+    if(tagFilterId !== undefined && tagFilterId !== null) {
+      params.set('tagFilterId', tagFilterId.toString());
     }
     let requestOptions = this.getRequestOptions(params);
     return this.http.get(this.changesetsUrl(), requestOptions)

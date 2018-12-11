@@ -21,7 +21,8 @@ frontend = Blueprint(
 @frontend.route('/<path:path>')
 def index(path=None):
     base_href = request.environ.get('HTTP_X_SCRIPT_NAME', '/')
-    response = make_response(render_template('frontend/index.html.j2', base_href=base_href))
+    response = make_response(
+        render_template('frontend/index.html.j2', base_href=base_href))
 
     if current_user.is_authenticated and current_user.osm_token:
         response.set_cookie('loggedIn', '1')

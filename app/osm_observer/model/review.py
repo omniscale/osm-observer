@@ -26,11 +26,8 @@ class Review(db.Model):
         db.DateTime(timezone=True),
         default=datetime.datetime.now
     )
-    changeset_id = db.Column(
-        db.Integer,
-        db.ForeignKey('changes_app.changesets.id'),
-        nullable=True
-    )
+
+    changeset_id = db.Column(db.Integer)
 
     user_id = db.Column(
         db.Integer,
@@ -43,6 +40,8 @@ class Review(db.Model):
         50: 'Fixed',
         99: 'OK',
     }
+
+    db.Index('idx_changeset_id', 'changeset_id', unique=True)
 
     def __init__(self, changeset_id=None, score=0,
                  status=None, comment=None, user_id=None):

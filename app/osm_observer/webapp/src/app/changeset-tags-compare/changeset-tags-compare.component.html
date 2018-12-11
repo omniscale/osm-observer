@@ -1,8 +1,10 @@
-<span class="changeset-change" (click)="showCompareTags = !showCompareTags" *ngIf="combinedTags | hasKeys">
-    <i class="fa fa-tags" aria-hidden="true"></i>
-</span>
-
-<div *ngIf="showCompareTags">
+<div *ngIf="element">
+  <h5>{{ type }}: {{ element.id }} (Version: {{ element.version }})
+    <span class="external-link"><a href="http://www.openstreetmap.org/{{type}}/{{ element.id }}"
+    target="_blank">
+      <i class="fa fa-external-link" aria-hidden="true"></i>
+    </a></span>
+  </h5>                    
   <table class="table table-sm table-borderless table-striped" 
     *ngIf="combinedTags | hasKeys">
     <thead>
@@ -15,9 +17,13 @@
     <tbody>
       <tr *ngFor="let t of combinedTags | keyValueList">
         <td>{{ t.key }}</td>
-        <td>{{ combinedTags[t.key].currentValue }}</td>
-        <td>{{ combinedTags[t.key].prevValue }}</td>
+        <td [class.table-warning]="combinedTags[t.key].currentValue !== combinedTags[t.key].prevValue">
+          {{ combinedTags[t.key].currentValue }}
+        </td>
+        <td *ngIf="hasPrevValue">
+          {{ combinedTags[t.key].prevValue }}
+        </td>
       </tr>
     </tbody>
   </table>
-</div>
+</div> 

@@ -6,6 +6,8 @@ import { AuthGuardService }        from './services/auth-guard.service';
 import { AnonymousGuardService}    from './services/anonymous-guard.service';
 import { ChangesetDetailResolver } from './services/changeset-detail-resolver.service';
 
+import { TagFilterListComponent }        from './tag-filter-list/tag-filter-list.component';
+
 import { CoverageListComponent }        from './coverage-list/coverage-list.component';
 import { ChangesetListComponent }       from './changeset-list/changeset-list.component';
 import { ChangesetDetailsComponent }    from './changeset-details/changeset-details.component';
@@ -33,6 +35,11 @@ const appRoutes: Routes = [
         }
       }
     ]
+  },
+  {
+    path: 'filter',
+    canActivate: [AuthGuardService],
+    component: TagFilterListComponent
   },
   {
     path: 'coverages',

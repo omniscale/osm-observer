@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {TranslateService} from 'ng2-translate';
@@ -19,13 +19,17 @@ import { MessageService } from '../services/message.service';
 })
 export class ChangesetDetailsComponent implements OnInit {
   @Input() id: number;
+  @Input() prevChangesetId: number;
+  @Input() nextChangesetId: number;
 
-  prevChangeset: Changeset;
+  @Output() idChange = new EventEmitter<number>();
+
   currentChangeset: Changeset;
-  nextChangeset: Changeset;
   currentChangesetDetails: ChangesetDetails;
 
+
   reviewStatus = ReviewStatus;
+  extern: boolean = false;
 
   private endOfListReachedText: string;
 
@@ -39,16 +43,13 @@ export class ChangesetDetailsComponent implements OnInit {
               private translate: TranslateService) { 
    }
 
-  next() {
-    if(this.nextChangeset !== undefined) {
-      this.router.navigate(['changesets', this.nextChangeset.osmId, 'details'])
-    }
+  assignChangeset(data: ChangesetDetails) {
+    this.currentChangeset = data.changeset;
+    this.currentChangesetDetails = data;
   }
 
-  prev() {
-    if(this.prevChangeset !== undefined) {
-      this.router.navigate(['changesets', this.prevChangeset.osmId, 'details'])
-    }
+  changeId(){
+    this.idChange.emit(this.nextChangesetId);
   }
 
   ngOnInit() {
@@ -57,19 +58,39 @@ export class ChangesetDetailsComponent implements OnInit {
     });
     this.reviewService.refreshReviews$
         .subscribe(e => {
-          if(this.nextChangeset !== undefined) {
-            this.router.navigate(['changesets', this.nextChangeset.osmId, 'details'])
+          if(this.nextChangesetId !== undefined) {
+            this.changeId();
           } else {
             this.messageService.add(this.endOfListReachedText, 'info');
-            this.router.navigate(['/changesets']);
           }
         });
-    this.route.data
-        .subscribe((data: {changeset: ChangesetDetails}) => {
-          this.currentChangeset = data.changeset.changeset;
-          this.currentChangesetDetails = data.changeset;
-          this.prevChangeset = this.changesetService.getPrevChangeset(this.currentChangeset);
-          this.nextChangeset = this.changesetService.getNextChangeset(this.currentChangeset);
-        });
+
+    if (this.id === undefined) {
+      this.extern = true;
+      this.route.data
+          .subscribe((data: {changeset: ChangesetDetails}) => {
+            this.currentChangeset = data.changeset.changeset;
+            this.currentChangesetDetails = data.changeset;
+      });
+    }
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['id']) {
+      this.id = changes['id'].currentValue;
+      this.changesetDetailsService.getChangesetDetails(this.id)
+        .subscribe(changeset => { 
+           this.assignChangeset(changeset)
+          }, osmId => this.id);
+    }    
+
+    if (changes['nextChangesetId']) {
+      this.nextChangesetId = changes['nextChangesetId'].currentValue;
+    }
+
+    if (changes['prevChangesetId']) {
+      this.prevChangesetId = changes['prevChangesetId'].currentValue;
+    }
+   
+   }
 }

@@ -15,47 +15,77 @@ export class ChangesetTagsCompareComponent implements OnChanges {
   @Input() key: string;
   @Input() prevKey: string;
   @Input() type: string;
+  @Input() openIntialCompare: boolean;
 
   showCompareTags: boolean;
-  combinedTags = {};
+  combinedTags: {};
+  hasPrevValue: boolean;
+  element: any;
 
   constructor(private changesetDetailsService: ChangesetDetailsService) {
     this.showCompareTags = false;
   }
 
   assignChangesets(changeset: ChangesetDetails, type: string, key: string, prevKey: string) {
-    let tags = changeset.elements[type][key].tags;
-    let combinedTags = {};
-
-    for (let tag in tags) {
-        combinedTags[tag] = {
-          'currentValue': tags[tag],
-          'prevValue': ''
-        };
+    if (key === undefined) {
+      return false;
     }
+    this.element = changeset.elements[type][key];   
+    if (this.element) {
+      let tags = this.element.tags;
+      let combinedTags = {};
+      this.hasPrevValue = false;
+      for (let tag in tags) {
+          combinedTags[tag] = {
+            'currentValue': tags[tag],
+            'prevValue': ''
+          };
+      }
 
-    if (prevKey) {
-        let prevTags = changeset.elements[type][key].tags;
-        for (let tag in prevTags) {
-            if (tag in combinedTags) {
-                combinedTags[tag]['prevValue'] = prevTags[tag]  
-            } else {
-                combinedTags[tag] = {
-                  'currentValue': '',
-                  'prevValue': tags[tag]
-                };
-            }
-        }
+      if (prevKey) {
+          let prevTags = changeset.elements[type][prevKey].tags;
+          if (prevTags) {
+            this.hasPrevValue = true;
+          }
+          for (let tag in prevTags) {
+              if (tag in combinedTags) {
+                  combinedTags[tag]['prevValue'] = prevTags[tag]  
+              } else {
+                  combinedTags[tag] = {
+                    'currentValue': '',
+                    'prevValue': prevTags[tag]
+                  };
+              }
+          }
 
+      }
+      this.combinedTags = combinedTags;
     }
-    this.combinedTags = combinedTags;
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.changeset = changes['changeset'].currentValue;
-    this.key = changes['key'].currentValue;
-    this.prevKey = changes['prevKey'].currentValue
-    this.type = changes['type'].currentValue
+    this.combinedTags = {};
+    if (changes['changeset']) {  
+      this.changeset = changes['changeset'].currentValue;
+      this.key = undefined;
+    }
+
+    if (changes['type']) {  
+      this.type = changes['type'].currentValue
+    }
+    
+    if (changes['openIntialCompare']) {
+      this.showCompareTags = changes['openIntialCompare'].currentValue
+    }
+    
+    if (changes['key']) {
+      this.key = changes['key'].currentValue;
+    }
+
+    if (changes['prevKey']) {
+      this.prevKey = changes['prevKey'].currentValue;
+    }
+
     this.assignChangesets(this.changeset, this.type, this.key, this.prevKey);
   }
 }

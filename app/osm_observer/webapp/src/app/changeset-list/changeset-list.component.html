@@ -6,28 +6,7 @@
   </button>
 
   <div class="form-inline">
-    <div class="btn-group btn-group-sm mr-2">
-      <button class="btn btn-sm"
-              [class.btn-primary]="timeRange==='today'"
-              [class.btn-secondary]="timeRange!=='today'"
-              (click)="setTimeRange('today')">
-        {{ 'TODAY' | translate }}
-      </button>
-      <button class="btn btn-sm"
-              [class.btn-primary]="timeRange==='yesterday'"
-              [class.btn-secondary]="timeRange!=='yesterday'"
-              (click)="setTimeRange('yesterday')">
-        {{ 'YESTERDAY' | translate }}
-      </button>
-      <button class="btn btn-sm"
-              [class.btn-primary]="timeRange==='lastWeek'"
-              [class.btn-secondary]="timeRange!=='lastWeek'"
-              (click)="setTimeRange('lastWeek')">
-        {{ 'LAST WEEK' | translate }}
-      </button>
-    </div>
-
-    <div class="btn-group btn-group-sm mr-2">
+<!--     <div class="btn-group btn-group-sm mr-2">
       <button class="btn btn-sm"
               [class.btn-primary]="currentUserReviewed===true"
               [class.btn-secondary]="currentUserReviewed!==true"
@@ -40,7 +19,7 @@
               (click)="setCurrentUserReviewed(false)">
         {{ 'NOT SELF REVIEWED' | translate }}
       </button>
-    </div>
+    </div> -->
 
     <select class="form-control form-control-sm"
             id="coverage"
@@ -56,247 +35,256 @@
         {{ coverage.name }}
       </option>
     </select>
+
+    <select class="form-control form-control-sm"
+            id="tagFilter"
+            type="number"
+            #tagFilter
+            (change)="setTagFilterId(tagFilter.value)"
+            [(ngModel)]="tagFilterId">
+      <option [value]="undefined">
+        {{ 'SELECT TAG FILTER' | translate }}
+      </option>
+      <option *ngFor="let tagFilter of tagFilters"
+              [value]="tagFilter.id" title="{{ tagFilter.description }}">
+        {{ tagFilter.name }}
+      </option>
+    </select>    
   </div>
 </div>
 <div class="component-container">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-6">
+
   <h4>{{ 'CHANGESET LIST' | translate }}</h4>
-  <table class="table table-striped table-sm">
-    <thead>
-      <tr class="header-row">
-        <th class="pointer"
-            (click)="sortBy('id')">
-          {{ 'ID' | translate }}
-          <i class="fa fa-sort"
-             aria-hidden="true"
-             *ngIf="orderBy!=='id'">
-          </i>
-          <i class="fa fa-sort-asc"
-             aria-hidden="true"
-             *ngIf="orderBy==='id' && order==='asc'">
-          </i>
-          <i class="fa fa-sort-desc"
-             aria-hidden="true"
-             *ngIf="orderBy==='id' && order==='desc'">
-          </i>
-        </th>
-        <th class="pointer"
-            (click)="sortBy('osmId')">
-          {{ 'OSM ID' | translate }}
-          <i class="fa fa-sort"
-             aria-hidden="true"
-             *ngIf="orderBy!=='osmId'">
-          </i>
-          <i class="fa fa-sort-asc"
-             aria-hidden="true"
-             *ngIf="orderBy==='osmId' && order==='asc'">
-          </i>
-          <i class="fa fa-sort-desc"
-             aria-hidden="true"
-             *ngIf="orderBy==='osmId' && order==='desc'">
-          </i>
-        </th>
-        <th class="pointer"
-            (click)="sortBy('closedAt')">
-          {{ 'CLOSED AT' | translate }}
-          <i class="fa fa-sort"
-             aria-hidden="true"
-             *ngIf="orderBy!=='closedAt'">
-          </i>
-          <i class="fa fa-sort-asc"
-             aria-hidden="true"
-             *ngIf="orderBy==='closedAt' && order==='asc'">
-          </i>
-          <i class="fa fa-sort-desc"
-             aria-hidden="true"
-             *ngIf="orderBy==='closedAt' && order==='desc'">
-          </i>
-        </th>
-        <th class="pointer"
-            (click)="sortBy('username')">
-          {{ 'USERNAME' | translate }}
-          <i class="fa fa-sort"
-             aria-hidden="true"
-             *ngIf="orderBy!=='username'">
-          </i>
-          <i class="fa fa-sort-asc"
-             aria-hidden="true"
-             *ngIf="orderBy==='username' && order==='asc'">
-          </i>
-          <i class="fa fa-sort-desc"
-             aria-hidden="true"
-             *ngIf="orderBy==='username' && order==='desc'">
-          </i>
-        </th>
-        <th class="comment-column">{{ 'COMMENT' | translate }}</th>
-        <th class="pointer"
-            (click)="sortBy('numChanges')">
-          {{ 'CHANGES' | translate }}
-          <i class="fa fa-sort"
-             aria-hidden="true"
-             *ngIf="orderBy!=='numChanges'">
-          </i>
-          <i class="fa fa-sort-asc"
-             aria-hidden="true"
-             *ngIf="orderBy==='numChanges' && order==='asc'">
-          </i>
-          <i class="fa fa-sort-desc"
-             aria-hidden="true"
-             *ngIf="orderBy==='numChanges' && order==='desc'">
-          </i>
-        </th>
-        <th class="pointer"
-            (click)="sortBy('numReviews')">
-          {{ 'REVIEWS' | translate }}
-          <i class="fa fa-sort"
-             aria-hidden="true"
-             *ngIf="orderBy!=='numReviews'">
-          </i>
-          <i class="fa fa-sort-asc"
-             aria-hidden="true"
-             *ngIf="orderBy==='numReviews' && order==='asc'">
-          </i>
-          <i class="fa fa-sort-desc"
-             aria-hidden="true"
-             *ngIf="orderBy==='numReviews' && order==='desc'">
-          </i>
-        </th>
-        <th class="pointer"
-            (click)="sortBy('sumScore')">
-          {{ 'SCORE' | translate }}
-          <i class="fa fa-sort"
-             aria-hidden="true"
-             *ngIf="orderBy!=='sumScore'">
-          </i>
-          <i class="fa fa-sort-asc"
-             aria-hidden="true"
-             *ngIf="orderBy==='sumScore' && order==='asc'">
-          </i>
-          <i class="fa fa-sort-desc"
-             aria-hidden="true"
-             *ngIf="orderBy==='sumScore' && order==='desc'">
-          </i>
-        </th>
-        <th class="pointer"
-            (click)="sortBy('status')">
-          {{ 'STATUS' | translate }}
-          <i class="fa fa-sort"
-             aria-hidden="true"
-             *ngIf="orderBy!=='status'">
-          </i>
-          <i class="fa fa-sort-asc"
-             aria-hidden="true"
-             *ngIf="orderBy==='status' && order==='asc'">
-          </i>
-          <i class="fa fa-sort-desc"
-             aria-hidden="true"
-             *ngIf="orderBy==='status' && order==='desc'">
-          </i>
-        </th>
-        <th></th>
-      </tr>
-      <tr class="filter-row">
-        <th></th>
-        <th></th>
-        <th></th>
-        <th>
-          <div class="form-group">
-            <input type="text"
-                   class="form-control form-control-sm"
-                   id="username"
-                   placeholder="{{ 'USERNAME' | translate }}"
-                   (keyup)="applyChange()"
-                   [(ngModel)]="username" />
-          </div>
-        </th>
-        <th></th>
-        <th class="comment-column"></th>
-        <th>
-          <div class="form-group">
-            <input type="number"
-                   class="form-control form-control-sm"
-                   id="num-reviews"
-                   placeholder="{{ 'REVIEWS' | translate }}"
-                   (keyup)="applyChange()"
-                   (change)="applyChange()"
-                   [(ngModel)]="numReviews" />
-          </div>
-        </th>
-        <th>
-          <div class="form-group">
-            <input type="number"
-                   class="form-control form-control-sm"
-                   id="average-score"
-                   placeholder="{{ 'SCORE' | translate }}"
-                   (keyup)="applyChange()"
-                   (change)="applyChange()"
-                   [(ngModel)]="sumScore" />
-          </div>
-        </th>
-        <th>
-          <div class="form-group">
-            <select class="form-control form-control-sm"
-                    id="status"
-                    #status
-                    (change)="setStatusId(status.value)"
-                    [(ngModel)]="statusId">
-              <option [value]="undefined">
-                {{ 'SELECT STATUS' | translate }}
-              </option>
-              <option *ngFor="let reviewStatusName of reviewStatus.names()"
-                      [value]="reviewStatus[reviewStatusName]">
-                {{ reviewStatusName | translate }}
-              </option>
-            </select>
-          </div>
-        </th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngIf="changesets !== undefined && changesets.length === 0">
-        <td colspan="9">
-          {{ 'NO CHANGESETS' | translate }}
-        </td>
-      </tr>
-      <tr *ngIf="loading">
-        <td colspan="9" class="loading-data">
-          {{ 'LOADING CHANGESETS' | translate }}
-        </td>
-      </tr>
-      <tr *ngIf="coverages !== undefined && coverages.length === 0">
-        <td colspan="9" class="loading-data">
-          {{ 'NO COVERAGES ASSIGNED' | translate }}
-        </td>
-      </tr>
-      <ng-container *ngFor="let changeset of changesets; let last = last" [ready]="last" (onReady)="changesetsRendered()">
-        <tr [class.table-danger]="changeset.status === reviewStatus.BROKEN">
-          <td>{{ changeset.id }}</td>
-          <td>
-            <a [routerLink]="[changeset.osmId, 'details']">
-              {{ changeset.osmId }}
-            </a>
-          </td>
-          <td>{{ changeset.closedAt }}</td>
-          <td>
-            <a href="javascript:void(0)"
-               (click)="username=changeset.username;applyChange();">
-              {{ changeset.username }}
-            </a>
-          </td>
-          <td class="comment-column">{{ changeset.tags.comment }}</td>
-          <td>{{ changeset.numChanges }}</td>
-          <td>{{ changeset.numReviews }}</td>
-          <td>{{ changeset.sumScore }}</td>
-          <td>{{ reviewStatus.byId(changeset.status) | translate }}</td>
-          <td>
-            <a class="btn btn-secondary btn-sm"
-               role="button"
-               [routerLink]="[changeset.osmId, 'details']">
-              {{ 'DETAILS' | translate }}
-            </a>
-          </td>
-        </tr>
-      </ng-container>
-    </tbody>
-  </table>
+  <div class="pull-right">
+    <div class="btn-group btn-group-sm mr-2">
+      <button class="btn btn-sm"
+              [class.btn-primary]="timeRange===0"
+              [class.btn-secondary]="timeRange!==0"
+              (click)="setTimeRange(0)">
+        {{ 'TODAY' | translate }}
+      </button>
+      <button class="btn btn-sm"
+              [class.btn-primary]="timeRange===1"
+              [class.btn-secondary]="timeRange!==1"
+              (click)="setTimeRange(1)">
+        {{ 'YESTERDAY' | translate }}
+      </button>
+    </div>
+    <div class="btn-group btn-group-sm mr-2">
+      <button class="btn btn-sm btn-secondary"
+              (click)="nextTimeRange('prev')">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-sm btn-secondary">
+          {{ currentDay | date:'dd.MM.y' }}
+      </button>
+      <button class="btn btn-sm btn-secondary"
+              (click)="nextTimeRange('next')">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr class="header-row">
+            <th class="pointer"
+                (click)="sortBy('id')">
+              {{ 'ID' | translate }}
+              <i class="fa fa-sort"
+                 aria-hidden="true"
+                 *ngIf="orderBy!=='id'">
+              </i>
+              <i class="fa fa-sort-asc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='id' && order==='asc'">
+              </i>
+              <i class="fa fa-sort-desc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='id' && order==='desc'">
+              </i>
+            </th>
+            <th class="pointer"
+                (click)="sortBy('closedAt')">
+              {{ 'CLOSED AT' | translate }}
+              <i class="fa fa-sort"
+                 aria-hidden="true"
+                 *ngIf="orderBy!=='closedAt'">
+              </i>
+              <i class="fa fa-sort-asc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='closedAt' && order==='asc'">
+              </i>
+              <i class="fa fa-sort-desc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='closedAt' && order==='desc'">
+              </i>
+            </th>
+            <th class="pointer"
+                (click)="sortBy('userName')">
+              {{ 'USERNAME' | translate }}
+              <i class="fa fa-sort"
+                 aria-hidden="true"
+                 *ngIf="orderBy!=='userName'">
+              </i>
+              <i class="fa fa-sort-asc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='userName' && order==='asc'">
+              </i>
+              <i class="fa fa-sort-desc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='userName' && order==='desc'">
+              </i>
+            </th>
+            <th class="comment-column">{{ 'COMMENT' | translate }}</th>
+            <th class="pointer"
+                (click)="sortBy('numChanges')">
+              {{ 'CHANGES' | translate }}
+              <i class="fa fa-sort"
+                 aria-hidden="true"
+                 *ngIf="orderBy!=='numChanges'">
+              </i>
+              <i class="fa fa-sort-asc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='numChanges' && order==='asc'">
+              </i>
+              <i class="fa fa-sort-desc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='numChanges' && order==='desc'">
+              </i>
+            </th>
+<!--             <th class="pointer"
+                (click)="sortBy('numReviews')">
+              {{ 'REVIEWS' | translate }}
+              <i class="fa fa-sort"
+                 aria-hidden="true"
+                 *ngIf="orderBy!=='numReviews'">
+              </i>
+              <i class="fa fa-sort-asc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='numReviews' && order==='asc'">
+              </i>
+              <i class="fa fa-sort-desc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='numReviews' && order==='desc'">
+              </i>
+            </th>
+            <th class="pointer"
+                (click)="sortBy('status')">
+              {{ 'STATUS' | translate }}
+              <i class="fa fa-sort"
+                 aria-hidden="true"
+                 *ngIf="orderBy!=='status'">
+              </i>
+              <i class="fa fa-sort-asc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='status' && order==='asc'">
+              </i>
+              <i class="fa fa-sort-desc"
+                 aria-hidden="true"
+                 *ngIf="orderBy==='status' && order==='desc'">
+              </i>
+            </th> -->
+            <th></th>
+          </tr>
+          <tr class="filter-row">
+            <th class="id-column"></th>
+            <th class="closed-at-column"></th>
+            <th class="username-column">
+              <div class="form-group">
+                <input type="text"
+                       class="form-control form-control-sm"
+                       id="userName"
+                       placeholder="{{ 'USERNAME' | translate }}"
+                       (keyup)="applyChange()"
+                       [(ngModel)]="userName" />
+              </div>
+            </th>
+            <th class="comment-column"></th>
+            <th class="changes-column"></th>
+<!--             <th class="review-column"></th>
+            <th class="status-column">
+              <div class="form-group">
+                <select class="form-control form-control-sm"
+                        id="status"
+                        #status
+                        (change)="setStatusId(status.value)"
+                        [(ngModel)]="statusId">
+                  <option [value]="undefined">
+                    {{ 'SELECT STATUS' | translate }}
+                  </option>
+                  <option *ngFor="let reviewStatusName of reviewStatus.names()"
+                          [value]="reviewStatus[reviewStatusName]">
+                    {{ reviewStatusName | translate }}
+                  </option>
+                </select>
+              </div>
+            </th> -->
+            <th class="link-column"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="changesets !== undefined && changesets.length === 0">
+            <td colspan="9">
+              {{ 'NO CHANGESETS' | translate }}
+            </td>
+          </tr>
+          <tr *ngIf="loading">
+            <td colspan="6" class="loading-data">
+              {{ 'LOADING CHANGESETS' | translate }}
+            </td>
+          </tr>
+          <tr *ngIf="coverages !== undefined && coverages.length === 0">
+            <td colspan="9" class="loading-data">
+              {{ 'NO COVERAGES ASSIGNED' | translate }}
+            </td>
+          </tr>
+          <ng-container *ngFor="let changeset of changesets | search:'userName':userName; let last = last" [ready]="last" (onReady)="changesetsRendered()">
+            <tr [class.table-danger]="changeset.status === reviewStatus.BROKEN"
+                [class.table-success]="changeset.id === currentChangesetId">
+              <td>
+                <a [routerLink]="[changeset.id, 'details']">
+                  {{ changeset.id }}
+                </a>
+              </td>
+              <td>{{ changeset.closedAt | date:'d.M.y HH:mm:ss'  }}</td>
+              <td>
+                <a href="javascript:void(0)"
+                   (click)="userName=changeset.userName;applyChange();">
+                  {{ changeset.userName }}
+                </a>
+              </td>
+              <td class="comment-column">{{ changeset.tags.comment }}</td>
+              <td>{{ changeset.numChanges }}</td>
+<!--               <td>{{ changeset.numReviews }}</td>
+              <td>{{ reviewStatus.byId(changeset.status) | translate }}</td>
+ -->              <td>
+                <a class="btn btn-secondary btn-sm"
+                   role="button"
+                   (click)='setCurrentChangesetId(changeset.id)'>
+                  {{ 'DETAILS' | translate }}
+                </a>
+                <a class="btn btn-secondary btn-sm"
+                   role="button"
+                   [routerLink]="[changeset.id, 'details']">
+                  <i class="fa fa-external-link" aria-hidden="true"></i>
+                </a>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6">
+       <changeset-details 
+            *ngIf="currentChangesetId" 
+              [id]="currentChangesetId" 
+              [prevChangesetId]="prevChangesetId"
+              [nextChangesetId]="nextChangesetId"
+              (idChange)="setCurrentChangesetId($event)"
+             >
+        </changeset-details>
+    </div>
+  </div>
 </div>
