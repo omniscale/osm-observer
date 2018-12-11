@@ -189,30 +189,33 @@ def collect_changeset(conn, cid):
 
     res = conn.execute(SQL_CHANGESET, {'cid': cid})
     row = res.fetchone()
-    changeset = {
-        'id': cid,
-        'userName': row.user_name,
-        'userID': row.user_name,
-        'createdAt': row.created_at,
-        'closedAt': row.closed_at,
-        'numChanges': row.num_changes,
-        'tags': row.tags,
-        'open': row.open,
-        'dataBBOX': [minx, miny, maxx, maxy],
-        'changesetBBOX': [row.minx, row.miny, row.maxx, row.maxy],
-    }
-
-    res = conn.execute(SQL_COMMENTS, {'cid': cid})
-    comments = []
-    for row in res:
-        comments.append({
+    if not row:
+        changeset = {'id': cid}
+    else:
+        changeset = {
+            'id': cid,
             'userName': row.user_name,
             'userID': row.user_name,
-            'timestamp': row.timestamp,
-            'text': row.text,
-        })
+            'createdAt': row.created_at,
+            'closedAt': row.closed_at,
+            'numChanges': row.num_changes,
+            'tags': row.tags,
+            'open': row.open,
+            'dataBBOX': [minx, miny, maxx, maxy],
+            'changesetBBOX': [row.minx, row.miny, row.maxx, row.maxy],
+        }
 
-    changeset['comments'] = comments
+        res = conn.execute(SQL_COMMENTS, {'cid': cid})
+        comments = []
+        for row in res:
+            comments.append({
+                'userName': row.user_name,
+                'userID': row.user_name,
+                'timestamp': row.timestamp,
+                'text': row.text,
+            })
+
+        changeset['comments'] = comments
 
 
 
