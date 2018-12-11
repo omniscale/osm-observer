@@ -98,9 +98,12 @@ def create_changed_elem_dict(key, elements):
         'added': new.get('added', False),
         'deleted': new.get('deleted', False),
         'modified': 'added' not in new and 'deleted' not in new,
-        'prevKey': tokey(id, version-1) if version != 1 else None,
         'key': tokey(id, version),
+        'prevKey': None,
     }
+    if version != 1 and tokey(id, version-1) in elements:
+        # only add prevKey if it is in our collection
+        elem['prevKey'] = tokey(id, version-1)
     return elem
 
 def collect_changeset(conn, cid):
