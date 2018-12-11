@@ -62,7 +62,6 @@ export class ChangesetDetailsComponent implements OnInit {
             this.changeId();
           } else {
             this.messageService.add(this.endOfListReachedText, 'info');
-            this.router.navigate(['/changesets']);
           }
         });
 
