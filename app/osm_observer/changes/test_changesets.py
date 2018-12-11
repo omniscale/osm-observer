@@ -1,29 +1,42 @@
 import pytest
+import datetime
 
-from osm_observer.changes.changesets import collect_changesets
+from osm_observer.changes.changesets import changesets
 
 # #################################
 # see conftest.py for conn fixture
 # #################################
+
+day = datetime.date(2018, 11, 15)
+
+def cids(changesets):
+    cids = set()
+    for cs in changesets:
+        cids.add(cs['id'])
+    return cids
 
 
 def test_single_node(conn):
     conn.execute('''
         INSERT INTO coverages VALUES (1, 'null island', ST_MakeEnvelope(-10, -10, 10, 10, 4326));
         INSERT INTO coverages VALUES (2, 'somewhere island', ST_MakeEnvelope(100, 0, 110, 10, 4326));
-        INSERT INTO nodes VALUES (10000, true, false, false, 10090, ST_SetSRID(ST_MakePoint(0.0, 0.0), 4326), 'u1', 10080, '2018-11-15 17:20:04+00', 1, '');
+        INSERT INTO nodes VALUES (10000, true, false, false, 10090, ST_SetSRID(ST_MakePoint(0.0, 0.0), 4326), 'u1', 10080, '2018-11-15 17:20:04+00', 1, '"tag"=>"value"');
         INSERT INTO changesets VALUES (10090, '2018-11-15 17:20:04+00', '2018-11-15 17:20:04+00', 1, false, 'u1', 10080, '', ST_MakeEnvelope(0, 0, 0, 0, 4326));
         ''', multi=True)
 
-    # TODO
-    # cs = collect_changesets(conn, coverages=[])
-    # assert cs == set()
+    cs = changesets(conn, day)
+    assert cids(cs) == set([10090])
 
-    cs = collect_changesets(conn, coverages=[1])
-    assert cs == set([10090])
+    cs = changesets(conn, day, coverages=[1])
+    assert cids(cs) == set([10090])
 
-    cs = collect_changesets(conn, coverages=[2])
-    assert cs == set()
+    cs = changesets(conn, day, filter="tags->'tag' = 'value'", coverages=[1])
+    assert cids(cs) == set([10090])
+    cs = changesets(conn, day, filter="tags->'tag' != 'value'", coverages=[1])
+    assert cids(cs) == set()
+
+    cs = changesets(conn, day, coverages=[2])
+    assert cids(cs) == set()
 
 
 def test_node_moves(conn):
@@ -40,22 +53,22 @@ def test_node_moves(conn):
         INSERT INTO changesets VALUES (10092, '2018-11-15 17:20:04+00', '2018-11-15 17:20:04+00', 1, false, 'u1', 10080, '', ST_MakeEnvelope(0, 0, 0, 0, 4326));
         ''', multi=True)
 
-    # TODO
-    # cs = collect_changesets(conn, coverages=[])
-    # assert cs == set()
+    cs = changesets(conn, day, coverages=[])
+    assert cids(cs) == set([10090, 10091, 10092])
 
-    cs = collect_changesets(conn, coverages=[1])
-    assert cs == set([10090])
+    cs = changesets(conn, day, coverages=[1])
+    assert cids(cs) == set([10090])
 
-    cs = collect_changesets(conn, coverages=[2])
-    assert cs == set([10091])
+    cs = changesets(conn, day, coverages=[2])
+    assert cids(cs) == set([10091])
 
-    cs = collect_changesets(conn, coverages=[1, 2])
-    assert cs == set([10090, 10091])
+    cs = changesets(conn, day, coverages=[1, 2])
+    assert cids(cs) == set([10090, 10091])
 
-    cs = collect_changesets(conn, coverages=[1, 2, 3])
-    assert cs == set([10090, 10091, 10092])
-    cs = collect_changesets(conn, coverages=[3])
+    cs = changesets(conn, day, coverages=[1, 2, 3])
+    assert cids(cs) == set([10090, 10091, 10092])
+    cs = changesets(conn, day, coverages=[3])
+
 
 def test_way(conn):
     # way references nodes in various coverages
@@ -75,7 +88,7 @@ def test_way(conn):
         INSERT INTO nds VALUES (10050, 1, 1, 10001);
 
         -- same nodes in coverage 1
-        INSERT INTO ways VALUES (10050, false, true, false, 10092, 'u1', 10080, '2018-11-15 17:20:04+00', 2, '"comment"=>"mod way", "highway"=>"secondary"');
+        INSERT INTO ways VALUES (10050, false, true, false, 10092, 'u1', 10080, '2018-11-15 17:20:04+00', 2, '"comment"=>"mod way", "highway"=>"primary"');
         INSERT INTO nds VALUES (10050, 2, 0, 10000);
         INSERT INTO nds VALUES (10050, 2, 1, 10001);
 
@@ -85,7 +98,7 @@ def test_way(conn):
         INSERT INTO nds VALUES (10050, 3, 1, 10001);
 
         -- nodes in coverage 2
-        INSERT INTO ways VALUES (10050, false, true, false, 10094, 'u1', 10080, '2018-11-15 17:20:04+00', 4, '"comment"=>"mod way", "highway"=>"secondary"');
+        INSERT INTO ways VALUES (10050, false, true, false, 10094, 'u1', 10080, '2018-11-15 17:20:04+00', 4, '"comment"=>"mod way", "highway"=>"tertiary"');
         INSERT INTO nds VALUES (10050, 4, 0, 10002);
         INSERT INTO nds VALUES (10050, 4, 1, 10003);
 
@@ -96,31 +109,44 @@ def test_way(conn):
         INSERT INTO nds VALUES (10050, 5, 0, 10002);
         INSERT INTO nds VALUES (10050, 5, 1, 10003);
 
-        -- we only have changesets for our ways
+        -- update node to check if we can filter on depending way
+        INSERT INTO nodes VALUES (10003, false, true, false, 10097, ST_SetSRID(ST_MakePoint(0.0, 1.0), 4326), 'u1', 10080, '2018-11-15 17:20:04+00', 3, '');
+
+        -- no changeset for our initial nodes
         INSERT INTO changesets VALUES (10091, '2018-11-15 17:20:04+00', '2018-11-15 17:20:04+00', 1, false, 'u1', 10080, '', ST_MakeEnvelope(0, 0, 0, 0, 4326));
         INSERT INTO changesets VALUES (10092, '2018-11-15 17:20:04+00', '2018-11-15 17:20:04+00', 1, false, 'u1', 10080, '', ST_MakeEnvelope(0, 0, 0, 0, 4326));
         INSERT INTO changesets VALUES (10093, '2018-11-15 17:20:04+00', '2018-11-15 17:20:04+00', 1, false, 'u1', 10080, '', ST_MakeEnvelope(0, 0, 0, 0, 4326));
         INSERT INTO changesets VALUES (10094, '2018-11-15 17:20:04+00', '2018-11-15 17:20:04+00', 1, false, 'u1', 10080, '', ST_MakeEnvelope(0, 0, 0, 0, 4326));
         INSERT INTO changesets VALUES (10096, '2018-11-15 17:20:04+00', '2018-11-15 17:20:04+00', 1, false, 'u1', 10080, '', ST_MakeEnvelope(0, 0, 0, 0, 4326));
+        INSERT INTO changesets VALUES (10097, '2018-11-15 17:20:04+00', '2018-11-15 17:20:04+00', 1, false, 'u1', 10080, '', ST_MakeEnvelope(0, 0, 0, 0, 4326));
         ''', multi=True)
 
-    # TODO
-    # cs = collect_changesets(conn, coverages=[])
-    # assert cs == set()
+    cs = changesets(conn, day, coverages=[])
+    assert cids(cs) == set([10091, 10092, 10093, 10094, 10096, 10097])
 
-    cs = collect_changesets(conn, coverages=[1])
-    assert cs == set([10091, 10092, 10093, 10096])
+    cs = changesets(conn, day, coverages=[1])
+    assert cids(cs) == set([10091, 10092, 10093, 10096, 10097])
 
-    cs = collect_changesets(conn, coverages=[2])
-    assert cs == set([10093, 10094])
+    cs = changesets(conn, day, coverages=[2])
+    assert cids(cs) == set([10093, 10094])
 
-    cs = collect_changesets(conn, coverages=[1, 2])
-    assert cs == set([10091, 10092, 10093, 10094, 10096])
+    cs = changesets(conn, day, coverages=[1, 2])
+    assert cids(cs) == set([10091, 10092, 10093, 10094, 10096, 10097])
 
-    cs = collect_changesets(conn, coverages=[1, 2, 3])
-    assert cs == set([10091, 10092, 10093, 10094, 10096])
-    cs = collect_changesets(conn, coverages=[3])
-    assert cs == set([10091, 10092, 10093, 10094, 10096])
+    cs = changesets(conn, day, coverages=[1, 2, 3])
+    assert cids(cs) == set([10091, 10092, 10093, 10094, 10096, 10097])
+    cs = changesets(conn, day, coverages=[3])
+    assert cids(cs) == set([10091, 10092, 10093, 10094, 10096, 10097])
+
+
+    # 10097 only changed node without tags
+    cs = changesets(conn, day, filter="tags ? 'highway'")
+    assert cids(cs) == set([10091, 10092, 10093, 10094, 10096])
+
+    # recursive query includes 10097
+    cs = changesets(conn, day, recursive=True, filter="tags ? 'highway'")
+    assert cids(cs) == set([10091, 10092, 10093, 10094, 10096, 10097])
+
 
 def test_relation_with_node_members(conn):
     # Relation references nodes in different coverages.
@@ -160,23 +186,22 @@ def test_relation_with_node_members(conn):
         INSERT INTO changesets VALUES (10095, '2018-11-15 17:20:04+00', '2018-11-15 17:20:04+00', 1, false, 'u1', 10080, '', ST_MakeEnvelope(0, 0, 0, 0, 4326));
         ''', multi=True)
 
-    # TODO
-    # cs = collect_changesets(conn, coverages=[])
-    # assert cs == set()
+    cs = changesets(conn, day, coverages=[])
+    assert cids(cs) == set([10091, 10092, 10094, 10095])
 
-    cs = collect_changesets(conn, coverages=[1])
-    assert cs == set([10091, 10094, 10095])
+    cs = changesets(conn, day, coverages=[1])
+    assert cids(cs) == set([10091, 10094, 10095])
 
-    cs = collect_changesets(conn, coverages=[2])
-    assert cs == set([10092, 10095])
+    cs = changesets(conn, day, coverages=[2])
+    assert cids(cs) == set([10092, 10095])
 
-    cs = collect_changesets(conn, coverages=[1, 2])
-    assert cs == set([10091, 10092, 10094, 10095])
+    cs = changesets(conn, day, coverages=[1, 2])
+    assert cids(cs) == set([10091, 10092, 10094, 10095])
 
-    cs = collect_changesets(conn, coverages=[1, 2, 3])
-    assert cs == set([10091, 10092, 10094, 10095])
-    cs = collect_changesets(conn, coverages=[3])
-    assert cs == set([10091, 10092, 10094, 10095])
+    cs = changesets(conn, day, coverages=[1, 2, 3])
+    assert cids(cs) == set([10091, 10092, 10094, 10095])
+    cs = changesets(conn, day, coverages=[3])
+    assert cids(cs) == set([10091, 10092, 10094, 10095])
 
 
 def test_relation_with_way_members(conn):
@@ -230,19 +255,19 @@ def test_relation_with_way_members(conn):
         ''', multi=True)
 
     # TODO
-    # cs = collect_changesets(conn, coverages=[])
-    # assert cs == set()
+    # cs = changesets(conn, day, coverages=[])
+    # assert cids(cs) == set()
 
-    cs = collect_changesets(conn, coverages=[1])
-    assert cs == set([10092, 10094, 10096])
+    cs = changesets(conn, day, coverages=[1])
+    assert cids(cs) == set([10092, 10094, 10096])
 
-    cs = collect_changesets(conn, coverages=[2])
-    assert cs == set([10096, 10098])
+    cs = changesets(conn, day, coverages=[2])
+    assert cids(cs) == set([10096, 10098])
 
-    cs = collect_changesets(conn, coverages=[1, 2])
-    assert cs == set([10092, 10094, 10096, 10098])
+    cs = changesets(conn, day, coverages=[1, 2])
+    assert cids(cs) == set([10092, 10094, 10096, 10098])
 
-    cs = collect_changesets(conn, coverages=[1, 2, 3])
-    assert cs == set([10092, 10094, 10096, 10098])
-    cs = collect_changesets(conn, coverages=[3])
-    assert cs == set([10092, 10094, 10096, 10098])
+    cs = changesets(conn, day, coverages=[1, 2, 3])
+    assert cids(cs) == set([10092, 10094, 10096, 10098])
+    cs = changesets(conn, day, coverages=[3])
+    assert cids(cs) == set([10092, 10094, 10096, 10098])

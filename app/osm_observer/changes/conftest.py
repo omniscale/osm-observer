@@ -12,7 +12,9 @@ def sqla_conn():
     dbschema = 'osm_changes_test,public'
     engine = create_engine(
         "postgresql+psycopg2://localhost/osm_observer",
-        connect_args={'options': '-csearch_path={}'.format(dbschema)})
+        connect_args={'options': '-csearch_path={}'.format(dbschema)},
+        # echo=True,
+    )
 
     conn = engine.connect()
 

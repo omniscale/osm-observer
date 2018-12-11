@@ -102,11 +102,11 @@ cchangesets as (
         and (:cids ::int[] = array[]::int[] or id = ANY(:cids ::int[]))
     order by id desc
 )
-select cid, id, 'node' as type, tags, true as direct from cnodes where tags != ''::hstore
+select cid, id, 'node' as type, tags, true as direct from cnodes
 union all
-select cid, id, 'way' as type, tags, direct from cways where tags != ''::hstore
+select cid, id, 'way' as type, tags, direct from cways
 union all
-select cid, id, 'relation' as type, tags, direct from crelations where tags != ''::hstore
+select cid, id, 'relation' as type, tags, direct from crelations
 ) as sub
 '''
 )
@@ -134,7 +134,7 @@ cways as (
             -- join nds/ways but also include ways that are newer so that we can check if our node is still present in the latest way version
             inner join ways w on nds.way_id = w.id and w.version >= nds.way_version
             where w.changeset <= n.cid  -- exclude ways newer than node
-            order by n.cid, w.id, n.id, w.changeset desc
+            order by n.cid, w.id, n.id, w.changeset desc, way_version desc
         ) as sub
         -- Only include if node was joined with most recent version of way,
         -- but not the same changeset (already included).
@@ -155,7 +155,7 @@ crelations as (
                 inner join members m on m.member_way_id = w.id
                 inner join relations r on m.relation_id = r.id and r.version >= m.relation_version
             where r.changeset <= w.cid
-            order by w.cid, r.id, w.id, r.changeset desc
+            order by w.cid, r.id, w.id, r.changeset desc, relation_version desc
         ) as sub
         where version = relation_version and wcid != rcid
     )
@@ -170,7 +170,7 @@ crelations as (
                 inner join members m on m.member_node_id = n.id
                 inner join relations r on m.relation_id = r.id and r.version >= m.relation_version
             where r.changeset <= n.cid
-            order by n.cid, r.id, n.id, r.changeset desc
+            order by n.cid, r.id, n.id, r.changeset desc, relation_version desc
         ) as sub
         where version = relation_version and ncid != rcid
     )
@@ -185,7 +185,7 @@ crelations as (
                 inner join members m on m.member_relation_id = cr.id
                 inner join relations r on m.relation_id = r.id and r.version >= m.relation_version
             where r.changeset <= cr.cid
-            order by cr.cid, r.id, cr.id, r.changeset desc
+            order by cr.cid, r.id, cr.id, r.changeset desc, relation_version desc
         ) as sub
         where version = relation_version and crcid != rcid
     )
@@ -199,11 +199,11 @@ cchangesets as (
         and (:cids ::int[] = array[]::int[] or id = ANY(:cids ::int[]))
     order by id desc
 )
-select cid, id, 'relation' as type, tags, direct from crelations where tags != ''::hstore
+select cid, id, 'relation' as type, tags, direct, changeset from crelations
 union all
-select cid, id, 'way' as type, tags, direct from cways where tags != ''::hstore
+select cid, id, 'way' as type, tags, direct, changeset from cways
 union all
-select cid, id, 'node' as type, tags, direct from cnodes where tags != ''::hstore
+select cid, id, 'node' as type, tags, direct, changeset from cnodes
 ) as sub
 '''
 )
@@ -237,7 +237,8 @@ def collect_changesets_tags(conn, filter=None, recursive=False, time_from=None, 
         time_till = datetime.now()
 
     stmt = select([text('distinct cid')])
-    # stmt = select([text('cid'), text('id'), text('type'), text('direct'), text('tags')])
+    # stmt = select([text('cid'), text('id'), text('type'), text('changeset'), text('direct'), text('tags')])
+    # stmt = select([text('*')])
     if filter:
         stmt = stmt.where(text(filter))
 
@@ -245,6 +246,7 @@ def collect_changesets_tags(conn, filter=None, recursive=False, time_from=None, 
         stmt = stmt.select_from(SQL_CHANGESET_TAGS_FILTER_RECURSIVE)
     else:
         stmt = stmt.select_from(SQL_CHANGESET_TAGS_FILTER)
+
 
     res = conn.execute(
         stmt,
@@ -305,6 +307,10 @@ def changesets(conn, day, filter=None, recursive=False, coverages=None):
 
     if coverages:
         cids = collect_changesets_coverages(conn, coverages, time_from=time_from, time_till=time_till)
+        if not cids:
+            # return empty collection, otherwise collect_changesets_tags would ignore cid
+            # filter
+            return collect_changesets(conn, cids)
 
     cids = collect_changesets_tags(
         conn, filter=filter,
