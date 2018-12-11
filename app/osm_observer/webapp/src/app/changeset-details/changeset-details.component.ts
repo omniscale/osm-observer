@@ -84,7 +84,7 @@ export class ChangesetDetailsComponent implements OnInit {
            this.assignChangeset(changeset)
           }, osmId => this.id);
     }    
-    console.log(changes)
+
     if (changes['nextChangesetId']) {
       this.nextChangesetId = changes['nextChangesetId'].currentValue;
     }
