@@ -1,10 +1,10 @@
+
+import {throwError as observableThrowError,  Observable, Observer ,  Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Http, URLSearchParams, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-
-import { Observable, Observer } from 'rxjs/Rx';
-import { Subject }    from 'rxjs/Subject';
+import { map, catchError } from 'rxjs/operators';
 
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
@@ -57,13 +57,13 @@ export class ChangesetService extends BaseHttpService {
     }
     let requestOptions = this.getRequestOptions(params);
     return this.http.get(this.changesetsUrl(), requestOptions)
-                    .map((response:Response) => {
+                    .pipe(map((response:Response) => {
                        this.changesets = response.json() as Changeset[];
                        return this.changesets;
-                     })
-                     .catch((error:any) => Observable.throw(
+                     }),
+                     catchError((error:any) => observableThrowError(
                        this.handleError(error, 'getChangesets', this.changesetsUrl(), params.paramsMap)
-                     ));
+                     )));
   }
 
   getChangeset(id: number, forceReload?: boolean): Observable<Changeset> {
@@ -71,11 +71,11 @@ export class ChangesetService extends BaseHttpService {
     // e.g. when reloading changeset detail page
     if(this.changesets === undefined || forceReload === true) {
       return this.getChangesets()
-          .map(
+          .pipe(map(
             v => {
               return this.changesetById(id);
             }
-          );
+          ));
     } else {
       return Observable.create((observer: Observer<Changeset>) => {
         observer.next(this.changesetById(id));
@@ -87,10 +87,10 @@ export class ChangesetService extends BaseHttpService {
   getChangesetComments(id: number): Observable<ChangesetComment[]> {
     let url = this.changesetCommentsUrl(id);
     return this.http.get(url, this.getRequestOptions())
-                    .map((response:Response) => response.json() as ChangesetComment[])
-                    .catch((error:any) => Observable.throw(
+                    .pipe(map((response:Response) => response.json() as ChangesetComment[]),
+                    catchError((error:any) => observableThrowError(
                       this.handleError(error, 'getChangesetComments', url, {id: id})
-                    ));
+                    )));
   }
 
   getChangesetIdx(current: Changeset): number {

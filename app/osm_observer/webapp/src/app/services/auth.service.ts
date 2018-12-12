@@ -1,9 +1,9 @@
+import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-
-import { Observable } from 'rxjs/Rx';
+import { map, catchError, } from 'rxjs/operators';
 
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
@@ -33,13 +33,12 @@ export class AuthService extends BaseHttpService {
 
   login(user: User): Observable<AuthResponse> {
     return this.http.post(this.loginUrl(), user, this.getRequestOptions())
-                    .map((response:Response) => {
+                    .pipe(map((response:Response) => {
                       this.isLoggedIn = this._isLoggedIn();
                       return response.json() as AuthResponse
-                     })
-                    .catch((error:any) => Observable.throw(
+                     }), catchError((error:any) => observableThrowError(
                       this.handleError(error, 'login', this.loginUrl(), user)
-                    ));
+                    )));
   }
 
   private _isLoggedIn(): boolean {
@@ -49,12 +48,11 @@ export class AuthService extends BaseHttpService {
 
   logout(): Observable<AuthResponse> {
     return this.http.get(this.logoutUrl(), this.getRequestOptions())
-                    .map((response:Response) => {
+                    .pipe(map((response:Response) => {
                       this.isLoggedIn = this._isLoggedIn();
                       return response.json() as AuthResponse
-                    })
-                    .catch((error:any) => Observable.throw(
+                    }), catchError((error:any) => observableThrowError(
                       this.handleError(error, 'logout', this.logoutUrl())
-                    ));
+                    )));
   }
 }

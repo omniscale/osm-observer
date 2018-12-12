@@ -2,12 +2,15 @@ import { BrowserModule }    from '@angular/platform-browser';
 import { NgModule }         from '@angular/core';
 import { FormsModule }      from '@angular/forms';
 import { HttpModule, Http } from '@angular/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+
 import { Location }         from '@angular/common'
 
-import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
 import { CustomFormsModule }                                       from 'ng2-validation'
 import { CookieService } from 'angular2-cookie/services/cookies.service';
-import { PopoverModule } from "ngx-popover";
 
 import { AppComponent }     from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -44,8 +47,8 @@ import { ReadyDirective } from './directives/ready.directive';
 
 import { OrderModule } from 'ngx-order-pipe';
 
-export function createTranslateLoader(http: Http, location: Location) {
-  return new TranslateStaticLoader(http, location.prepareExternalUrl('/static/i18n'), '.json' + '?' + Date.now());
+export function createTranslateLoader(http: HttpClient, location: Location) {
+  return new TranslateHttpLoader(http, location.prepareExternalUrl('/static/i18n'), '.json' + '?' + Date.now());
 }
 
 @NgModule({
@@ -74,16 +77,18 @@ export function createTranslateLoader(http: Http, location: Location) {
     BrowserModule,
     FormsModule,
     HttpModule,
+    HttpClient,
     CustomFormsModule,
     AppRoutingModule,
-    PopoverModule,
     OrderModule,
     TranslateModule.forRoot({
-      provide: TranslateLoader,
-      useFactory: (createTranslateLoader),
-      deps: [Http, Location]
-    })
-  ],
+        loader: {
+          provide: TranslateLoader,
+          useFactory: createTranslateLoader,
+          deps: [HttpClient, Location]
+        }
+      })
+    ],
   providers: [
     CookieService,
     CoverageService,

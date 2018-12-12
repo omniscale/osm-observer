@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import {TranslateService} from 'ng2-translate';
+import {TranslateService} from '@ngx-translate/core';
 
 import { Changeset } from '../types/changeset';
 import { ChangesetDetails } from '../types/changeset-details';

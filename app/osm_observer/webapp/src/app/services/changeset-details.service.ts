@@ -1,10 +1,11 @@
+
+import {throwError as observableThrowError,  Observable, Observer ,  Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Http, URLSearchParams, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { Observable, Observer } from 'rxjs/Rx';
-import { Subject }    from 'rxjs/Subject';
+import { map, catchError } from 'rxjs/operators';
 
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
@@ -27,10 +28,10 @@ export class ChangesetDetailsService extends BaseHttpService {
   getChangesetDetails(id: number): Observable<ChangesetDetails> {
     let url = this.changesetDetailsUrl(id);
     return this.http.get(url, this.getRequestOptions())
-                    .map((response:Response) => response.json() as ChangesetDetails)
-                    .catch((error:any) => Observable.throw(
+                    .pipe(map((response:Response) => response.json() as ChangesetDetails),
+                    catchError((error:any) => observableThrowError(
                       this.handleError(error, 'getChangesetChanges', url, {id: id})
-                    ));
+                    )));
   }
 
 }

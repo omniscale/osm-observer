@@ -1,10 +1,10 @@
+
+import {throwError as observableThrowError,  Observable ,  Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-
-import { Observable } from 'rxjs/Rx';
-import { Subject }    from 'rxjs/Subject';
+import { map, catchError, } from 'rxjs/operators';
 
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
@@ -31,17 +31,17 @@ export class ReviewService extends BaseHttpService {
   getReviews(changesetId: number): Observable<Review[]> {
     let url = this.reviewsUrl(changesetId);
     return this.http.get(url, this.getRequestOptions())
-                    .map((response:Response) => response.json() as Review[])
-                    .catch((error:any) => Observable.throw(
+                    .pipe(map((response:Response) => response.json() as Review[]),
+                    catchError((error:any) => observableThrowError(
                       this.handleError(error, 'getReview', url)
-                    ));
+                    )));
   }
 
   addReview(changesetId: number, review: Review): Observable<Review> {
     let url = this.addReviewUrl(changesetId);
     return this.http.post(url, review, this.getRequestOptions())
-                    .map((response:Response) => this.handleAddReviewResponse(response))
-                    .catch((error:any) => Observable.throw(this.handleError(error, 'addReview', url, review)));
+                    .pipe(map((response:Response) => this.handleAddReviewResponse(response)),
+                    catchError((error:any) => observableThrowError(this.handleError(error, 'addReview', url, review))));
   }
 
   private handleAddReviewResponse(response: any): Review {

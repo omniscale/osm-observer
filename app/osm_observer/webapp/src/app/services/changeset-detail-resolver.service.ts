@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { ChangesetDetailsService } from './changeset-details.service';
 import { ChangesetDetails } from '../types/changeset-details';
@@ -14,11 +15,11 @@ export class ChangesetDetailResolver implements Resolve<ChangesetDetails> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ChangesetDetails> {
     let id = parseInt(route.params['id']);
     return this.changesetDetailsService.getChangesetDetails(id)
-                                .map(changeset => {
+                                .pipe(map(changeset => {
                                   if(changeset) {
                                     return changeset;
                                   }
                                   this.router.navigate(['/changesets']);
-                                }, osmId => id);
+                                }, osmId => id));
   }
 }
