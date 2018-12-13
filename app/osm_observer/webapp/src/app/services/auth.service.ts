@@ -35,13 +35,14 @@ export class AuthService extends BaseHttpService {
   }
 
   login(user: User): Observable<AuthResponse> {
-    return this.http.post(this.loginUrl(), user, this.getRequestOptions())
-                    .pipe(map((response: any) => {
-                      this.isLoggedIn = this._isLoggedIn();
-                      return response.json() as AuthResponse
-                     }), catchError((error:any) => observableThrowError(
-                      this.handleError(error, 'login', this.loginUrl(), user)
-                    )));
+    return this.http.post<AuthResponse>(this.loginUrl(), user, this.httpOptions)
+      .pipe(map((response: any) => {
+          this.isLoggedIn = this._isLoggedIn();
+          return response.json() as AuthResponse
+        }),
+        (catchError((error:any) => observableThrowError(
+          this.handleError(error, 'login', this.loginUrl(), user)
+    ))));
   }
 
   private _isLoggedIn(): boolean {
@@ -50,12 +51,10 @@ export class AuthService extends BaseHttpService {
   }
 
   logout(): Observable<AuthResponse> {
-    return this.http.get(this.logoutUrl(), this.getRequestOptions())
-                    .pipe(map((response: any) => {
-                      this.isLoggedIn = this._isLoggedIn();
-                      return response.json() as AuthResponse
-                    }), catchError((error:any) => observableThrowError(
-                      this.handleError(error, 'logout', this.logoutUrl())
-                    )));
+    return this.http.get<any>(this.logoutUrl(), this.httpOptions)
+      .pipe(
+        (catchError((error:any) => observableThrowError(
+          this.handleError(error, 'logout', this.logoutUrl())
+    ))));
   }
 }

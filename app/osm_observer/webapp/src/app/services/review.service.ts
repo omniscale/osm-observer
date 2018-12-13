@@ -32,16 +32,16 @@ export class ReviewService extends BaseHttpService {
 
   getReviews(changesetId: number): Observable<Review[]> {
     let url = this.reviewsUrl(changesetId);
-    return this.http.get(url, this.getRequestOptions())
-                    .pipe(map((response: any) => response.json() as Review[]),
-                    catchError((error:any) => observableThrowError(
-                      this.handleError(error, 'getReview', url)
-                    )));
+    return this.http.get<Review[]>(url, this.httpOptions)
+      .pipe(
+        (catchError((error:any) => observableThrowError(
+          this.handleError(error, 'getReview', url)
+      ))));
   }
 
   addReview(changesetId: number, review: Review): Observable<Review> {
     let url = this.addReviewUrl(changesetId);
-    return this.http.post(url, review, this.getRequestOptions())
+    return this.http.post(url, review, this.httpOptions)
                     .pipe(map((response: any) => this.handleAddReviewResponse(response)),
                     catchError((error:any) => observableThrowError(this.handleError(error, 'addReview', url, review))));
   }

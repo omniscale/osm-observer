@@ -32,26 +32,28 @@ export class CoverageService extends BaseHttpService {
   }
 
   getCoverages(): Observable<Coverage[]> {
-    return this.http.get(this.coveragesUrl(), this.getRequestOptions())
-               .pipe(map((response: any) => response.json() as Coverage[]),
-               catchError((error:any) => observableThrowError(
-                 this.handleError(error, 'getCoverages', this.coveragesUrl())
-               )));
+    return this.http.get<Coverage[]>(this.coveragesUrl(), this.httpOptions)
+      .pipe(
+        (catchError((error:any) => observableThrowError(
+          this.handleError(error, 'getCoverages', this.coveragesUrl())
+      ))));
   }
 
   getActiveCoverages(): Observable<Coverage[]> {
-    return this.http.get(this.activeCoveragesUrl(), this.getRequestOptions())
-               .pipe(map((response: any) => response.json() as Coverage[]),
-               catchError((error:any) => observableThrowError(
-                 this.handleError(error, 'getActiveCoverages', this.activeCoveragesUrl())
-               )));
+    return this.http.get<Coverage[]>(this.activeCoveragesUrl(), this.httpOptions)
+      .pipe(
+        (catchError((error:any) => observableThrowError(
+          this.handleError(error, 'getActiveCoverages', this.activeCoveragesUrl())
+      ))));
   }
 
   setActiveCoverages(coverageIds: number[]): Observable<any> {
     let data = {'coverageIds': coverageIds}
-    return this.http.post(this.setActiveCoveragesUrl(), data, this.getRequestOptions())
-                    .pipe(catchError((error:any) => observableThrowError(
-                      this.handleError(error, 'setActiveCoverages', this.setActiveCoveragesUrl(), data)
-                    )));
+
+    return this.http.post(this.setActiveCoveragesUrl(), data, this.httpOptions)
+      .pipe(
+        (catchError((error:any) => observableThrowError(
+          this.handleError(error, 'setActiveCoverages', this.setActiveCoveragesUrl())
+      ))));
   }
 }

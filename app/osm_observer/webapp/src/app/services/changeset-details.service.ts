@@ -30,11 +30,11 @@ export class ChangesetDetailsService extends BaseHttpService {
 
   getChangesetDetails(id: number): Observable<ChangesetDetails> {
     let url = this.changesetDetailsUrl(id);
-    return this.http.get(url, this.getRequestOptions())
-                    .pipe(map((response: any) => response.json() as ChangesetDetails),
-                    catchError((error:any) => observableThrowError(
-                      this.handleError(error, 'getChangesetChanges', url, {id: id})
-                    )));
-  }
 
+    return this.http.get<ChangesetDetails>(url, this.httpOptions)
+      .pipe(
+        (catchError((error:any) => observableThrowError(
+           this.handleError(error, 'getChangesetChanges', url, {id: id})
+    ))));
+  }
 }

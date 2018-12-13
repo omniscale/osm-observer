@@ -4,23 +4,20 @@ import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
+
 @Injectable()
 export class BaseHttpService {
   constructor(public router: Router, public cookieService: CookieService) {}
 
-  getRequestOptions(params?: URLSearchParams): any {
-    // if(params !== undefined) {
-    //   requestOptions.search = params;
-    // }
-    let headers = new HttpHeaders({
+  httpOptions = {
+    headers: new HttpHeaders({
         'Cache-Control': 'no-cache',
         'Pragma': 'no-cache',
         'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
     })
-    return {'headers': headers };
-  }
+  };
 
   handleError(error: Response, caller: string, url: string, opt?: any): any {
     if(error.status === 401 || error.status === 403) {

@@ -2,8 +2,8 @@
 import {throwError as observableThrowError,  Observable, Observer ,  Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-import { URLSearchParams } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
+// import { URLSearchParams } from '@angular/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -48,25 +48,21 @@ export class ChangesetService extends BaseHttpService {
   }
 
   getChangesets(timeRange?: number, coverageId?: number, tagFilterId?): Observable<Changeset[]> {
-    let params = new URLSearchParams();
+    let params = new HttpParams();
     if(timeRange !== undefined && timeRange !== null) {
-      params.set('timeRange', timeRange.toString());
-    }
-    if(coverageId !== undefined && coverageId !== null) {
-      params.set('coverageId', coverageId.toString());
+      params = params.append('timeRange', timeRange.toString());
     }
     if(tagFilterId !== undefined && tagFilterId !== null) {
-      params.set('tagFilterId', tagFilterId.toString());
+      params = params.append('tagFilterId', tagFilterId.toString());
     }
-    let requestOptions = this.getRequestOptions(params);
-    return this.http.get(this.changesetsUrl(), requestOptions)
-                    .pipe(map((response: any) => {
-                       this.changesets = response.json() as Changeset[];
-                       return this.changesets;
-                     }),
-                     catchError((error:any) => observableThrowError(
-                       this.handleError(error, 'getChangesets', this.changesetsUrl(), params.paramsMap)
-                     )));
+    if(coverageId !== undefined && coverageId !== null) {
+      params = params.append('coverageId', coverageId.toString());
+    }
+    return this.http.get<Changeset[]>(this.changesetsUrl(), {params: params})
+      .pipe(
+        (catchError((error:any) => observableThrowError(
+          this.handleError(error, 'getChangesets', this.changesetsUrl(), params)
+     ))));
   }
 
   getChangeset(id: number, forceReload?: boolean): Observable<Changeset> {
@@ -85,15 +81,6 @@ export class ChangesetService extends BaseHttpService {
         observer.complete();
       });
     }
-  }
-
-  getChangesetComments(id: number): Observable<ChangesetComment[]> {
-    let url = this.changesetCommentsUrl(id);
-    return this.http.get(url, this.getRequestOptions())
-                    .pipe(map((response: any) => response.json() as ChangesetComment[]),
-                    catchError((error:any) => observableThrowError(
-                      this.handleError(error, 'getChangesetComments', url, {id: id})
-                    )));
   }
 
   getChangesetIdx(current: Changeset): number {
