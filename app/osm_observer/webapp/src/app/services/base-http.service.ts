@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Response, URLSearchParams } from '@angular/http';
+import { Response } from '@angular/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CookieService } from 'angular2-cookie/services/cookies.service';

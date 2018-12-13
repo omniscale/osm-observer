@@ -2,7 +2,6 @@
 import {throwError as observableThrowError,  Observable, Observer ,  Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-import { URLSearchParams } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 
 import { Router } from '@angular/router';
