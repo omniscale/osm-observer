@@ -26,23 +26,32 @@ export class AuthService extends BaseHttpService {
     return this.location.prepareExternalUrl('api/logout');
   }
 
+  isAdmin: boolean;
   isLoggedIn: boolean;
   redirectUrl: string;
 
   constructor(router: Router, private http: HttpClient, cookieService: CookieService, private location: Location) {
     super(router, cookieService);
     this.isLoggedIn = this._isLoggedIn();
+    this.isAdmin = this._isAdmin();
   }
 
   login(user: User): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(this.loginUrl(), user, this.httpOptions)
       .pipe(map((response: AuthResponse) => {
           this.isLoggedIn = this._isLoggedIn();
+          console.log(response)
+          this.isAdmin = this._isAdmin();
           return response
         }),
         (catchError((error:any) => observableThrowError(
           this.handleError(error, 'login', this.loginUrl(), user)
     ))));
+  }
+
+  private _isAdmin(): boolean {
+    let isAdmin = this.cookieService.get('isAdmin');
+    return isAdmin === '1';
   }
 
   private _isLoggedIn(): boolean {

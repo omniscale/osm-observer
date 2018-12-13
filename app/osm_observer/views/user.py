@@ -68,19 +68,12 @@ def login():
     if json_response['success'] is True:
         response.set_cookie('loggedIn', '1')
 
+        if current_user.is_admin:
+            response.set_cookie('isAdmin', '1')
+        else: 
+            response.set_cookie('isAdmin', '', expires=0)
+
     return response
-
-@api.route('/is_admin', methods=['POST'])
-def is_admin():
-    if current_user.is_authenticated and current_user.is_admin:
-        return jsonify({
-            'success': True
-        })
-    
-    return jsonify({
-        'success': False
-    })
-
 
 @api.route('/logout')
 def logout():
