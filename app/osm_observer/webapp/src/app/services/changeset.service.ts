@@ -1,7 +1,10 @@
 
 import {throwError as observableThrowError,  Observable, Observer ,  Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Http, URLSearchParams, Response } from '@angular/http';
+
+import { URLSearchParams } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
+
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { map, catchError } from 'rxjs/operators';
@@ -39,7 +42,7 @@ export class ChangesetService extends BaseHttpService {
 
   private changesets: Changeset[];
 
-  constructor(router: Router, private http: Http, cookieService: CookieService, private location: Location) {
+  constructor(router: Router, private http: HttpClient, cookieService: CookieService, private location: Location) {
     super(router, cookieService);
     location.prepareExternalUrl('api/changesets/comments/')
   }
@@ -57,7 +60,7 @@ export class ChangesetService extends BaseHttpService {
     }
     let requestOptions = this.getRequestOptions(params);
     return this.http.get(this.changesetsUrl(), requestOptions)
-                    .pipe(map((response:Response) => {
+                    .pipe(map((response: any) => {
                        this.changesets = response.json() as Changeset[];
                        return this.changesets;
                      }),
@@ -87,7 +90,7 @@ export class ChangesetService extends BaseHttpService {
   getChangesetComments(id: number): Observable<ChangesetComment[]> {
     let url = this.changesetCommentsUrl(id);
     return this.http.get(url, this.getRequestOptions())
-                    .pipe(map((response:Response) => response.json() as ChangesetComment[]),
+                    .pipe(map((response: any) => response.json() as ChangesetComment[]),
                     catchError((error:any) => observableThrowError(
                       this.handleError(error, 'getChangesetComments', url, {id: id})
                     )));

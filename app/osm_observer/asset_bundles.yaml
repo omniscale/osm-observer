@@ -24,6 +24,7 @@ app-js:
     output: app.js
     filters: jsmin
     contents:
-      - webapp/inline.bundle.js
-      - webapp/vendor.bundle.js
-      - webapp/main.bundle.js
+      - webapp/polyfills.js
+      - webapp/vendor.js
+      - webapp/main.js
+      - webapp/runtime.js

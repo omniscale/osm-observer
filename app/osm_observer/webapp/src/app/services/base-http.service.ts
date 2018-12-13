@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, Response, URLSearchParams } from '@angular/http';
+import { Response, URLSearchParams } from '@angular/http';
+import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
@@ -7,21 +8,18 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
 export class BaseHttpService {
   constructor(public router: Router, public cookieService: CookieService) {}
 
-  getRequestOptions(params?: URLSearchParams): RequestOptions {
-    let requestOptions = new RequestOptions({
-      headers: new Headers({
+  getRequestOptions(params?: URLSearchParams): any {
+    // if(params !== undefined) {
+    //   requestOptions.search = params;
+    // }
+    let headers = new HttpHeaders({
         'Cache-Control': 'no-cache',
         'Pragma': 'no-cache',
         'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
-      })
-    });
-    if(params !== undefined) {
-      requestOptions.search = params;
-    }
-
-    return requestOptions;
+    })
+    return {'headers': headers };
   }
 
   handleError(error: Response, caller: string, url: string, opt?: any): any {

@@ -1,7 +1,8 @@
 import { BrowserModule }    from '@angular/platform-browser';
 import { NgModule }         from '@angular/core';
 import { FormsModule }      from '@angular/forms';
-import { HttpModule, Http } from '@angular/http';
+// import { HttpModule, Http } from '@angular/http';
+// import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { Location }         from '@angular/common'
@@ -48,7 +49,7 @@ import { ReadyDirective } from './directives/ready.directive';
 import { OrderModule } from 'ngx-order-pipe';
 
 export function createTranslateLoader(http: HttpClient, location: Location) {
-  return new TranslateHttpLoader(http, location.prepareExternalUrl('/static/i18n'), '.json' + '?' + Date.now());
+  return new TranslateHttpLoader(http, location.prepareExternalUrl('/static/i18n/'), '.json' + '?' + Date.now());
 }
 
 @NgModule({
@@ -76,8 +77,7 @@ export function createTranslateLoader(http: HttpClient, location: Location) {
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
-    HttpClient,
+    HttpClientModule,
     CustomFormsModule,
     AppRoutingModule,
     OrderModule,

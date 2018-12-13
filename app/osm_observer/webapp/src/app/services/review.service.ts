@@ -1,7 +1,9 @@
 
 import {throwError as observableThrowError,  Observable ,  Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+
+import { HttpClient } from '@angular/common/http';
+
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { map, catchError, } from 'rxjs/operators';
@@ -24,14 +26,14 @@ export class ReviewService extends BaseHttpService {
   private refreshReviewsSource = new Subject<boolean>();
   refreshReviews$ = this.refreshReviewsSource.asObservable();
 
-  constructor(router: Router, private http: Http, cookieService: CookieService, private location: Location) {
+  constructor(router: Router, private http: HttpClient, cookieService: CookieService, private location: Location) {
     super(router, cookieService);
   }
 
   getReviews(changesetId: number): Observable<Review[]> {
     let url = this.reviewsUrl(changesetId);
     return this.http.get(url, this.getRequestOptions())
-                    .pipe(map((response:Response) => response.json() as Review[]),
+                    .pipe(map((response: any) => response.json() as Review[]),
                     catchError((error:any) => observableThrowError(
                       this.handleError(error, 'getReview', url)
                     )));
@@ -40,7 +42,7 @@ export class ReviewService extends BaseHttpService {
   addReview(changesetId: number, review: Review): Observable<Review> {
     let url = this.addReviewUrl(changesetId);
     return this.http.post(url, review, this.getRequestOptions())
-                    .pipe(map((response:Response) => this.handleAddReviewResponse(response)),
+                    .pipe(map((response: any) => this.handleAddReviewResponse(response)),
                     catchError((error:any) => observableThrowError(this.handleError(error, 'addReview', url, review))));
   }
 

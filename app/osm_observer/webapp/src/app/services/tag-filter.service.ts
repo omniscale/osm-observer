@@ -1,7 +1,9 @@
 
 import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+
+import { HttpClient } from '@angular/common/http';
+
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { map, catchError } from 'rxjs/operators';
@@ -26,16 +28,16 @@ export class TagFilterService extends BaseHttpService {
     return this.location.prepareExternalUrl('api/filter/save');
   }
 
-  constructor(router: Router, private http: Http, cookieService: CookieService, private location: Location) {
+  constructor(router: Router, private http: HttpClient, cookieService: CookieService, private location: Location) {
     super(router, cookieService);
   }
 
   getTagFilters(): Observable<TagFilter[]> {
     return this.http.get(this.tagFilterUrl(), this.getRequestOptions())
-               .pipe(map((response:Response) => response.json() as TagFilter[]))
-               .pipe(catchError((error:any) => observableThrowError(
+               .pipe(map((response: any) => response.json() as TagFilter[]),
+               (catchError((error:any) => observableThrowError(
                  this.handleError(error, 'getTagFilter', this.tagFilterUrl())
-               )));
+               ))));
   }
 
   removeTagFilter(id: number): Observable<any> {

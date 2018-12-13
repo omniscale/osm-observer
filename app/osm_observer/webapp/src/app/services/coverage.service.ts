@@ -1,7 +1,9 @@
 
 import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+
+import { HttpClient } from '@angular/common/http';
+
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -25,13 +27,13 @@ export class CoverageService extends BaseHttpService {
     return this.location.prepareExternalUrl('api/coverages/set-actives');
   }
 
-  constructor(router: Router, private http: Http, cookieService: CookieService, private location: Location) {
+  constructor(router: Router, private http: HttpClient, cookieService: CookieService, private location: Location) {
     super(router, cookieService);
   }
 
   getCoverages(): Observable<Coverage[]> {
     return this.http.get(this.coveragesUrl(), this.getRequestOptions())
-               .pipe(map((response:Response) => response.json() as Coverage[]),
+               .pipe(map((response: any) => response.json() as Coverage[]),
                catchError((error:any) => observableThrowError(
                  this.handleError(error, 'getCoverages', this.coveragesUrl())
                )));
@@ -39,7 +41,7 @@ export class CoverageService extends BaseHttpService {
 
   getActiveCoverages(): Observable<Coverage[]> {
     return this.http.get(this.activeCoveragesUrl(), this.getRequestOptions())
-               .pipe(map((response:Response) => response.json() as Coverage[]),
+               .pipe(map((response: any) => response.json() as Coverage[]),
                catchError((error:any) => observableThrowError(
                  this.handleError(error, 'getActiveCoverages', this.activeCoveragesUrl())
                )));
