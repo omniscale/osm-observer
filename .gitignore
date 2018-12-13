@@ -7,6 +7,9 @@ doc/_build
 server/pkgs
 app/osm_observer/static/webapp
 app/osm_observer/static/cache
+app/osm_observer/static/app.js
+app/osm_observer/static/libs.css
+app/osm_observer/static/main.css
 dev/changes
 dev/diffs
 .DS_Store
