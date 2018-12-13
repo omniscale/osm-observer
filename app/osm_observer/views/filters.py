@@ -1,4 +1,4 @@
-from flask import jsonify, request,  g, redirect, url_for
+from flask import jsonify, request, redirect, url_for
 from flask_login import login_required, current_user
 
 from osm_observer.extensions import db
