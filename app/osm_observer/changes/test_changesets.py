@@ -144,7 +144,7 @@ def test_way(conn):
     assert cids(cs) == set([10091, 10092, 10093, 10094, 10096])
 
     # recursive query includes 10097
-    cs = changesets(conn, day, recursive=True, filter="tags ? 'highway'")
+    cs = changesets(conn, day, include_deps=True, filter="tags ? 'highway'")
     assert cids(cs) == set([10091, 10092, 10093, 10094, 10096, 10097])
 
 
