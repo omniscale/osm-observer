@@ -79,6 +79,26 @@ cnodes as (
 select distinct cid from cnodes n, coverages co where ST_Intersects(n.geometry, co.geometry) and co.id in :coverage_ids;
 ''')
 
+
+SQL_CHANGESET = text(
+'''
+-- all changesets, keep query similar to SQL_CHANGESET_TAGS_FILTER
+(
+with
+cchangesets as (
+    select id as cid
+    from changesets
+    where
+        closed_at >= :time_from
+        and closed_at <= :time_till
+        and (:cids ::int[] = array[]::int[] or id = ANY(:cids ::int[]))
+    order by id desc
+)
+    select cid, 0, 'changeset' as type, ''::hstore, false as direct from cchangesets
+) as sub
+'''
+)
+
 SQL_CHANGESET_TAGS_FILTER = text(
 '''
 -- all changesets that include tags
@@ -113,7 +133,7 @@ select cid, id, 'relation' as type, tags, direct from crelations
 
 SQL_CHANGESET_TAGS_FILTER_WITH_DEPS = text(
 '''
--- all changesets that include tags
+-- all changesets that include tags, including tag from elements that depend on a changed element
 (
 with
 cchangesets as (
@@ -249,7 +269,9 @@ def collect_changesets_tags(conn, filter=None, include_deps=False, time_from=Non
     if filter:
         stmt = stmt.where(text(filter))
 
-    if include_deps:
+    if not filter:
+        stmt = stmt.select_from(SQL_CHANGESET)
+    elif include_deps:
         stmt = stmt.select_from(SQL_CHANGESET_TAGS_FILTER_WITH_DEPS)
     else:
         stmt = stmt.select_from(SQL_CHANGESET_TAGS_FILTER)
@@ -353,7 +375,7 @@ def main():
     day = date.today() - days_delta
     # result = changesets(conn, day=day, filter=sys.argv[1], include_deps=True, coverages=[1])
     # result = changesets(conn, day=day, filter=sys.argv[1], include_deps=False, coverages=[18])
-    result = changesets(conn, day=day, filter=sys.argv[1], include_deps=True, coverages=None)
+    result = changesets(conn, day=day, filter=sys.argv[1], include_deps=True, coverages=[18])
     # print(result)
     import json
     print(json.dumps(result, indent=2))
