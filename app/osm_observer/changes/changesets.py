@@ -38,7 +38,7 @@ cmembers (wid, nid, rid, cid) as (
         from cmembers cm
         inner join relations r on cm.rid = r.id
         inner join members m on r.id = m.relation_id and r.version = m.relation_version
-        where cm.rid is not null and false
+        where cm.rid is not null
 ),
 cways as (
     -- ways changed in this changeset
@@ -83,16 +83,7 @@ SQL_CHANGESET_TAGS_FILTER = text(
 '''
 -- all changesets that include tags
 (
-with recursive
-cnodes as (
-    select n.id, cid, n.tags from cchangesets c inner join nodes n on c.cid = n.changeset
-),
-cways as (
-    select w.id, cid, w.tags, true as direct from cchangesets c inner join ways w on c.cid = w.changeset
-),
-crelations as (
-    select r.id, cid, r.tags, true as direct from cchangesets c inner join relations r on c.cid = r.changeset
-),
+with
 cchangesets as (
     select id as cid
     from changesets
@@ -101,6 +92,15 @@ cchangesets as (
         and closed_at <= :time_till
         and (:cids ::int[] = array[]::int[] or id = ANY(:cids ::int[]))
     order by id desc
+),
+cnodes as (
+    select n.id, cid, n.tags from cchangesets c inner join nodes n on c.cid = n.changeset
+),
+cways as (
+    select w.id, cid, w.tags, true as direct from cchangesets c inner join ways w on c.cid = w.changeset
+),
+crelations as (
+    select r.id, cid, r.tags, true as direct from cchangesets c inner join relations r on c.cid = r.changeset
 )
 select cid, id, 'node' as type, tags, true as direct from cnodes
 union all
@@ -111,17 +111,28 @@ select cid, id, 'relation' as type, tags, direct from crelations
 '''
 )
 
-SQL_CHANGESET_TAGS_FILTER_RECURSIVE = text(
+SQL_CHANGESET_TAGS_FILTER_WITH_DEPS = text(
 '''
 -- all changesets that include tags
 (
-with recursive
+with
+cchangesets as (
+    select id as cid
+    from changesets
+    where
+        closed_at >= :time_from
+        and closed_at <= :time_till
+        and (:cids ::int[] = array[]::int[] or id = ANY(:cids ::int[]))
+    order by id desc
+),
 cnodes as (
     select n.id, cid, n.tags, true as direct, n.changeset from cchangesets c inner join nodes n on c.cid = n.changeset
 ),
 cways as (
     select w.id, cid, w.tags, true as direct, w.changeset from cchangesets c inner join ways w on c.cid = w.changeset
-    union all
+),
+-- ways which depend on a modified node
+cways_deps as (
     (
         select id, cid, tags, false as direct, ncid as changeset from (
             -- reduce multiple joined ways with distinct on to only return the most recent (see order by)
@@ -135,7 +146,7 @@ cways as (
             inner join ways w on nds.way_id = w.id and w.version >= nds.way_version
             where w.changeset <= n.cid  -- exclude ways newer than node
             order by n.cid, w.id, n.id, w.changeset desc, way_version desc
-        ) as sub
+        ) as cways_cnodes_sub
         -- Only include if node was joined with most recent version of way,
         -- but not the same changeset (already included).
         where version = way_version and wcid != ncid
@@ -143,8 +154,9 @@ cways as (
 ),
 crelations as (
     select r.id, cid, r.tags, true as direct, r.changeset from cchangesets c inner join relations r on c.cid = r.changeset
-    union all
-    -- select r.id, cid, r.tags, false as direct from cways w inner join members m on m.member_way_id = w.id inner join relations r on m.relation_id = r.id and r.version = m.relation_version where r.changeset != cid
+),
+-- relations which depend on a modified node/way/relation
+crelations_deps as (
     (
         select id, cid, tags, false as direct, wcid as changeset from (
             select distinct on (w.cid, r.id, w.id)
@@ -156,7 +168,7 @@ crelations as (
                 inner join relations r on m.relation_id = r.id and r.version >= m.relation_version
             where r.changeset <= w.cid
             order by w.cid, r.id, w.id, r.changeset desc, relation_version desc
-        ) as sub
+        ) as crels_cways_sub
         where version = relation_version and wcid != rcid
     )
     union all
@@ -171,7 +183,7 @@ crelations as (
                 inner join relations r on m.relation_id = r.id and r.version >= m.relation_version
             where r.changeset <= n.cid
             order by n.cid, r.id, n.id, r.changeset desc, relation_version desc
-        ) as sub
+        ) as crels_cnodes_sub
         where version = relation_version and ncid != rcid
     )
     union all
@@ -186,22 +198,17 @@ crelations as (
                 inner join relations r on m.relation_id = r.id and r.version >= m.relation_version
             where r.changeset <= cr.cid
             order by cr.cid, r.id, cr.id, r.changeset desc, relation_version desc
-        ) as sub
+        ) as crels_crels_sub
         where version = relation_version and crcid != rcid
     )
-),
-cchangesets as (
-    select id as cid
-    from changesets
-    where
-        closed_at >= :time_from
-        and closed_at <= :time_till
-        and (:cids ::int[] = array[]::int[] or id = ANY(:cids ::int[]))
-    order by id desc
 )
 select cid, id, 'relation' as type, tags, direct, changeset from crelations
 union all
+select cid, id, 'relation' as type, tags, direct, changeset from crelations_deps
+union all
 select cid, id, 'way' as type, tags, direct, changeset from cways
+union all
+select cid, id, 'way' as type, tags, direct, changeset from cways_deps
 union all
 select cid, id, 'node' as type, tags, direct, changeset from cnodes
 ) as sub
@@ -230,7 +237,7 @@ def collect_changesets_coverages(conn, coverages, time_from=None, time_till=None
 
     return changesets
 
-def collect_changesets_tags(conn, filter=None, recursive=False, time_from=None, time_till=None, cids=None):
+def collect_changesets_tags(conn, filter=None, include_deps=False, time_from=None, time_till=None, cids=None):
     if not time_from:
         time_from = datetime.now() - timedelta(days=99*365)
     if not time_till:
@@ -242,8 +249,8 @@ def collect_changesets_tags(conn, filter=None, recursive=False, time_from=None, 
     if filter:
         stmt = stmt.where(text(filter))
 
-    if recursive:
-        stmt = stmt.select_from(SQL_CHANGESET_TAGS_FILTER_RECURSIVE)
+    if include_deps:
+        stmt = stmt.select_from(SQL_CHANGESET_TAGS_FILTER_WITH_DEPS)
     else:
         stmt = stmt.select_from(SQL_CHANGESET_TAGS_FILTER)
 
@@ -287,18 +294,22 @@ def collect_changesets(conn, cids):
 
     return changesets
 
-def changesets(conn, day, filter=None, recursive=False, coverages=None):
+def changesets(conn, day, filter=None, recursive=False, include_deps=False, coverages=None):
     """
     Return metadata of all changesets from a given day (as datetime.date).
 
     Optional filter can be an SQL where filter (tags->'building' = 'office').
     Only changesets where at least match is found are returned.
-    If recursive is True, the filter is also applied to affected elements (e.g. if a node
-    was changed, also check the tags for any way it belongs to).
+    If include_deps is True, the filter is also applied to affected elements (e.g. if a node
+    was changed, also check the tags for all ways that depend on this node).
 
     Optional coverages can be a list of IDs of geometries in the coverages table. Only
     changesets with at least one node within the geometry are returned.
     """
+
+    # TODO remove recursive option
+    if recursive:
+        include_deps = True
 
     cids = []
 
@@ -314,7 +325,7 @@ def changesets(conn, day, filter=None, recursive=False, coverages=None):
 
     cids = collect_changesets_tags(
         conn, filter=filter,
-        recursive=recursive, time_from=time_from, time_till=time_till,
+        include_deps=include_deps, time_from=time_from, time_till=time_till,
         cids=cids,
     )
 
@@ -324,10 +335,12 @@ def changesets(conn, day, filter=None, recursive=False, coverages=None):
 def main():
     import sys
 
-    dbschema = 'changes,public'
+    dbschema = 'changes,changes_app,public'
     engine = create_engine(
-        "postgresql+psycopg2://localhost/osm_observer",
-        connect_args={'options': '-csearch_path={} -cenable_seqscan=false -cenable_indexscan=true'.format(dbschema)},
+        # "postgresql+psycopg2://localhost/osm_observer",
+        "postgresql+psycopg2://stadtplan_rw:rvr@localhost:55432/stadtplan",
+        # connect_args={'options': '-csearch_path={} -cenable_seqscan=true -cenable_indexscan=false'.format(dbschema)},
+        connect_args={'options': '-csearch_path={} -cenable_seqscan=false -cenable_indexscan=false'.format(dbschema)},
         # echo=True,
     )
 
@@ -338,11 +351,12 @@ def main():
     time_till = datetime.now().replace(hour=23, minute=59, second=59, microsecond=0) - days_delta
 
     day = date.today() - days_delta
-    # result = collect_changesets_tags(conn, sys.argv[1], recursive=True, time_from=time_from, time_till=time_till)
-    result = changesets(conn, day=day, filter=sys.argv[1], recursive=True, coverages=[1])
-    print(result)
-    # import json
-    # print(json.dumps(result))
+    # result = changesets(conn, day=day, filter=sys.argv[1], include_deps=True, coverages=[1])
+    # result = changesets(conn, day=day, filter=sys.argv[1], include_deps=False, coverages=[18])
+    result = changesets(conn, day=day, filter=sys.argv[1], include_deps=True, coverages=None)
+    # print(result)
+    import json
+    print(json.dumps(result, indent=2))
 
     # res = conn.execute(text('select * from members where relation_id = 2069510 and relation_version = 73'))
     # for row in res:

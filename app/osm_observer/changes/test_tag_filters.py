@@ -25,20 +25,20 @@ def test_single_node(conn):
     # TODO
     # cs = collect_changesets(conn, coverages=[])
     # assert cs == set()
-    for recursive in [True, False]:
-        cs = collect_changesets_tags(conn, "tags ? 'tag'", recursive=recursive)
+    for include_deps in [True, False]:
+        cs = collect_changesets_tags(conn, "tags ? 'tag'", include_deps=include_deps)
         assert cs == set([10090, 10091, 10092])
 
-        cs = collect_changesets_tags(conn, "tags->'tag' like 'value_'", recursive=recursive)
+        cs = collect_changesets_tags(conn, "tags->'tag' like 'value_'", include_deps=include_deps)
         assert cs == set([10090, 10091])
 
-        cs = collect_changesets_tags(conn, "tags->'tag' = 'value1'", recursive=recursive)
+        cs = collect_changesets_tags(conn, "tags->'tag' = 'value1'", include_deps=include_deps)
         assert cs == set([10090])
 
-        cs = collect_changesets_tags(conn, "tags->'tag' = 'value2'", recursive=recursive)
+        cs = collect_changesets_tags(conn, "tags->'tag' = 'value2'", include_deps=include_deps)
         assert cs == set([10091])
 
-        cs = collect_changesets_tags(conn, "tags ? 'foo' and tags ? 'tag'", recursive=recursive)
+        cs = collect_changesets_tags(conn, "tags ? 'foo' and tags ? 'tag'", include_deps=include_deps)
         assert cs == set([10092])
 
 
@@ -76,18 +76,18 @@ def test_way_nodes(conn):
     # cs = collect_changesets(conn, coverages=[])
     # assert cs == set()
 
-    cs = collect_changesets_tags(conn, "tags->'highway' = 'secondary'", recursive=True)
+    cs = collect_changesets_tags(conn, "tags->'highway' = 'secondary'", include_deps=True)
     assert cs == set([10090, 10091, 10092])
 
     cs = collect_changesets_tags(conn, "tags->'highway' = 'secondary'")
     assert cs == set([10090, 10092])
 
-    cs = collect_changesets_tags(conn, "tags->'highway' = 'primary'", recursive=True)
+    cs = collect_changesets_tags(conn, "tags->'highway' = 'primary'", include_deps=True)
     assert cs == set([10094, 10095])
     cs = collect_changesets_tags(conn, "tags->'highway' = 'primary'")
     assert cs == set([10094])
 
-    cs = collect_changesets_tags(conn, "tags ? 'highway'", recursive=True)
+    cs = collect_changesets_tags(conn, "tags ? 'highway'", include_deps=True)
     assert cs == set([10090, 10091, 10092, 10094, 10095])
 
 
@@ -120,7 +120,7 @@ def test_relation_nodes(conn):
     # cs = collect_changesets(conn, coverages=[])
     # assert cs == set()
 
-    cs = collect_changesets_tags(conn, "tags->'highway' = 'secondary'", recursive=True)
+    cs = collect_changesets_tags(conn, "tags->'highway' = 'secondary'", include_deps=True)
     assert cs == set([10090, 10091, 10092])
     cs = collect_changesets_tags(conn, "tags->'highway' = 'secondary'")
     assert cs == set([10090, 10092])
@@ -155,7 +155,7 @@ def test_relation_ways(conn):
     # cs = collect_changesets(conn, coverages=[])
     # assert cs == set()
 
-    cs = collect_changesets_tags(conn, "tags->'highway' = 'secondary'", recursive=True)
+    cs = collect_changesets_tags(conn, "tags->'highway' = 'secondary'", include_deps=True)
     assert cs == set([10090, 10091, 10092])
     cs = collect_changesets_tags(conn, "tags->'highway' = 'secondary'")
     assert cs == set([10090, 10092])
@@ -176,7 +176,7 @@ def test_relation_relation_way_node(conn):
         INSERT INTO members VALUES (10071, 1, 0, 'relation', '', null, null, 10070);
         INSERT INTO changesets VALUES (10090, '2018-11-15 17:20:04+00', '2018-11-15 17:20:04+00', 1, false, 'u1', 10080, '', ST_MakeEnvelope(0, 0, 0, 0, 4326));
 
-        -- change node
+        -- change node does not trigger filter, as include_deps works from node-way and node-rel but not node-way-rel
         INSERT INTO nodes VALUES (10000, false, true, false, 10091, ST_SetSRID(ST_MakePoint(0.0, 0.0), 4326), 'u1', 10080, '2018-11-15 17:20:04+00', 2, '"bus"=>"stop"');
         INSERT INTO changesets VALUES (10091, '2018-11-15 17:20:04+00', '2018-11-15 17:20:04+00', 1, false, 'u1', 10080, '', ST_MakeEnvelope(0, 0, 0, 0, 4326));
 
@@ -195,12 +195,12 @@ def test_relation_relation_way_node(conn):
     # cs = collect_changesets(conn, coverages=[])
     # assert cs == set()
 
-    cs = collect_changesets_tags(conn, "tags->'type' = 'route'", recursive=True)
-    assert cs == set([10090, 10091, 10092, 10093])
+    cs = collect_changesets_tags(conn, "tags->'type' = 'route'", include_deps=True)
+    assert cs == set([10090, 10092, 10093])
     cs = collect_changesets_tags(conn, "tags->'type' = 'route'")
     assert cs == set([10090, 10093])
 
-    cs = collect_changesets_tags(conn, "tags->'type' = 'route_master'", recursive=True)
-    assert cs == set([10090, 10091, 10092, 10093])
+    cs = collect_changesets_tags(conn, "tags->'type' = 'route_master'", include_deps=True)
+    assert cs == set([10090, 10093])
     cs = collect_changesets_tags(conn, "tags->'type' = 'route_master'")
     assert cs == set([10090])
