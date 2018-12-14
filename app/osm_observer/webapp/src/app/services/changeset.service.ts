@@ -1,10 +1,12 @@
+
+import {throwError as observableThrowError,  Observable, Observer ,  Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Http, URLSearchParams, Response } from '@angular/http';
+
+import { HttpClient, HttpParams } from '@angular/common/http';
+
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-
-import { Observable, Observer } from 'rxjs/Rx';
-import { Subject }    from 'rxjs/Subject';
+import { map, catchError } from 'rxjs/operators';
 
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
@@ -39,31 +41,27 @@ export class ChangesetService extends BaseHttpService {
 
   private changesets: Changeset[];
 
-  constructor(router: Router, private http: Http, cookieService: CookieService, private location: Location) {
+  constructor(router: Router, private http: HttpClient, cookieService: CookieService, private location: Location) {
     super(router, cookieService);
     location.prepareExternalUrl('api/changesets/comments/')
   }
 
   getChangesets(timeRange?: number, coverageId?: number, tagFilterId?): Observable<Changeset[]> {
-    let params = new URLSearchParams();
+    let params = new HttpParams();
     if(timeRange !== undefined && timeRange !== null) {
-      params.set('timeRange', timeRange.toString());
-    }
-    if(coverageId !== undefined && coverageId !== null) {
-      params.set('coverageId', coverageId.toString());
+      params = params.append('timeRange', timeRange.toString());
     }
     if(tagFilterId !== undefined && tagFilterId !== null) {
-      params.set('tagFilterId', tagFilterId.toString());
+      params = params.append('tagFilterId', tagFilterId.toString());
     }
-    let requestOptions = this.getRequestOptions(params);
-    return this.http.get(this.changesetsUrl(), requestOptions)
-                    .map((response:Response) => {
-                       this.changesets = response.json() as Changeset[];
-                       return this.changesets;
-                     })
-                     .catch((error:any) => Observable.throw(
-                       this.handleError(error, 'getChangesets', this.changesetsUrl(), params.paramsMap)
-                     ));
+    if(coverageId !== undefined && coverageId !== null) {
+      params = params.append('coverageId', coverageId.toString());
+    }
+    return this.http.get<Changeset[]>(this.changesetsUrl(), {params: params})
+      .pipe(
+        (catchError((error:any) => observableThrowError(
+          this.handleError(error, 'getChangesets', this.changesetsUrl(), params)
+     ))));
   }
 
   getChangeset(id: number, forceReload?: boolean): Observable<Changeset> {
@@ -71,26 +69,17 @@ export class ChangesetService extends BaseHttpService {
     // e.g. when reloading changeset detail page
     if(this.changesets === undefined || forceReload === true) {
       return this.getChangesets()
-          .map(
+          .pipe(map(
             v => {
               return this.changesetById(id);
             }
-          );
+          ));
     } else {
       return Observable.create((observer: Observer<Changeset>) => {
         observer.next(this.changesetById(id));
         observer.complete();
       });
     }
-  }
-
-  getChangesetComments(id: number): Observable<ChangesetComment[]> {
-    let url = this.changesetCommentsUrl(id);
-    return this.http.get(url, this.getRequestOptions())
-                    .map((response:Response) => response.json() as ChangesetComment[])
-                    .catch((error:any) => Observable.throw(
-                      this.handleError(error, 'getChangesetComments', url, {id: id})
-                    ));
   }
 
   getChangesetIdx(current: Changeset): number {

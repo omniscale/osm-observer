@@ -4,7 +4,7 @@ import json
 
 from datetime import datetime, timedelta
 
-from osm_observer import create_app
+from osm_observer.application import create_app
 from osm_observer.extensions import db, assets
 from osm_observer.model import Coverage, User
 

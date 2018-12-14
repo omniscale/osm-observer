@@ -20,7 +20,8 @@
   </a>
   <a class="nav-link rounded-0"
      routerLink="/filter"
-     [routerLinkActive]="['active']">
+     [routerLinkActive]="['active']"
+      *ngIf="authService.isAdmin">
     <i class="fa fa-tags" aria-hidden="true"></i>
     {{ 'TAG FILTER' | translate }}
   </a>

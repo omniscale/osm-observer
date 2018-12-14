@@ -1,10 +1,13 @@
+
+import {throwError as observableThrowError,  Observable, Observer ,  Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Http, URLSearchParams, Response } from '@angular/http';
+
+import { HttpClient } from '@angular/common/http';
+
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { Observable, Observer } from 'rxjs/Rx';
-import { Subject }    from 'rxjs/Subject';
+import { map, catchError } from 'rxjs/operators';
 
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
@@ -19,18 +22,18 @@ export class ChangesetDetailsService extends BaseHttpService {
     return this.location.prepareExternalUrl(`/api/changesets/changes/${id}`);
   }
 
-  constructor(router: Router, private http: Http, cookieService: CookieService, private location: Location) {
+  constructor(router: Router, private http: HttpClient, cookieService: CookieService, private location: Location) {
     super(router, cookieService);
     location.prepareExternalUrl('api/changesets/comments/')
   }
 
   getChangesetDetails(id: number): Observable<ChangesetDetails> {
     let url = this.changesetDetailsUrl(id);
-    return this.http.get(url, this.getRequestOptions())
-                    .map((response:Response) => response.json() as ChangesetDetails)
-                    .catch((error:any) => Observable.throw(
-                      this.handleError(error, 'getChangesetChanges', url, {id: id})
-                    ));
-  }
 
+    return this.http.get<ChangesetDetails>(url, this.httpOptions)
+      .pipe(
+        (catchError((error:any) => observableThrowError(
+           this.handleError(error, 'getChangesetChanges', url, {id: id})
+    ))));
+  }
 }

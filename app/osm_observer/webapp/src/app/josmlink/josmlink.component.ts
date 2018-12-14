@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Renderer, ElementRef } from '@angular/core';
 
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 
 import { ChangesetService } from '../services/changeset.service';
 import { MessageService } from '../services/message.service';

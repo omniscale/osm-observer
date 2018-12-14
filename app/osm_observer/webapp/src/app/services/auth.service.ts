@@ -1,9 +1,12 @@
+import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+
+import { Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
+
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-
-import { Observable } from 'rxjs/Rx';
+import { map, catchError, } from 'rxjs/operators';
 
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
@@ -23,23 +26,32 @@ export class AuthService extends BaseHttpService {
     return this.location.prepareExternalUrl('api/logout');
   }
 
+  isAdmin: boolean;
   isLoggedIn: boolean;
   redirectUrl: string;
 
-  constructor(router: Router, private http: Http, cookieService: CookieService, private location: Location) {
+  constructor(router: Router, private http: HttpClient, cookieService: CookieService, private location: Location) {
     super(router, cookieService);
     this.isLoggedIn = this._isLoggedIn();
+    this.isAdmin = this._isAdmin();
   }
 
   login(user: User): Observable<AuthResponse> {
-    return this.http.post(this.loginUrl(), user, this.getRequestOptions())
-                    .map((response:Response) => {
-                      this.isLoggedIn = this._isLoggedIn();
-                      return response.json() as AuthResponse
-                     })
-                    .catch((error:any) => Observable.throw(
-                      this.handleError(error, 'login', this.loginUrl(), user)
-                    ));
+    return this.http.post<AuthResponse>(this.loginUrl(), user, this.httpOptions)
+      .pipe(map((response: AuthResponse) => {
+          this.isLoggedIn = this._isLoggedIn();
+          console.log(response)
+          this.isAdmin = this._isAdmin();
+          return response
+        }),
+        (catchError((error:any) => observableThrowError(
+          this.handleError(error, 'login', this.loginUrl(), user)
+    ))));
+  }
+
+  private _isAdmin(): boolean {
+    let isAdmin = this.cookieService.get('isAdmin');
+    return isAdmin === '1';
   }
 
   private _isLoggedIn(): boolean {
@@ -48,13 +60,13 @@ export class AuthService extends BaseHttpService {
   }
 
   logout(): Observable<AuthResponse> {
-    return this.http.get(this.logoutUrl(), this.getRequestOptions())
-                    .map((response:Response) => {
-                      this.isLoggedIn = this._isLoggedIn();
-                      return response.json() as AuthResponse
-                    })
-                    .catch((error:any) => Observable.throw(
-                      this.handleError(error, 'logout', this.logoutUrl())
-                    ));
+    return this.http.get<AuthResponse>(this.logoutUrl(), this.httpOptions)
+      .pipe(map((response: AuthResponse) => {
+          this.isLoggedIn = this._isLoggedIn();
+          return response
+        }),
+        (catchError((error:any) => observableThrowError(
+           this.handleError(error, 'logout', this.logoutUrl())
+    ))));
   }
 }

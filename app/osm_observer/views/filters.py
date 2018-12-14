@@ -1,11 +1,21 @@
-from flask import jsonify, request
-
-from flask_login import login_required
+from flask import jsonify, request, redirect, url_for
+from flask_login import login_required, current_user
 
 from osm_observer.extensions import db
 from osm_observer.views import api
 from osm_observer.model import Filter
 
+from functools import wraps
+
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        print(current_user)
+        if not current_user.is_admin:
+            return redirect(url_for('login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
 
 @api.route('/filter/all')
 @login_required
@@ -21,6 +31,7 @@ def filter_all():
 
 @api.route('/filter/load')
 @login_required
+@admin_required
 def filter_load():
     data = request.json
     id = data.get('id', False)
@@ -33,6 +44,7 @@ def filter_load():
 
 @api.route('/filter/remove', methods=['POST'])
 @login_required
+@admin_required
 def filter_remove():
     data = request.json
     id = data.get('id', False)
@@ -48,6 +60,7 @@ def filter_remove():
   
 @api.route('/filter/save', methods=['POST'])
 @login_required
+@admin_required
 def filter_save():
     data = request.json
     id = data.get('id', False)
