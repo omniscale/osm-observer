@@ -316,7 +316,7 @@ def collect_changesets(conn, cids):
 
     return changesets
 
-def changesets(conn, day, filter=None, recursive=False, include_deps=False, coverages=None):
+def changesets(conn, day, filter=None, include_deps=False, coverages=None):
     """
     Return metadata of all changesets from a given day (as datetime.date).
 
@@ -328,10 +328,6 @@ def changesets(conn, day, filter=None, recursive=False, include_deps=False, cove
     Optional coverages can be a list of IDs of geometries in the coverages table. Only
     changesets with at least one node within the geometry are returned.
     """
-
-    # TODO remove recursive option
-    if recursive:
-        include_deps = True
 
     cids = []
 

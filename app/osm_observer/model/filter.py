@@ -21,6 +21,8 @@ class Filter(db.Model):
     description = db.Column(db.String)
     code = db.Column(db.String)
 
+    # TODO add include_deps Boolean field
+
     active = db.Column(db.Boolean, default=True)
 
     users = db.relationship(

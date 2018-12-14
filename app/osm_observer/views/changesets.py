@@ -35,10 +35,10 @@ def changesets_list():
         day = day - timedelta(int(time_range))
 
     result = changesets(
-        current_app.changeset_connection, 
+        current_app.changeset_connection,
         day=day,
         filter=tag_filter,
-        recursive=True,
+        include_deps=True, # TODO add include_deps to Filter
         coverages=coverages
     )
     return jsonify(result)
