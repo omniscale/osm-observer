@@ -8,7 +8,6 @@ __all__ = ['Review', 'REVIEW_STATUS']
 
 class REVIEW_STATUS(object):
     BROKEN = 1
-    FIXED = 50
     OK = 99
 
 
@@ -37,7 +36,6 @@ class Review(db.Model):
 
     _review_status = {
         1: 'Broken',
-        50: 'Fixed',
         99: 'OK',
     }
 

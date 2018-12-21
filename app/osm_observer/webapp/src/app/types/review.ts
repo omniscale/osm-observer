@@ -23,7 +23,6 @@ export class Creator {
 
 export class ReviewStatus {
   static BROKEN = 1;
-  static FIXED = 50;
   static OK = 99;
 
   static names(): Array<string> {

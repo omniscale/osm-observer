@@ -41,7 +41,6 @@ export class AppComponent implements OnInit {
     // define translations for enum keys (./types/review:ReviewStatus)
     this.translate.get('BROKEN');
     this.translate.get('OK');
-    this.translate.get('FIXED');
 
   }
 }
