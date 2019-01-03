@@ -3,5 +3,6 @@ export class TagFilter {
     name: string;
     code: string;
     active: boolean;
+    include_deps: boolean;
     description: string;
 }

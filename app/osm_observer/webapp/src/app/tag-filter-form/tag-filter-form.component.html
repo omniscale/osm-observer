@@ -50,6 +50,20 @@
     </div>
 
     <div class="form-group"
+         [class.has-danger]="hasFormError(filterForm.controls.include_deps)">
+        <div class="checkbox">
+          <label for="include_deps">
+            <input type="checkbox"
+                id="include_deps"
+                name="include_deps"
+                [class.form-control-danger]="hasFormError(filterForm.controls.include_deps)"
+                [(ngModel)]="model.include_deps" />
+            {{ 'INCLUDE DEPS' | translate }}
+          </label>
+        </div>
+    </div>
+
+    <div class="form-group"
          [class.has-danger]="hasFormError(filterForm.controls.active)">
         <div class="checkbox">
           <label for="active">

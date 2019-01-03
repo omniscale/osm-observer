@@ -20,9 +20,7 @@ class Filter(db.Model):
     name = db.Column(db.String)
     description = db.Column(db.String)
     code = db.Column(db.String)
-
-    # TODO add include_deps Boolean field
-
+    include_deps = db.Column(db.Boolean, default=False)
     active = db.Column(db.Boolean, default=True)
 
     users = db.relationship(
@@ -31,11 +29,12 @@ class Filter(db.Model):
         backref='filters'
     )
 
-    def __init__(self, name, description, code, active=True):
+    def __init__(self, name, description, code, active=True, include_deps=False):
         self.name = name
         self.description = description
         self.code = code
         self.active = active
+        self.include_deps = include_deps
 
     @property
     def json(self):
@@ -44,7 +43,8 @@ class Filter(db.Model):
             'name': self.name,
             'description': self.description,
             'code': self.code,
-            'active': self.active
+            'active': self.active,
+            'include_deps': self.include_deps
         }
 
     @classmethod

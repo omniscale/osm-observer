@@ -19,10 +19,12 @@ def changesets_list():
     if coverage_id:
         coverages = [coverage_id]
 
+    include_deps = False
     tag_filter = request.args.get('tagFilterId', None)
     if tag_filter:
        tag_filter = Filter.by_id(tag_filter)
        if tag_filter:
+           include_deps = tag_filter.include_deps
            tag_filter = tag_filter.code
 
     time_range = request.args.get('timeRange', None)
@@ -37,7 +39,7 @@ def changesets_list():
         current_app.changeset_connection,
         day=day,
         filter=tag_filter,
-        include_deps=True, # TODO add include_deps to Filter
+        include_deps=include_deps,
         coverages=coverages
     )
     return jsonify(result)

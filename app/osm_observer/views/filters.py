@@ -11,7 +11,6 @@ from functools import wraps
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        print(current_user)
         if not current_user.is_admin:
             return redirect(url_for('login', next=request.url))
         return f(*args, **kwargs)
@@ -64,19 +63,20 @@ def filter_remove():
 def filter_save():
     data = request.json
     id = data.get('id', False)
-
     if id:
         tag_filter = Filter.by_id(id)
         tag_filter.name = data.get('name')
         tag_filter.code = data.get('code')
         tag_filter.description = data.get('description')
         tag_filter.active = data.get('active')
+        tag_filter.include_deps = data.get('include_deps')
     else:
         tag_filter = Filter(
             name=data.get('name'),
             code=data.get('code'),
             description=data.get('description'),
-            active=data.get('active')
+            active=data.get('active'),
+            include_deps=data.get('include_deps')
         )
         db.session.add(tag_filter)
     
