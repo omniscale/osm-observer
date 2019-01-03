@@ -14,7 +14,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='osm_observer',
-    version='0.0.1',
+    version='0.1.0',
     url='<enter URL here>',
     license='BSD',
     author='Omniscale',
