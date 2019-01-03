@@ -6,7 +6,7 @@
   </button>
 
   <div class="form-inline">
-<!--     <div class="btn-group btn-group-sm mr-2">
+    <div class="btn-group btn-group-sm mr-2">
       <button class="btn btn-sm"
               [class.btn-primary]="currentUserReviewed===true"
               [class.btn-secondary]="currentUserReviewed!==true"
@@ -19,7 +19,7 @@
               (click)="setCurrentUserReviewed(false)">
         {{ 'NOT SELF REVIEWED' | translate }}
       </button>
-    </div> -->
+    </div>
 
     <select class="form-control form-control-sm"
             id="coverage"
@@ -154,22 +154,6 @@
                  *ngIf="orderBy==='numChanges' && order==='desc'">
               </i>
             </th>
-<!--             <th class="pointer"
-                (click)="sortBy('numReviews')">
-              {{ 'REVIEWS' | translate }}
-              <i class="fa fa-sort"
-                 aria-hidden="true"
-                 *ngIf="orderBy!=='numReviews'">
-              </i>
-              <i class="fa fa-sort-asc"
-                 aria-hidden="true"
-                 *ngIf="orderBy==='numReviews' && order==='asc'">
-              </i>
-              <i class="fa fa-sort-desc"
-                 aria-hidden="true"
-                 *ngIf="orderBy==='numReviews' && order==='desc'">
-              </i>
-            </th>
             <th class="pointer"
                 (click)="sortBy('status')">
               {{ 'STATUS' | translate }}
@@ -185,7 +169,7 @@
                  aria-hidden="true"
                  *ngIf="orderBy==='status' && order==='desc'">
               </i>
-            </th> -->
+            </th>
             <th></th>
           </tr>
           <tr class="filter-row">
@@ -203,7 +187,6 @@
             </th>
             <th class="comment-column"></th>
             <th class="changes-column"></th>
-<!--             <th class="review-column"></th>
             <th class="status-column">
               <div class="form-group">
                 <select class="form-control form-control-sm"
@@ -220,7 +203,7 @@
                   </option>
                 </select>
               </div>
-            </th> -->
+            </th>
             <th class="link-column"></th>
           </tr>
         </thead>
@@ -231,7 +214,7 @@
             </td>
           </tr>
           <tr *ngIf="loading">
-            <td colspan="6" class="loading-data">
+            <td colspan="7" class="loading-data">
               {{ 'LOADING CHANGESETS' | translate }}
             </td>
           </tr>
@@ -240,9 +223,8 @@
               {{ 'NO COVERAGES ASSIGNED' | translate }}
             </td>
           </tr>
-          <ng-container *ngFor="let changeset of changesets | search:'userName':userName; let last = last" [ready]="last" (onReady)="changesetsRendered()">
-            <tr [class.table-danger]="changeset.status === reviewStatus.BROKEN"
-                [class.table-success]="changeset.id === currentChangesetId">
+          <ng-container *ngFor="let changeset of changesets | search:'userName':userName; let last = last;" [ready]="last" (onReady)="changesetsRendered()">
+            <tr [class.table-success]="changeset.id === currentChangesetId">
               <td>
                 <a [routerLink]="[changeset.id, 'details']">
                   {{ changeset.id }}
@@ -257,9 +239,12 @@
               </td>
               <td class="comment-column">{{ changeset.tags.comment }}</td>
               <td>{{ changeset.numChanges }}</td>
-<!--               <td>{{ changeset.numReviews }}</td>
-              <td>{{ reviewStatus.byId(changeset.status) | translate }}</td>
- -->              <td>
+              <td class="status-column">
+                <span *ngIf="changeset.observerReviews ?.length > 0">
+                  {{ reviewStatus.byId(changeset.observerReviews[changeset.observerReviews.length -1].status) | translate }}
+                </span>
+              </td>
+              <td>
                 <a class="btn btn-secondary btn-sm"
                    role="button"
                    (click)='setCurrentChangesetId(changeset.id)'>

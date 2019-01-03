@@ -1,11 +1,9 @@
 import { ChangesetComment } from './changeset-comment';
+import { Review } from './review';
 
 export class Changeset {
   id: number;
   osmId: number;
-  status: number;
-  numReviews: number;
-
   createdAt: Date; 
   closedAt: Date; 
   userName: string; 
@@ -13,27 +11,24 @@ export class Changeset {
   userID: number; 
   tags: Tags; 
   comments: ChangesetComment[]; 
-  currentUserReviewed: boolean;
   changesetBBOX: Array<number>; 
   dataBBOX: Array<number>; 
   open: boolean; 
+  observerReviews: Review[];
 
   constructor(
     id: number, osmId: number, createdAt: string, closedAt: string,
-    numReviews: number, userName: string, numChanges: number,
-    userID: number, tags: Tags, status: number,
-    currentUserReviewed: boolean, changesetBBOX: number[], dataBBOX: number[],
-    comments: ChangesetComment[], open: boolean
+    userName: string, numChanges: number,
+    userID: number, tags: Tags,
+    changesetBBOX: number[], dataBBOX: number[],
+    comments: ChangesetComment[], open: boolean, observerReviews: Review[]
   ) {
     this.id = id;
     this.osmId = osmId;
-    this.status = status;
-    this.numReviews = numReviews;
     this.userName = userName;
     this.userID = userID;
     this.numChanges = numChanges;
     this.tags = tags;
-    this.currentUserReviewed = currentUserReviewed;
     this.changesetBBOX = changesetBBOX;
     this.dataBBOX = dataBBOX;
     this.comments = comments;

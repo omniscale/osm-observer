@@ -338,7 +338,7 @@ def collect_changesets(conn, cids):
                 'status': row.status,
             }
             reviews.append(review)
-        changesets[cid]['observer_reviews'] = reviews
+        changesets[cid]['observerReviews'] = reviews
 
     return list(changesets.values())
 
