@@ -20,7 +20,7 @@ def upgrade():
     op.drop_constraint('reviews_changeset_id_fkey', 'reviews',
                        type_='foreignkey', schema='changes_app')
     op.drop_table('changesets', schema='changes_app')
-    # op.create_index('idx_changeset_id', 'reviews', 'changeset_id', unique=True, schema='changes_app')
+    op.create_index('idx_changeset_id', 'reviews', 'changeset_id', unique=True, schema='changes_app')
 
 def downgrade():
     op.create_table('changesets',
