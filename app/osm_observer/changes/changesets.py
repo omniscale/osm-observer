@@ -1,5 +1,8 @@
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
+from collections import OrderedDict
+from itertools import groupby
+
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text, select
 
@@ -13,6 +16,14 @@ select id,
     num_changes, open, user_name, user_id, tags,
     st_xmin(bbox) as minx, st_ymin(bbox) as miny, st_xmax(bbox) as maxx, st_ymax(bbox) as maxy
 from changesets where id = ANY(:cids ::int[]) order by closed_at
+''')
+
+SQL_OBSERVER_REVIEWS = text(
+'''
+select changeset_id, r.id, comment, _status as status, username, user_id,
+    to_char(time_created, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as time_created
+from reviews r left join users u on r.user_id = u.id where changeset_id = ANY(:cids ::int[])
+order by changeset_id, time_created
 ''')
 
 SQL_CHANGESET_NODES_INTERSECTS = text(
@@ -299,12 +310,12 @@ def collect_changesets(conn, cids):
     if not cids:
         return []
     res = conn.execute(SQL_CHANGESETS, {'cids': list(cids)})
-    changesets = []
+    changesets = OrderedDict()
     for row in res:
         changeset = {
             'id': row.id,
             'userName': row.user_name,
-            'userID': row.user_name,
+            'userID': row.user_id,
             'createdAt': row.created_at,
             'closedAt': row.closed_at,
             'numChanges': row.num_changes,
@@ -312,9 +323,24 @@ def collect_changesets(conn, cids):
             'open': row.open,
             'changesetBBOX': [row.minx, row.miny, row.maxx, row.maxy],
         }
-        changesets.append(changeset)
+        changesets[row.id] = changeset
 
-    return changesets
+
+    res = conn.execute(SQL_OBSERVER_REVIEWS, {'cids': list(cids)})
+    for cid, rows in groupby(res, lambda r: r.changeset_id):
+        reviews = []
+        for row in rows:
+            review = {
+                'userName': row.username,
+                'userID': row.user_id,
+                'timeCreated': row.time_created,
+                'comment': row.comment,
+                'status': row.status,
+            }
+            reviews.append(review)
+        changesets[cid]['observer_reviews'] = reviews
+
+    return list(changesets.values())
 
 def changesets(conn, day, filter=None, include_deps=False, coverages=None):
     """
