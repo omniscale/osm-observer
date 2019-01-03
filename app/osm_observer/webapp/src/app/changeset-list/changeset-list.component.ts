@@ -155,6 +155,10 @@ export class ChangesetListComponent implements OnInit {
   handleRouteParams(params: any): void {
     this.userName = params['username'] as string;
     this.timeRange = params['timeRange'] as number;
+    if(!isNaN(this.timeRange)) {
+      this.calcDate(this.timeRange);
+    }
+
     this.coverageId = parseInt(params['coverageId']) as number;
     if(isNaN(this.coverageId)) {
       this.coverageId = undefined;
@@ -188,7 +192,6 @@ export class ChangesetListComponent implements OnInit {
     if (!this.timeRange) {
       this.timeRange = 0;
     }
-
     if (rangeStep == 'prev') {
       if (this.timeRange > 0) {
          this.timeRange = +this.timeRange + -1;
@@ -201,7 +204,7 @@ export class ChangesetListComponent implements OnInit {
       }
     }
     this.calcDate(this.timeRange);
-    this.applyChange();
+    this.applyChange(true);
   }
 
   setTimeRange(timeRange: number): void {
