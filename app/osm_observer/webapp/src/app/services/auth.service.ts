@@ -40,7 +40,6 @@ export class AuthService extends BaseHttpService {
     return this.http.post<AuthResponse>(this.loginUrl(), user, this.httpOptions)
       .pipe(map((response: AuthResponse) => {
           this.isLoggedIn = this._isLoggedIn();
-          console.log(response)
           this.isAdmin = this._isAdmin();
           return response
         }),
