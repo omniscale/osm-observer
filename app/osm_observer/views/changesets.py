@@ -47,16 +47,3 @@ def changeset_changes(changeset_id):
     result = collect_changeset(current_app.changeset_connection, changeset_id)
     return jsonify(result)
 
-def serialize_changeset_comments(comments):
-    data = []
-    for comment in comments:
-        data.append({
-            'changesetId': comment.changeset_id,
-            'idx': comment.idx,
-            'userName': comment.user_name,
-            'userId': comment.user_id,
-            'timestamp': comment.timestamp,
-            'text': comment.text
-        })
-    return data
-
