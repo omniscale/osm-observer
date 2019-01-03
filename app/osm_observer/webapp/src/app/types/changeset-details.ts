@@ -22,9 +22,9 @@ export class ChangesetDetails {
 }
 
 export class Changes {
-  nodes: ChangesetChange;
-  relations: ChangesetChange;
-  ways: ChangesetChange;
+  nodes: ChangesetChange[];
+  relations: ChangesetChange[];
+  ways: ChangesetChange[];
 }
 
 export class Elements {
