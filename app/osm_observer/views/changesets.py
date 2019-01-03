@@ -29,8 +29,7 @@ def changesets_list():
 
 
     day = date.today()
-    # TODO remove
-    day = date(2018, 11, 20)
+
     if time_range:
         day = day - timedelta(int(time_range))
 
