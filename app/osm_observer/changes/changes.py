@@ -238,8 +238,11 @@ def collect_changeset(conn, cid):
 def main():
     dbschema = 'changes,public'
     engine = create_engine(
-        "postgresql+psycopg2://localhost/osm_observer",
-        connect_args={'options': '-csearch_path={}'.format(dbschema)})
+        # "postgresql+psycopg2://localhost/osm_observer",
+        "postgresql+psycopg2://stadtplan_rw:rvr@localhost:55432/stadtplan",
+        # connect_args={'options': '-csearch_path={} -cwork_mem=64MB -cenable_seqscan=false -cenable_indexscan=true'.format(dbschema)},
+        connect_args={'options': '-csearch_path={}'.format(dbschema)},
+    )
 
     conn = engine.connect()
     import sys
