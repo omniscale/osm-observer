@@ -360,20 +360,25 @@ def changesets(conn, day, filter=None, include_deps=False, coverages=None):
     time_from = datetime.combine(day, time(hour=0, minute=0, second=0, microsecond=0))
     time_till = datetime.combine(day, time(hour=23, minute=59, second=59, microsecond=999999))
 
-    if coverages:
-        cids = collect_changesets_coverages(conn, coverages, time_from=time_from, time_till=time_till)
-        if not cids:
-            # return empty collection, otherwise collect_changesets_tags would ignore cid
-            # filter
-            return collect_changesets(conn, cids)
+    with conn.begin():
+        # Force use of index: Otherwise PG might decide to do a seqscan if it needs to
+        # fetch a few thousand rows, even if we have an index.
+        conn.execute('set enable_seqscan=false;')
+        conn.execute('set enable_indexscan=true;')
+        if coverages:
+            cids = collect_changesets_coverages(conn, coverages, time_from=time_from, time_till=time_till)
+            if not cids:
+                # return empty collection, otherwise collect_changesets_tags would ignore cid
+                # filter
+                return collect_changesets(conn, cids)
 
-    cids = collect_changesets_tags(
-        conn, filter=filter,
-        include_deps=include_deps, time_from=time_from, time_till=time_till,
-        cids=cids,
-    )
+        cids = collect_changesets_tags(
+            conn, filter=filter,
+            include_deps=include_deps, time_from=time_from, time_till=time_till,
+            cids=cids,
+        )
 
-    return collect_changesets(conn, cids)
+        return collect_changesets(conn, cids)
 
 
 def main():
@@ -383,8 +388,8 @@ def main():
     engine = create_engine(
         # "postgresql+psycopg2://localhost/osm_observer",
         "postgresql+psycopg2://stadtplan_rw:rvr@localhost:55432/stadtplan",
-        # connect_args={'options': '-csearch_path={} -cenable_seqscan=true -cenable_indexscan=false'.format(dbschema)},
-        connect_args={'options': '-csearch_path={} -cenable_seqscan=false -cenable_indexscan=false'.format(dbschema)},
+        # connect_args={'options': '-csearch_path={} -cenable_seqscan=false -cenable_indexscan=true'.format(dbschema)},
+        connect_args={'options': '-csearch_path={}'.format(dbschema)},
         # echo=True,
     )
 
@@ -398,6 +403,7 @@ def main():
     # result = changesets(conn, day=day, filter=sys.argv[1], include_deps=True, coverages=[1])
     # result = changesets(conn, day=day, filter=sys.argv[1], include_deps=False, coverages=[18])
     result = changesets(conn, day=day, filter=sys.argv[1], include_deps=True, coverages=[18])
+    # result = changesets(conn, day=day, filter=sys.argv[1], include_deps=False, coverages=None)
     # print(result)
     import json
     print(json.dumps(result, indent=2))
