@@ -318,7 +318,35 @@ export class ChangesetListComponent implements OnInit {
       this.order = 'desc';
     }
     this.orderBy = by;
-    this.changesetService.sortChangesets(this.orderBy, this.order);
+    this.sortChangesets(this.orderBy, this.order);
+  }
+
+  createCompareFunc(by: string, order: string) {
+    if(order === 'asc') {
+      return function(a, b) {
+        if(a[by] < b[by]) {
+          return -1;
+        }
+        if(a[by] > b[by]) {
+          return 1;
+        }
+        return 0
+      }
+    } else {
+      return function(a, b) {
+        if(a[by] > b[by]) {
+          return -1;
+        }
+        if(a[by] < b[by]) {
+          return 1;
+        }
+        return 0
+      }
+    }
+  }
+
+  sortChangesets(by: string, order: string): void {
+    this.changesets.sort(this.createCompareFunc(by, order));
   }
 
   ngOnInit() {
