@@ -45,7 +45,7 @@ def changesets_list():
 
 @api.route('/changesets/changes/<int:changeset_id>')
 def changeset_changes(changeset_id):
-    result = collect_changeset(current_app.changes_connection, changeset_id)
+    result = collect_changeset(current_app.changeset_connection, changeset_id)
     return jsonify(result)
 
 def serialize_changeset_comments(comments):

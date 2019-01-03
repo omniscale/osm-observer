@@ -140,18 +140,11 @@ def configure_extensions(app):
 def configure_db_connections(app):
     dbschema = 'changes,changes_app,public'
     engine = create_engine(
-        "postgresql+psycopg2://localhost/osm_observer",
+        app.config.get('SQLALCHEMY_DATABASE_URI'),
         connect_args={'options': '-csearch_path={} -cenable_seqscan=false -cenable_indexscan=true'.format(dbschema)},
         # echo=True,
     )
     app.changeset_connection = engine.connect()
-
-    dbschema = 'changes,public'
-    engine = create_engine(
-        "postgres://os:os@localhost:5432/osm_observer",
-        connect_args={'options': '-csearch_path={}'.format(dbschema)})
-
-    app.changes_connection = engine.connect()
 
 
 def configure_assets(app):
