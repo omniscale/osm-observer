@@ -28,7 +28,6 @@ class TestEditReviews(BaseTestClass):
         with self.app.test_client() as c:
 
             r = c.post(url_for('api.add_review', changeset_id=changeset.id), data=dict(
-                score=120,
                 status=99
             ))
             self.assertEqual(r.status_code, 200)
@@ -36,6 +35,5 @@ class TestEditReviews(BaseTestClass):
             review_resposne = r.json
             review = Review.by_id(review_resposne['id'])
 
-            assert review.score == 120
             assert review._status == 99
             assert review.status == Review._review_status[review._status]

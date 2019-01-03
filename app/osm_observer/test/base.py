@@ -38,17 +38,14 @@ class BaseTestClass(TestCase):
         reviews = [
             {
                 'changeset_id': 1,
-                'score': 100,
                 'status': 0,
             },
             {
                 'changeset_id': 1,
-                'score': 5,
                 'status': 99,
             },
             {
                 'changeset_id': 2,
-                'score': 100,
                 'status': 0,
             },
         ]
@@ -56,7 +53,6 @@ class BaseTestClass(TestCase):
             cs = Changeset.by_id(review['changeset_id'])
             r = Review(
                 changeset_id=cs.id,
-                score=review['score'],
                 status=review['status'],
             )
             db.session.add(r)

@@ -25,7 +25,7 @@ export class ReviewFormComponent implements OnInit, OnChanges {
   constructor(private reviewService: ReviewService, private translate: TranslateService, private messageService: MessageService) { }
 
   reviewOK() {
-    this.reviewService.addReview(this.id, new Review(undefined, undefined, ReviewStatus.OK))
+    this.reviewService.addReview(this.id, new Review(undefined, ReviewStatus.OK))
                       .subscribe(
                         v => {
                           this.model = new Review();

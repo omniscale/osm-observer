@@ -18,7 +18,6 @@ class Review(db.Model):
     }
 
     id = db.Column(db.Integer, primary_key=True)
-    score = db.Column(db.Integer)
     _status = db.Column(db.Integer)
     comment = db.Column(db.String)
     time_created = db.Column(
@@ -41,10 +40,8 @@ class Review(db.Model):
 
     db.Index('idx_changeset_id', 'changeset_id', unique=True)
 
-    def __init__(self, changeset_id=None, score=0,
-                 status=None, comment=None, user_id=None):
+    def __init__(self, changeset_id=None, status=None, comment=None, user_id=None):
         self.changeset_id = changeset_id
-        self.score = score
         self.status = status
         self.comment = comment
         self.user_id = user_id
@@ -53,7 +50,6 @@ class Review(db.Model):
     def serialize(self):
         data = {
             'id': self.id,
-            'score': self.score,
             'status': self._status,
             'comment': self.comment,
             'timeCreated': self.time_created.strftime("%d.%m.%Y %H:%M:%S")
