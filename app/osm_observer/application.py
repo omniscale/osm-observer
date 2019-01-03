@@ -141,7 +141,7 @@ def configure_db_connections(app):
     dbschema = 'changes,changes_app,public'
     engine = create_engine(
         app.config.get('SQLALCHEMY_DATABASE_URI'),
-        connect_args={'options': '-csearch_path={} -cenable_seqscan=false -cenable_indexscan=true'.format(dbschema)},
+        connect_args={'options': '-csearch_path={}'.format(dbschema)},
         # echo=True,
     )
     app.changeset_connection = engine.connect()
