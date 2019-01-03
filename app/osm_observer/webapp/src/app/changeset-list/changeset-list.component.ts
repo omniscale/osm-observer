@@ -26,7 +26,6 @@ export class ChangesetListComponent implements OnInit {
 
   userName: string;
   timeRange: number;
-  numReviews: number;
   coverageId: number;
   tagFilterId: number;
   statusId: number;
@@ -133,9 +132,6 @@ export class ChangesetListComponent implements OnInit {
     if(this.timeRange !== undefined && this.timeRange !== null) {
       routeParams['timeRange'] = this.timeRange;
     }
-    if(this.numReviews !== undefined && this.numReviews !== null) {
-      routeParams['numReviews'] = this.numReviews;
-    }
     if(this.coverageId !== undefined && this.coverageId !== null) {
       routeParams['coverageId'] = this.coverageId;
     }
@@ -159,10 +155,6 @@ export class ChangesetListComponent implements OnInit {
   handleRouteParams(params: any): void {
     this.userName = params['username'] as string;
     this.timeRange = params['timeRange'] as number;
-    this.numReviews = parseInt(params['numReviews']) as number;
-    if(isNaN(this.numReviews)) {
-      this.numReviews = undefined;
-    }
     this.coverageId = parseInt(params['coverageId']) as number;
     if(isNaN(this.coverageId)) {
       this.coverageId = undefined;
@@ -302,7 +294,6 @@ export class ChangesetListComponent implements OnInit {
   resetFilters(): void {
     this.userName = undefined;
     this.timeRange = undefined;
-    this.numReviews = undefined;
     this.coverageId = undefined;
     this.tagFilterId = undefined;
     this.statusId = undefined;
