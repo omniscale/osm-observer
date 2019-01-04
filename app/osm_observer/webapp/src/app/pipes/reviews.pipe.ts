@@ -8,8 +8,7 @@ export class ReviewPipe implements PipeTransform {
 
     let entries = [];
     if (content['status']) {
-      for (let idx in value) {
-        let item = value[idx];
+      for (let item of value) {
         if (item.hasOwnProperty('observerReviews')) {
           let review = (item['observerReviews'][item['observerReviews'].length - 1])
           if (review.status === content['status']) {
@@ -23,11 +22,10 @@ export class ReviewPipe implements PipeTransform {
 
     if (content['currentUserReviewed']) {
       let userEntries = [];
-      for (let idx in entries) {
-        let item = entries[idx];
+      for (let item of entries) {
         if (item.hasOwnProperty('observerReviews')) {
-          for (let idx in item['observerReviews']) {
-            if (item['observerReviews'][idx].userName === content['username']) {
+          for (let review of item['observerReviews']) {
+            if (review.userName === content['username']) {
               userEntries.push(item);
               break;
             }
