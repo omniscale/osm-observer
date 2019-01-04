@@ -67,7 +67,8 @@ def login():
     response = jsonify(json_response)
     if json_response['success'] is True:
         response.set_cookie('loggedIn', '1')
-
+        response.set_cookie('username', data['username'])
+        
         if current_user.is_admin:
             response.set_cookie('isAdmin', '1')
         else: 

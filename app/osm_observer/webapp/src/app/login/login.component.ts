@@ -48,7 +48,6 @@ export class LoginComponent implements OnInit {
                           }
                         }
                       },
-                      // TODO define onError actions
                       error => {}
                     );
     return false;

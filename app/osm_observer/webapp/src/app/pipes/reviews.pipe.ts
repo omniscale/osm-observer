@@ -27,8 +27,12 @@ export class ReviewPipe implements PipeTransform {
         let item = entries[idx];
         if (item.hasOwnProperty('observerReviews')) {
           for (let idx in item['observerReviews']) {
-            userEntries.push(item);
+            if (item['observerReviews'][idx].userName === content['username']) {
+              userEntries.push(item);
+              break;
+            }
           }
+
         }
       }
       return userEntries;

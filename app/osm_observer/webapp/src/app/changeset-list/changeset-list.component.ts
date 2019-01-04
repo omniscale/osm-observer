@@ -12,6 +12,9 @@ import { ChangesetService } from '../services/changeset.service';
 import { CoverageService } from '../services/coverage.service';
 import { TagFilterService } from '../services/tag-filter.service';
 
+import { AuthService }    from '../services/auth.service';
+
+
 @Component({
   selector: 'changeset-list',
   templateUrl: './changeset-list.component.html',
@@ -23,6 +26,7 @@ export class ChangesetListComponent implements OnInit {
   changesets: Changeset[];
   coverages: Coverage[];
   tagFilters: TagFilter[];
+  currentUsername: string;
 
   userName: string;
   timeRange: number;
@@ -32,7 +36,7 @@ export class ChangesetListComponent implements OnInit {
   currentUserReviewed: boolean;
   allowedCoverageIds: number[];
   allowedTagFilterIds: number[];
-  
+
   currentChangesetId: number;
   nextChangesetId: number;
   prevChangesetId: number;
@@ -52,6 +56,7 @@ export class ChangesetListComponent implements OnInit {
     private changesetService: ChangesetService,
     private coverageService: CoverageService,
     private tagFilterService: TagFilterService,
+    private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -122,6 +127,10 @@ export class ChangesetListComponent implements OnInit {
                           // TODO define onError actions
                           error => {}
                         );
+  }
+
+  getCurrentUsername(): void {
+     this.currentUsername = this.authService.username;
   }
 
   updateRouteParams(): void {
@@ -350,6 +359,7 @@ export class ChangesetListComponent implements OnInit {
     this.getCoverages();
     this.getTagFilters();
     this.getChangesets();
+    this.getCurrentUsername();
   }
 
   ngOnDestroy() {

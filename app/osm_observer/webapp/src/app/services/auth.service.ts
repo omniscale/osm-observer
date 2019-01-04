@@ -29,11 +29,13 @@ export class AuthService extends BaseHttpService {
   isAdmin: boolean;
   isLoggedIn: boolean;
   redirectUrl: string;
+  username: string;
 
   constructor(router: Router, private http: HttpClient, cookieService: CookieService, private location: Location) {
     super(router, cookieService);
     this.isLoggedIn = this._isLoggedIn();
     this.isAdmin = this._isAdmin();
+    this.username = this._getUsername();
   }
 
   login(user: User): Observable<AuthResponse> {
@@ -41,11 +43,16 @@ export class AuthService extends BaseHttpService {
       .pipe(map((response: AuthResponse) => {
           this.isLoggedIn = this._isLoggedIn();
           this.isAdmin = this._isAdmin();
+          this.username = this._getUsername();
           return response
         }),
         (catchError((error:any) => observableThrowError(
           this.handleError(error, 'login', this.loginUrl(), user)
     ))));
+  }
+
+  private _getUsername(): string {
+    return this.cookieService.get('username');
   }
 
   private _isAdmin(): boolean {

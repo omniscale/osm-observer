@@ -224,7 +224,9 @@
             </td>
           </tr>
 
-          <ng-container *ngFor="let changeset of changesets | reviews: { 'currentUserReviewed':currentUserReviewed, 'status':statusId } | search:'userName':userName; let last = last;" [ready]="last" (onReady)="changesetsRendered()">
+          <ng-container *ngFor="let changeset of changesets
+            | reviews: { 'currentUserReviewed':currentUserReviewed, 'status':statusId, 'username': currentUsername } 
+            | search:'userName':userName; let last = last;" [ready]="last" (onReady)="changesetsRendered()">
             <tr [class.table-success]="changeset.id === currentChangesetId">
               <td>
                 <a [routerLink]="[changeset.id, 'details']">
