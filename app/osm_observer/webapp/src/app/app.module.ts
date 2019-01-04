@@ -42,6 +42,8 @@ import { TagFilterService } from './services/tag-filter.service';
 import { KeyValueListPipe } from './pipes/key-value-list.pipe';
 import { HasKeysPipe } from './pipes/has-keys.pipe';
 import { SearchPipe } from './pipes/search.pipe';
+import { ReviewPipe } from './pipes/reviews.pipe';
+
 import { ReadyDirective } from './directives/ready.directive';
 
 import { OrderModule } from 'ngx-order-pipe';
@@ -61,6 +63,7 @@ export function createTranslateLoader(http: HttpClient, location: Location) {
     KeyValueListPipe,
     HasKeysPipe,
     SearchPipe,
+    ReviewPipe,
     ChangesetCommentListComponent,
     ChangesetChangesListComponent,
     ChangesetTagsCompareComponent,
