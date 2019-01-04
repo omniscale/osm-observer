@@ -22,6 +22,8 @@ export class BaseHttpService {
   handleError(error: Response, caller: string, url: string, opt?: any): any {
     if(error.status === 401 || error.status === 403) {
       this.cookieService.remove('loggedIn');
+      this.cookieService.remove('isAdmin');
+      this.cookieService.remove('username');
       this.router.navigate(['/login']);
       return;
     }
