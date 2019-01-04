@@ -18,7 +18,6 @@ app-css:
     contents:
       - libs-css
       - main-css
-      - webapp/styles.bundle.css
 
 app-js:
     output: app.js
