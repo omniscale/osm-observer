@@ -21,6 +21,7 @@ export class ChangesetTagsCompareComponent implements OnChanges {
   combinedTags: {};
   hasPrevValue: boolean;
   element: any;
+  osmType: any;
 
   constructor(private changesetDetailsService: ChangesetDetailsService) {
     this.showCompareTags = false;
@@ -30,7 +31,14 @@ export class ChangesetTagsCompareComponent implements OnChanges {
     if (key === undefined) {
       return false;
     }
-    this.element = changeset.elements[type][key];   
+    this.element = changeset.elements[type][key];
+    this.osmType = 'node';
+    if (type === 'ways') {
+      this.osmType = 'way'; 
+    }
+    if (type === 'relations') {
+      this.osmType = 'relation'; 
+    }
     if (this.element) {
       let tags = this.element.tags;
       let combinedTags = {};
