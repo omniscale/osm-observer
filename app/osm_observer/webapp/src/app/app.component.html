@@ -2,8 +2,13 @@
 <header>
 
 <nav class="navbar navbar-toggleable navbar-light bg-faded">
-  <h1 class="navbar-brand mr-auto">{{ title }}</h1>
-  <button class="btn btn-outline-secondary btn-sm header-btn"
+ <h1 class="navbar-brand mr-auto">{{ title }}</h1>
+
+ <span class="header-logged-in-as" *ngIf="authService.isLoggedIn">
+   {{ 'LOGGED IN AS' | translate }}
+   {{ authService.username }}
+ </span>
+ <button class="btn btn-outline-secondary btn-sm header-btn"
           type="button"
           *ngIf="authService.isLoggedIn"
           (click)="logout()">
