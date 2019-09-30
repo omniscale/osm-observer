@@ -28,9 +28,7 @@ export class JOSMLinkComponent implements OnInit {
   }
 
   private buildJSOMUrl(protocol) {
-    let url = protocol === 'https:' ?
-      'https://127.0.0.1.8112/load_and_zoom?' :
-      'http://127.0.0.1:8111/load_and_zoom?';
+    let url = 'http://127.0.0.1:8111/load_and_zoom?';
     let params = [
       'left=' + this.changeset.dataBBOX[0],
       'right=' + this.changeset.dataBBOX[2],
